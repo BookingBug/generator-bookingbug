@@ -39,7 +39,7 @@ module.exports = generators.Base.extend({
       type: 'input',
       name: 'apiUrl',
       message: 'What is the API URL?',
-      default: 'https://www.bookingbug.com/api/v1'
+      default: 'https://www.bookingbug.com'
     }];
     this.prompt(prompts, function (response) {
       this.companyId = response.companyId;
