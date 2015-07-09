@@ -1,0 +1,22 @@
+{
+  "name": "generator-bookingbug",
+  "version": "0.1.0",
+  "description": "A Yeoman generator for creating BookingBug widgets",
+  "files": [
+    "app"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "bookingbug"
+  ],
+  "author": "Ed Clements <ed@bookingbug.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.10.0",
+    "path": "^0.11.14",
+    "yeoman-generator": "^0.20.1"
+  }
+}

@@ -1,0 +1,83 @@
+ <div class="confirmation-header">
+  <h2 class="confirmation-heading">Your Waitlist bookings</h2>
+</div>
+
+<div ng-show="waitlist_bookings">
+<ul class="confirmation-summary" ng-repeat="i in waitlist_bookings">
+  <li ng-if="i.id" class="row confirmation-summary-item">
+    <div class="col-sm-3">Booking Reference:</div>
+    <div class="col-sm-9">{{i.id}}</div>
+  </li>
+  <li ng-if="i.full_describe" class="row confirmation-summary-item">
+    <div class="col-sm-3">Service:</div>
+    <div class="col-sm-9">{{i.full_describe}}</div>
+  </li>
+  <li ng-if="i.describe" class="row confirmation-summary-item">
+    <div class="col-sm-3">Date/Time:</div>
+    <div class="col-sm-9">{{i.describe}}</div>
+  </li>
+  <li ng-if="i.price" class="row confirmation-summary-item">
+    <div class="col-sm-3">Price:</div>
+    <div class="col-sm-9">{{i.price | currency }}</div>
+  </li>
+  <li class="row confirmation-summary-item">
+  <div class="col-sm-3 pull-right">
+    <button type="button" class="btn btn-primary btn-block" ng-click="bookWaitlistItem(i)">Book</button>
+  </div>
+  </li>
+</ul>
+<ul class="confirmation-summary">
+<li class="row confirmation-summary-item">
+  <div class="row">
+    <div class="col-sm-6 col-xs-6 total-label"><strong>Total</strong></div>
+    <div class="col-sm-3 col-xs-6"><strong>{{purchase.total_price | currency }}</strong></div>
+  </div>
+</li>
+<li class="row confirmation-summary-item">
+  <div class="row">
+    <div class="col-sm-6 col-xs-6 total-label"><strong>Total Due Now</strong></div>
+    <div class="col-sm-3 col-xs-6"><strong>{{purchase.due_now | currency }}</strong></div>
+  </div>
+</li>
+</ul>
+</div>
+
+<div ng-hide="waitlist_bookings">
+ <ul class="confirmation-summary">
+   <p> Thanks {{purchase.client.first_name }}. You have successully booked onto {{purchase.bookings[0].service_name }}. </p>
+</ul>
+<ul class="confirmation-summary">
+<li class="row confirmation-summary-item">
+  <div class="row">
+    <div class="col-sm-6 col-xs-6 total-label"><strong>Total</strong></div>
+    <div class="col-sm-3 col-xs-6"><strong>{{purchase.total_price | currency }}</strong></div>
+  </div>
+</li>
+<li class="row confirmation-summary-item">
+  <div class="row">
+    <div class="col-sm-6 col-xs-6 total-label"><strong>Total Due Now</strong></div>
+    <div class="col-sm-3 col-xs-6"><strong>{{purchase.due_now | currency }}</strong></div>
+  </div>
+</li>
+</ul>
+
+</div>
+
+<div class="hidden-print">
+  <div class="bb-step-navigation">
+    <div ng-if="make_payment" class="col-sm-12 bb-checkout-pay-button-div">
+      <div payment-button 
+        value="Pay" 
+        class="btn btn-primary" 
+        total="total" 
+        bb="bb"
+        decide-next-page="decideNextPage">
+      </div>
+    </div>
+    <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> Print</button>
+    <div bb-booking-export class="bb-booking-export"></div>
+    <div class="col-sm-12 pull-left">
+      <button type="button" class="btn btn-default" ng-click="$parent.is_waitlist = false"> Back </button>
+    </div>
+     </div>
+</div>

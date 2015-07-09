@@ -1,0 +1,46 @@
+<ul class="bb-summary-list">
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.service.name">
+    <div class="bb-summary-label">Service:
+    </div>
+    <div class="bb-summary-value"><span>{{bb.current_item.service.name}}</span>
+    </div>
+  </li>
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.resource.name">
+    <div class="bb-summary-label">Resource:
+    </div>
+    <div class="bb-summary-value bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
+    </div>
+  </li>
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.person.name">
+    <div class="bb-summary-label">Person:
+    </div>
+    <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
+    </div>
+  </li>
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.service.price">
+    <div class="bb-summary-label">Price:
+    </div>
+    <div class="bb-summary-value"><span>{{bb.current_item.service.price | currency: bb.company.currency_code }}</span>
+    </div>
+  </li>
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.date.date">
+    <div class="bb-summary-label">Date:
+    </div>
+    <div class="bb-summary-value"><span>{{bb.current_item.date.date | datetime: 'dddd D MMMM':false}}</span>
+    </div>
+  </li>
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.time.time">
+    <div class="bb-summary-label">Time:
+    </div>
+    <div class="bb-summary-value"><span>{{bb.current_item.start_datetime() | datetime: 'h.mma':false }}</span>
+    </div>
+  </li>
+  <li class="bb-confirmation-summary-item" ng-if="bb.current_item.duration">
+    <div class="bb-summary-label">Duration:
+    </div>
+    <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
+    </div>
+  </li>
+</ul>
+
+

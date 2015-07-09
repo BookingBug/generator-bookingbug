@@ -1,0 +1,157 @@
+<div bb-basket-list ng-init="checkStepTitle('Check Your Basket')" class="bb-basket">
+	<div class="row">
+
+
+		<div class="col-sm-12">
+			<div class="bb-subcontent">
+
+				<h2 class="bb-section-title">Your basket</h2>
+				<div class="bb-empty-basket-full-screen" ng-hide="items">
+					<h3>There are no items in the basket</h3>
+					<p>Please press the add another item button if you wish to add a product or service.</p>
+				</div>
+				<table class="table table-bordered" ng-show="items">
+					<thead>
+						<tr>
+							<th>Item</th>
+							<th>Price</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in items" ng-class="{'last-item': $last}">
+							<td>
+								<p>
+									{{item.describe()}}
+									<br/>
+									<small>{{item.date.date | datetime: "h:mma dddd Do MMMM":false}}</small>
+									<br/>
+									<small>{{item.resource.getAddress() | address_single_line }}</small>
+									<br/>
+									<small ng-if="item.recipient"> Recipient: {{ item.recipient }} </small>
+								</p>
+								<p></p>
+							</td>
+							<td class="text-right">
+								{{ item.total_price | currency }}
+								<div ng-if="item.certificate_paid > 0">
+									<small>Certificate Paid: {{ item.certificate_paid | currency }}</small>
+								</div>
+							</td>
+							<td class="text-center">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
+							</td>
+						</tr>
+						<tr ng-if="basket.hasDeal()">
+							<th class="text-left">Gift Certificates</th>
+							<th>&nbsp;</th>
+							<th>&nbsp;</th>
+						</tr>
+						<tr ng-if="basket.hasDeal()" ng-repeat="deal_code in basket.getDealCodes()" ng-class="{'last-item': $last}">
+							<td>
+								<p>
+									{{deal_code.description}}
+									<br/> 
+								</p>
+								<p></p>
+							</td>
+							<td class="text-right">
+								{{ deal_code.value | currency }}
+							</td>
+							<td class="text-center">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeDeal(deal_code)"></span>
+							</td>
+						</tr>
+
+						<tr data-ng-if="basket.hasDeal() || basket.hasCoupon()">
+							<th class="text-right">Original Price</th>
+							<th class="text-right">{{basket.fullPrice() | currency }}</th>
+							<th>&nbsp;</th>
+						</tr>
+						
+						<tr data-ng-if="basket.questionPrice()">
+							<th class="text-right">Booking Fee</th>
+							<th class="text-right">{{basket.questionPrice() | currency}}</th>
+							<th>&nbsp;</th>
+						</tr>
+						
+						
+						<tr data-ng-if="basket.hasDeal()">
+							<th class="text-right">Total Gift Certificates</th>
+							<th class="text-right">{{basket.totalDeals() | currency }}</th>
+							<th>&nbsp;</th>
+						</tr>
+
+						<tr data-ng-if="basket.hasDeal()">
+							<th class="text-right">Remaining Value on Gift Certificates</th>
+							<th class="text-right">{{ basket.totalCertificatePaid() | currency }}</th>
+							<th>&nbsp;</th>
+						</tr>
+
+						<tr data-ng-if="basket.hasCoupon()">
+							<th class="text-right">Coupon Discount</th>
+							<th class="text-right">{{(bb.basket.fullPrice() - bb.basket.totalPrice()) | currency}}</th>
+							<th>&nbsp;</th>
+						</tr>
+
+						<tr data-ng-if="basket.total_price > 0">
+							<th class="text-right">Total</th>
+							<th class="text-right">{{basket.total_price | currency }}</th>
+							<th>&nbsp;</th>
+						</tr>
+						<tr data-ng-if="basket.total_due_price != basket.total_price">
+							<th class="text-right">Total Due Now</th>
+							<th class="text-right">{{basket.total_due_price | currency }}</th>
+							<th>&nbsp;</th>
+						</tr>
+					</tbody>
+				</table>
+
+				<div ng-if="bb.company_settings.has_coupons" class="bb-coupon-box">
+					<span>Apply a coupon </span>
+					<input ng-model="coupon_code"/>
+					<button type="button" class="btn btn-primary btn-xs" ng-click="applyCoupon(coupon_code)">Apply</button>
+				</div>
+
+				<div class="bb-coupon-box" ng-if="bb.company_settings.has_vouchers">
+					<form class="form-inline">
+						<div ng-show="!show_voucher_box">
+							<a ng-click="show_voucher_box = true">Have a gift certificate?</a>
+						</div>
+						<div ng-show="show_voucher_box" class="form-group">
+							<label ng-if="!basket.hasDeal()" for="deal">Apply a Gift Certificate:</label>
+							<label ng-if="basket.hasDeal()" for="deal">Apply another Gift Certificate:</label>
+							<div class=" input-group">
+								<input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="Enter a voucher code">
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)">Apply</button>
+								</span>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="col-sm-12">
+			<div class="bb-step-navigation">
+				<div class="row">
+					<div class="col-sm-9 col-sm-push-3 text-right">
+						<div ng-if="bb.company.$has('events')">
+							<button type="button" class="btn btn-primary" ng-click="addAnother('event_list')">Add another item</button>
+						</div>
+						<div ng-if="bb.company.$has('services')">
+							<button type="button" class="btn btn-primary" ng-click="addAnother('service_list')">Add another item</button>
+						</div>
+						<button type="button" class="btn btn-primary" ng-click="checkout('checkout')">Checkout</button>
+					</div>
+					<div class="col-sm-3 col-sm-pull-9">
+						<button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span>Back</span></button>
+					</div>
+				</div>
+			</div>	
+		</div>
+
+	</div>
+</div>

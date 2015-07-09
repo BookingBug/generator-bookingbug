@@ -1,0 +1,98 @@
+<div bb-purchase="{move_route: 'calendar'}">
+
+  <div class="bb-checkout">
+
+    <div class="row">
+
+      <div class="col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8">
+
+        <div ng-if="purchase && bookings.length == 0">
+          <div class="confirmation-header">
+            <h2 class="confirmation-heading">Your booking has been cancelled</h2>
+          </div>
+        </div>
+
+        <div ng-if="bookings">
+          <div ng-show="is_waitlist">
+            <div bb-include="book_waitlist"></div>
+          </div>
+          <div ng-hide="is_waitlist">
+            <div class="confirmation-header">
+              <h2 class="confirmation-heading">Your {{purchase.bookings[0].service_name}} booking</h2>
+              <!-- <p ng-if="bb.current_item.move_done" class="move-done-msg">Your booking has been moved to <strong>{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM"}}</strong>.</p> -->
+              <div class="row hidden-print text-right" >
+              <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> Print</button>
+              <div bb-booking-export class="bb-booking-export"></div>
+              </div>
+            </div>
+
+            <ul class="confirmation-summary bb-checkout-top-border">
+              <li class="row confirmation-summary-item">
+                <div class="col-xs-3">Name:</div>
+                <div class="col-xs-9">{{purchase.client.name}}</div>
+              </li>
+              <li class="row confirmation-summary-item">
+                <div class="col-xs-3">Email:</div>
+                <div class="col-xs-9">{{purchase.client.email}}</div>
+              </li>
+              <li class="row confirmation-summary-item">
+                <div class="col-xs-3">Service:</div>
+                <div class="col-xs-9">{{purchase.bookings[0].service_name}}</div>
+              </li>
+              <li class="row confirmation-summary-item">
+                <div class="col-xs-3">When:</div>
+                <div class="col-xs-9">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
+              </li>
+              <li class="row confirmation-summary-item">
+                <div class="col-xs-3">Where:</div>
+                <div class="col-xs-9">
+                  <ul class="address">
+                    <li class="address-item">{{bb.company.name}}</li>
+                    <li class="address-item">{{bb.company.getAddress() | address_single_line}}</li>
+                    <li class="address-item">{{bb.company.getAddress().phone | uk_local_number}}</li>
+                  </ul>
+                </div>
+              </li>
+              <li class="row confirmation-summary-item">
+                <div class="col-xs-3">Price:</div>
+                <div class="col-xs-9">{{purchase.total_price | currency }}</div>
+              </li>
+            </ul>
+
+            <div class="payment">
+              <div bb-custom-confirmation-text class="text-block-sml bb-message-buffer" ng-show="messages">
+                <p ng-repeat="msg in messages" ng-bind-html="msg"></p>
+              </div>
+            </div>
+
+            <div class="hidden-print">
+              <div class="bb-step-navigation">
+                <div class="col-sm-4">
+                  <button type="button" class="btn btn-secondary btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
+                </div>
+                <div class="col-sm-4">
+                  <button type="button" class="btn btn-primary btn-block" ng-click="move(bookings[0], '', {use_resource: true})">Move Booking</button>
+                </div>
+                <div ng-show="waitlist_bookings"class="col-sm-4">
+                  <button type="button" class="btn btn-primary btn-block" ng-click="is_waitlist = true">Book Waitlist Items</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+       </div>
+
+    </div>
+
+  </div>
+
+<!--   <div ng-show="bb.moving_booking && !bb.current_item.move_done" bb-scroll-to="booking:move" bb-always-scroll class="move-booking-container hidden-print">
+    <hr>
+    <h2 ng-hide="purchase && bookings.length == 0">Move your booking</h2>
+    <div bb-content></div>
+  </div> -->
+
+</div>

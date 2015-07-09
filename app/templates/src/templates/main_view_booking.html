@@ -1,0 +1,22 @@
+<header>
+<!--   <div bb-breadcrumbs class="breadcrumbs_holder" ng-init="setRoute([
+      {page:'purchase', title: 'Your booking'}
+      ])">
+  </div> -->
+
+  <div class="alerts" bb-scroll-to="alert:raised">
+   <div alert ng-repeat="alert in $root.alerts" type="{{alert.type}}">
+     <ul>
+       <li ng-bind-html="alert.msg"></li>
+     </ul>
+   </div>
+ </div>
+</header>
+<section class="content">
+  <div bb-content class="ng-cloak"></div>
+  <div bb-loading class="bb-loader" >
+    <div id="loading_icon">
+      <div id="wait_graphic">&nbsp;</div>
+    </div>
+  </div>
+</section>

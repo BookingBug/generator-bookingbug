@@ -1,0 +1,66 @@
+<% content_for :head do %>
+<script src="/assets/widget.js" type="text/javascript"></script>
+<link href="/assets/angular/widget/main.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/angular/widget/bb_light_theme.css" type="text/css" media="all" rel="stylesheet" />
+<% end %>
+
+<%
+scp = {}
+if params[:base]
+  scp[:page_suffix] = "?base=#{params[:base]}"
+end
+
+%>
+
+<div bb-widget="<%=scp.to_json%>" >
+  <div bb-purchase="{}" class="bb-checkout">
+    <div class="container content">
+      <div class="row">
+        <div class="col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8">
+
+          <div class="confirmation-header bb-confirmation-border-margin">
+            <h2>Booking Confirmation Details</h2>
+            <p class="bb-confirmation-p-alignment">Thanks. Your booking is now confirmed. We have you emailed you the details below.</p>
+            <div class="pull-right hidden-print" >
+              <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> Print</button>
+              <button type="button" class="btn btn-link" onclick="" popover="<a class='image img_outlook' title='Add this booking to an Outlook Calendar' href='http://blinkbrowbar.bookingbug.com/ical/total/UkICc5s-2yzH09PqNzE%3D'><img alt='' src='https://www.bookingbug.com/assets/outlook.png'></a> <a class='image img_ical' title='Add this booking to an iCal Calendar' href='http://blinkbrowbar.bookingbug.com/ical/total/UkICc5s-2yzH09PqNzE%3D'><img alt='' src='https://www.bookingbug.com/assets/ical.png'></a> <a class='image img_gcal' title='Add this booking to Google Calendar' href='http://www.google.com/calendar/event?dates=20150120T120000Z%2F20150120T123000Z&details=&location=Chair&sprop=www.bookingbug.com&text=Booking%3A+Ayurvedic+Eye+Soother+with+Romana+-+Chair+at+Bristol&trp=false&action=TEMPLATE' target='_blank'><img src='https://www.bookingbug.com/assets/gcal.png' border='0'></a>" popover-placement="bottom"><span class="glyphicon glyphicon-calendar"></span> Export to calendar</button>
+            </div>
+          </div>
+
+          <ul class="confirmation-summary" ng-repeat="i in purchase.items">
+            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+              <div class="col-xs-12 col-sm-3">Item:</div>
+              <div class="col-xs-12 col-sm-9">{{i.full_describe}}</div>
+            </li>
+            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+              <div class="col-xs-12 col-sm-3">Date and Time:</div>
+              <div class="col-xs-12 col-sm-9">{{i.describe}}</div>
+            </li>
+            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+              <div class="col-xs-12 col-sm-3">Quantity:</div>
+              <div class="col-xs-12 col-sm-9">{{i.quantity}}</div>
+            </li>
+            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+              <div class="col-xs-12 col-sm-3">Booking Reference:</div>
+              <div class="col-xs-12 col-sm-9">{{i.id}}</div>
+            </li>
+          </ul>
+
+          <div ng-repeat="msg in messages" ng-bind-html="msg" class="bb-message">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bb-step-navigation">
+</div>
+
+<footer>
+  <div class="powered-by hidden-print">
+    <p>Bookings powered by <span style="color:#087f94">booking</span><span style="color:#88c66f">bug</p>
+    <a href="http://www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
+  </div>
+</footer>

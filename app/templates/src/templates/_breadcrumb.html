@@ -1,0 +1,12 @@
+<div class="breadcrumbs-holder" ng-init="setBasicRoute([])">
+  <ol class="breadcrumb"> 
+    <li ng-repeat="step in bb.allSteps" ng-class="{'active': step.active, 'passed': step.passed, 'disabled': isDisabledStep(step)}">
+      <button type="button" ng-click="loadStep(step.number)" ng-class="{'active': step.active, 'passed': step.passed}" ng-disabled="isDisabledStep(step)">
+        <span class="step-num">{{step.number}}.</span>
+        <span class="step-title">{{step.title}}</span>
+      </button>
+    </li>
+  </ol>
+</div>
+
+

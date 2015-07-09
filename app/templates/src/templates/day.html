@@ -1,0 +1,46 @@
+<div bb-include="_service_item_aggregate">
+</div>
+
+<div class="bb-subcontent">
+
+  <div bb-month-availability ng-init="checkStepTitle('Select a date')" class="bb-day">
+    <div class="bb-calendar-navigation">
+      <button type="button" class="btn btn-link pull-left" ng-click="subtract('months',1)" ng-disabled="isPast()">
+        <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true">
+        </span>
+        <span class="hidden-xs">Previous Month
+        </span>
+      </button>
+      <button type="button" class="btn btn-link pull-right" ng-click="add('months',1)">
+        <span class="hidden-xs">Next Month
+        </span>
+        <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+        </span>
+      </button>
+    </div>
+    <div>
+      <h2 class="bb-section-title text-center hidden-xs">{{format_date('MMMM YYYY')}}
+      </h2>
+      <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{format_date('MMM YY')}}
+      </h2>
+      <table class="table table-bordered">
+        <tr ng-repeat="week in weeks">
+          <td ng-repeat="day in week" ng-class="{'bb-today': day.date.isSame(moment(),'day'), 'bb-go-ok': day.spaces > 0, 'bb-no-go': day.date.isBefore(moment(),'day') || day.spaces == 0, 'bb-month-highlight': current_date.isSame(day.date,'month') }" ng-click="selectDay(day)">
+            <p class="pull-right" class="time-slot {{day.class(month)}}"  ng-class="{'bb-past': day.date.isBefore(moment(),'day') || day.spaces == 0}">
+              {{day.day()}}
+            </p> 
+          </td>
+        </tr>  
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="bb-step-navigation">
+  <div class="row">
+    <div class="col-sm-3">
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+  </div>
+</div>

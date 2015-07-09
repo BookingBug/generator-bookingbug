@@ -1,0 +1,39 @@
+<div bb-basket-list class="modal-content bb-basket-mini"> 
+
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <h5 class="modal-title">Basket Details</h5>
+  </div>
+
+  <div class="modal-body">
+    <p ng-hide="bb.basket.items">No items added to basket yet.</p>
+    <table class="table table-bordered" ng-show="bb.basket.items">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Appointment</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in bb.basket.items">
+          <td >
+            {{ item.service_name }}
+          </td>
+          <td>
+            {{ item.date.date | datetime: "ddd Do MMM":false}} at {{ item.date.date | datetime: "h:mma":false}} for {{ item.duration | time_period }}
+          </td>
+          <td class="text-center">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button ng-show="bb.basket.items" class="btn btn-primary" ng-click="checkout('basket') && cancel()">Checkout</button>
+  </div>
+
+</div>

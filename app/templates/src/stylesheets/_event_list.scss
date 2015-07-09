@@ -1,0 +1,235 @@
+#bb-event-list, [bb-events] {
+
+  .date-chooser-heading {
+    margin-bottom: 30px;
+  }
+
+  .date-chooser {
+    margin: 0 0 20px 0;
+  }
+
+  .date-list-item {
+    display: inline-block;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    .btn-secondary {
+      width: 120px;
+    }
+    .btn-secondary.selected {
+      @extend .btn-primary;
+    }
+  }
+
+  .events {
+    padding-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .event-datetime {
+    text-transform: uppercase;
+    
+    .event-date {
+      font-size: 0.8em;
+      display: block;
+    }
+    .event-time {
+      font-size: 1.7em;
+    }
+  }
+
+  .bb-filter-summary {
+    border-top: none;
+    padding: 10px 0;
+    margin-bottom: 0;
+  }
+
+  .bb-month-picker {
+    @include make-row();
+    margin-top: 10px;
+    overflow: hidden;
+
+    .bb-month-nav {
+      text-align: center;
+      padding-top: 100px;
+      @include make-xs-column(2);
+      @include make-md-column(1);
+    }
+
+    .bb-months {
+      @include make-xs-column(8);
+      @include make-md-column(10);
+    }
+
+    .bb-month {
+      table {
+        margin: 0 auto;
+      }
+    }
+
+    .slick-disabled {
+      cursor: default;
+      opacity: 0.2;
+      cursor: false;
+      pointer-events: none;
+      filter: alpha(opacity=20);
+    }
+
+
+    td {
+      
+      text-align: center;
+      padding: 1px;
+      height: 36px;
+      width: 36px;
+      font-family: Arial, sans-serif;
+      //color:#EEE;
+      //background-color: #FFF;
+
+      // &.thisMonth {
+      //  // border: 1px solid #DDD;
+
+      //   cursor: default;
+      //   opacity: 1;
+
+      &.past, &.disabled {
+        color: #AAA;
+      }
+
+      &.available {
+        cursor: pointer;
+        color: #FFF;
+
+        .circle {
+          background-color: rgb(11, 87, 162);
+          border: none;
+          border-radius: 50%;
+          padding: 6px 5px;
+          height: 30px;
+          width: 30px;
+          text-align: center;
+
+          &:hover {
+            background-color: rgb(151, 186, 219);
+          }
+        }
+      }
+      &.selected.available {
+        .circle {
+          background-color: rgb(25, 169, 115);
+        }
+      }
+      // &.today {
+      //   .circle {
+      //     border: 1px solid #FFF;
+      //     &:hover {
+      //       border: 1px solid #FFF;
+      //     }
+      //   }
+      // }
+
+    }
+    th {
+      margin: 0;
+      text-align: center;
+      &.months {
+        padding-bottom: 10px;
+      }
+      &.days {
+        font-weight: normal;
+      }
+    }
+  }
+
+  .bb-events-list {
+
+    min-height: 400px;
+    margin-bottom: 15px;
+
+    .ng-enter {
+      -webkit-animation: fadeIn 1s;
+      -moz-animation: fadeIn 1s;
+      -o-animation: fadeIn 1s;
+      animation: fadeIn 1s;
+    }
+
+    .ng-leave {
+      -webkit-animation: fadeOutDown 1s;
+      -moz-animation: fadeOutDown 1s;
+      -o-animation: fadeOutDown 1s;
+      animation: fadeOutDown 1s;
+    }
+
+    .panel {
+      border-top: none;
+      margin-bottom: 0;
+    }
+
+    .panel-body {
+      padding: 15px 0;
+    }
+
+    .bb-event-card {
+
+      min-height: 140px;
+
+      // span.ng-hide-remove, span.ng-hide-add {
+      //   -webkit-animation: fadeIn 1s;
+      //   -moz-animation: fadeIn 1s;
+      //   -o-animation: fadeIn 1s;
+      //   animation: fadeIn 1s;
+      // }
+    }
+
+    .event-summary-list {
+      margin-bottom: 0;
+      @media(max-width:$screen-xs-max) {
+        margin-bottom: 20px;
+      }
+    }
+
+  }
+
+  .bb-filters {
+    a {
+      text-decoration: none;
+    }
+
+    .panel:last-child {
+      margin-bottom: 0;
+    }
+
+    .panel-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .panel-heading {
+      text-align: center;
+      padding: 15px;
+      cursor: pointer;
+      &:hover {
+        background-color: #EEE;
+      }
+    }
+
+    .panel-title {
+      padding-bottom: 0;
+    }
+
+    .panel-body {
+      padding-bottom: 0;
+    }
+
+    .date-picker {
+      width: 240px;
+      margin-right: 0;
+      table {
+        outline: none;
+      }
+      @media (max-width: $screen-xs-max) {
+        width: 100%;
+      }
+    }
+
+  }
+
+}

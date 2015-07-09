@@ -1,0 +1,96 @@
+<div bb-checkout class="event">
+
+  <div bb-payment class="bb-payment" ng-if="total">
+
+    <div class="event-header" ng-style="bb.event_details.image.background_css">
+      <div class="event-details">
+        <h1>{{bb.event_details.name}}</h1>
+        <ul class="event-summary-list">
+          <li class="date-time">
+            <span class="bb-icon icon-calendar"></span>
+            <span>{{bb.event_details.datetime.format('dddd MMMM Do YYYY')}} at <span class="event-time">{{bb.event_details.datetime.format('h[:]mma')}}</span></span>
+          </li>
+          <li class="location" ng-show="bb.event_details.address">
+            <span class="bb-icon icon-location"></span>
+            <span>{{bb.event_details.address | address_single_line}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default event-description">
+      <div class="panel-body">
+        <p>Please enter your payment details to confirm your booking.</p>
+      </div>
+    </div>
+
+    <div class="panel panel-default event-tickets">
+      <div class="panel-body">
+        <h2 class="heading">Place Summary</h2>
+        <div ng-form name="ticket_form" class="bb-form" role="form">
+          <ul class="ticket-list">
+            <li class="header">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6">Type</div>
+                <div class="col-sm-3 col-xs-4">Price</div>
+                <div class="col-sm-3 col-xs-2">Qty</div>
+              </div>
+            </li>
+            <li ng-repeat="ticket in bb.event_details.tickets">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6">
+                  <span>{{ticket.fullName()}}</span>
+                </div>
+                <div class="col-sm-3 col-xs-4">
+                  <span ng-if="ticket.price > 0">{{ticket.price | currency}}</span><span ng-if="ticket.price == 0">Free</span>
+                  <small ng-if="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
+                </div>
+                <div class="col-sm-3 col-xs-2">
+                  <span>{{ticket.qty}}</span>
+                </div>
+              </div>
+            </li>
+            <li ng-if="bb.basket.questionPrice()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Booking Fee</div>
+                <div class="col-sm-3 col-xs-6">{{bb.basket.questionPrice() | currency}}</div>
+              </div>
+            </li>
+            <li ng-if="bb.basket.hasCoupon()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Original Cost</div>
+                <div class="col-sm-3 col-xs-6">{{bb.basket.fullPrice() | currency}}</div>
+              </div>
+            </li>
+            <li ng-if="bb.basket.hasCoupon()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Coupon Discount</div>
+                <div class="col-sm-3 col-xs-6">{{(bb.basket.fullPrice() - bb.basket.totalPrice()) | currency}}</div>
+              </div>
+            </li>
+            <li ng-if="bb.basket.hasCoupon() || bb.basket.totalPrice()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Total</div>
+                <div class="col-sm-3 col-xs-6"><strong>{{bb.basket.totalPrice() | currency}}</strong></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default event-tickets">
+      <div class="panel-body">
+        <h2 class="heading">Payment Details</h2>
+        <div id="bb-payment">
+          <iframe id="bb-widget" ng-src="{{url}}" width="100%" height="930px" scrolling="no" frameborder="0"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      iFrameResize([{log:false, checkOrigin:false}],['#bb-widget']);
+    </script> 
+  </div>
+
+</div>

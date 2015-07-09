@@ -1,0 +1,172 @@
+.calendar, div[bb-time-ranges],  {
+  padding-bottom: 50px;
+
+  .week {
+    padding: 0 15px;
+    list-style: none;
+  }
+
+  .day {
+    width: 12.85%;
+    float: left;
+    padding-right: 10px;
+    @media (max-width: $screen-xs-max) {
+      padding: 0 20px;
+      width: 100%;
+    }
+  }
+
+  .day.navigation {
+    width: 5%;
+    float: left;
+    .btn-icon {
+      font-size: $font-size-h2;
+      color: inherit;
+      float: left;
+      margin-top: 118px;
+    }
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+
+  .month-header {
+    margin-bottom: 30px;
+     .month-heading {
+      margin: 0;
+      text-align: center;
+      //text-transform: uppercase;
+      font-size: $font-size-h2;
+    }
+  }
+
+
+  .day-header {
+    .previous {
+      text-align: left;
+    }
+    .next {
+      text-align: right;
+    }
+    .icon {
+      font-size: $font-size-h3;
+    }
+    .day-heading {
+      //text-transform: uppercase;
+      text-align: center;
+      font-size: $font-size-base;
+      @media (min-width: $screen-sm) {
+        text-align: left;
+        padding-left: 30px;
+      }
+    }
+
+  }
+
+
+  // panel styling
+  .panel-group {
+    .panel {
+      border-radius: 0;
+      margin: 0;
+      border: none;  
+      border-bottom: 1px rgb(221, 221, 221) solid;
+      box-shadow: none;
+    }
+
+    .accordian-group:first-child .panel {
+      border-top: 1px rgb(221, 221, 221) solid;
+    }
+  }
+
+  .panel-default > .panel-heading {
+    background: none;
+    padding: 15px;
+    position: relative;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .collapse-control {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: position;
+  }
+
+  .panel-default > .panel-heading + .panel-collapse .panel-body {
+    border: none;
+  }
+
+   .panel-body {
+    padding: 0;
+  }
+
+  .panel-title {
+    font-size: inherit;
+  }
+
+  .period-label {
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-size: $font-size-small; 
+    // font-size: 0.9rem;
+  }
+
+  // .selected-time {
+  //   font-size: 12px; 
+  //   font-size: 1.2rem;
+  // }
+
+  .time-slot {
+    padding: 15px 25px;
+    cursor: pointer;
+    text-align: center;
+    &:hover, &.selected {
+      background-color: #333;
+      color: #FFF;
+    }
+  }
+
+  // expanded or selected panel
+  .panel-group .panel.expanded {
+    background-color: #EEE;
+  }
+
+  .panel-group .panel.selected {
+    background-color: #777;
+    color: #FFF;
+  }
+
+  .panel-default.expanded > .panel-heading {
+    padding-bottom: 5px;
+  } 
+
+  // disabled panel
+  .panel-default[disabled], .panel[disabled].expanded {
+    background: none;
+
+    .panel-heading {
+      cursor: default;
+      padding-bottom: 15px;
+    }
+    .panel-collapse {
+      display: none;
+    }
+    .panel-title {
+      color: #CCC;
+    }
+  }
+
+  // actions
+
+  .actions {
+    text-align: right;
+    @media (max-width: $screen-xs-max) {
+      padding-right: 20px;
+    }
+  }
+
+}
+

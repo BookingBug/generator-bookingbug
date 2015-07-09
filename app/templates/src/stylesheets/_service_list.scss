@@ -1,0 +1,28 @@
+.bb-service-list, div[bb-services] {
+
+  .bb-service-name {
+    font-size: $font-size-h3;
+    font-weight: 200;
+  }
+
+  .bb-service-image {
+    margin-bottom: 20px;
+    img {
+      @include center-block();
+    }
+
+    @media (min-width: $screen-sm) {
+      margin-bottom: 0;
+    }
+  }
+
+  .bb-service-description {
+    margin-bottom: 20px;
+  }
+
+  .bb-service-price {
+    font-size: $font-size-h3;
+    text-align: right;
+  }
+
+}

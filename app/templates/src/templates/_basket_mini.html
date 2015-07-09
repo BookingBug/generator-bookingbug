@@ -1,0 +1,5 @@
+<div class="bb-basket-mini">
+  <span class='glyphicon glyphicon-shopping-cart pull-right' ng-class="{'disabled-cart': bb.current_page == 'basket'}" ng-click="showBasketDetails()">
+    <span ng-if="basketItemCount" class="badge badge-notify">{{ basketItemCount }}</span>
+  </span>
+</div>

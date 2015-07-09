@@ -1,0 +1,60 @@
+<div class="header">
+
+  <div bb-form-data-store></div>
+
+  <!-- BREADCRUMB ROUTE
+  <div bb-breadcrumbs class="breadcrumbs_holder" ng-init="setRoute([
+    {page:'event_list', title: 'Select an event'},
+    {page:'event', title: 'Event'},
+    {page:'checkout', title: 'Confirmation'}
+    ])">
+
+    <ol class="breadcrumb"> 
+      <li ng-repeat="step in bb.allSteps" ng-class="{'active': step.active, 'passed': step.passed, 'disabled': isDisabledStep(step)}">
+        <button type="button" ng-click="loadStep(step.number)" ng-class="{'active': step.active, 'passed': step.passed}" ng-disabled="isDisabledStep(step)">
+          <span class="step-num">{{step.number}}.</span>
+          <span class="step-title">{{step.title}}</span>
+        </button>
+      </li>
+    </ol>
+  </div> 
+  -->
+
+  <!-- PROGRESSBAR
+  <div progressbar value="bb.percentage_complete" type="primary"></div>
+  -->
+
+  <!-- STEP INDICATOR
+  <div ng-if="bb.current_step" class="step-heading">
+    <span ng-if="bb.current_step != 1 && bb.current_step <  bb.allSteps.length" ng-bind="'Step ' + (bb.current_step - 1) + ' of ' + (bb.allSteps.length - 2)"></span>
+    <span ng-if="bb.current_step == bb.allSteps.length" ng-bind="'Complete'"></span>
+  </div> -->
+
+  <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
+    <div alert ng-repeat="alert in $root.alerts" type="{{alert.type}}" >
+     <ul>
+       <li ng-bind-html="alert.msg"></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="content">
+
+  <div bb-content class="ng-cloak"></div>
+  <div bb-display-mode></div>
+
+  <div bb-loading class="bb-loader" >
+    <div id="loading_icon">
+      <div id="wait_graphic">&nbsp;</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div ng-show="isLoaded" class="powered-by">
+    <span>Bookings powered by <a href="http://www.bookingbug.com" style="text-decoration:none" target="_blank"><span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></a></span>
+  </div>
+</div>

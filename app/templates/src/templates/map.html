@@ -1,0 +1,84 @@
+<div id="map" bb-map class="bb-store-search" ng-init="checkStepTitle('Select a company')">
+
+  <div class="page-summary">
+    <p>Search for a store to begin your booking.</p>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body" >
+      <div class="row search-form-wrapper">
+        <div class="col-xs-10 col-sm-6 col-sm-offset-3">
+          <form role="form" ng-submit="searchAddress({region: 'GB', componentRestrictions: {'country': 'GB'}, bounds: {sw:{x:'50.064192',y:'-9.711914'}, ne:{x:'61.015725',y:'3.691406'}}});">
+            <div class="form-group" style="width: 100%;">
+              <label class="sr-only" for="search-stores">Search</label>
+              <div class="input-group">
+                <input type="text" ng-model="address" class="form-control input-lg" id="search-stores" placeholder="Enter a town, city, postcode or store name">
+                <span class="input-group-btn">
+                  <button class="btn btn-primary btn-lg" type="submit" title="Search"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-xs-2">
+          <button type="button" class="btn btn-default btn-lg" title="use current location" ng-click="geolocate()">
+            <span class="glyphicon glyphicon-screenshot"></span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div ng-show="loc">
+
+    <h2 class="company-map-header">{{shownMarkers.length}} results for stores near {{address}}</h2>
+
+    <div class="company-map row">
+
+      <div class="bb-map-block col-sm-8 col-sm-push-4">
+        <div ng-delayed="ui-map" ng-delayed-value="myMap" ng-delayed-watch="mapReady" ng-delayed-ready="mapLoaded" ui-options="mapOptions" class="map-canvas"></div>
+        <div ng-repeat="marker in mapMarkers" ui-map-marker="mapMarkers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"> </div>
+        <div ui-map-info-window="myInfoWindow" class="clearfix">
+
+          <p><strong>{{currentMarker.company.name}}</strong></p>
+          <p>{{currentMarker.company.address | address_single_line}}</p>
+          <p><strong>Phone:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
+          <p>
+            <span ng-if="currentMarker.company.extra.closing_time"><strong>{{currentMarker.company.extra.closing_time}}</strong></span>
+            <span class="distance">{{roundNumberUp(currentMarker.distance,1)}}mi</span>
+          </p>
+          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.live">select</button>
+
+        </div>
+      </div>
+
+
+      <div class="bb-company-block col-sm-4 col-sm-pull-8" >
+
+        <div accordion close-others="true">
+          <div accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" ng-repeat="marker in shownMarkers" class="store-body" ng-init="is_open = $first">
+
+            <div accordion-heading class="store-header">
+              <span><strong>{{$index+1}}.</strong> {{marker.company.name}}</span>
+              <span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></span>
+            </div>
+
+            <ul class="store-details" ng-click="openMarkerInfo(marker)">
+              <li>{{marker.company.address | address_single_line }}</li>
+              <li><strong>Phone:</strong> {{marker.company.address.phone | uk_local_number}}</li>
+              <li>
+                <span class="distance">{{roundNumberUp(marker.distance,1)}}mi</span>
+              </li>
+            </ul>
+            <button type="button" ng-click="selectItem(marker.company)" class="btn btn-primary pull-right">Select</button>
+          </div>
+        </div>
+
+      </div>
+ 
+    </div>
+  </div>
+  <div ng-if="loc"class="bb-step-navigation">
+  </div>
+</div>

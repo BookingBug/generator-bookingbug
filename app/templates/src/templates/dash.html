@@ -1,0 +1,46 @@
+<h1>Dashboard</h1>
+  <div class="dashcontainer" ng-controller="DashboardContainer" style="">
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <h4>Pick a Location/Service</h4>
+
+      <div ng-controller="CompanyList" ng-init="init()">
+
+        <div class="" ng-repeat="comp in companies"  >
+          <h3>{{comp.name}}</h3>
+
+          <div ng-controller="PersonList" ng-init="init(comp)">
+
+            <a class="" ng-repeat="person in all_people"  style="margin-left:20px;font-size:14px;display:block;cursor:pointer;">
+              {{person.name}}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="selectedSlot">
+        <div ng-controller="SelectedSlotDetails" class="side_details">
+          <div ng-include="showItemView">
+          </div>
+        </div>
+      </div>  
+
+    </div> 
+
+    <div class="col-md-8">
+
+      <div ng-controller="CalendarCtrl" ng-init="init()">
+
+        <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar">
+      </div>
+
+    </div>
+  </div>
+
+
+    <div id="dialog-modal" title="" display:none;>
+      
+    </div>
+  </div>

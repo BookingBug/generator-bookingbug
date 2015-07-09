@@ -1,0 +1,97 @@
+<div bb-deals>
+  
+  <h2 class="deal-list-heading">
+    <span> Gift Certificates </span>
+  </h2>
+
+<div ng-if="bb.stacked_items && bb.stacked_items[0].deal">
+  <h4> Selected Gift Certificates </h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr ng-repeat="item in bb.stacked_items" ng-class="{'last-item': $last}">
+        <td>
+          <p>
+            {{item.deal.name}}
+            <br/> 
+             <form ng-if="!bb.company_settings.no_recipient" name="recipient_form" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
+              <div ng-hide="recipient_form.submitted && item.recipient">
+              <small> Add a Recipient <small>
+              <br/>
+              <p>
+                <label bb-question-label="question" for="recipient_name" class="control-label col-sm-4"> <small> Name: </small> </label> <input type="text" name="recipient_name" id="recipient_name" ng-model="recipient.name" ng-pattern="validator.alpha"/>
+                <br/>
+              </p>
+              <p>
+                <label bb-question-label="question" for="recipient_mail" class="control-label col-sm-4"><small> Email: </small> </label> <input type="email" name="recipient_mail" id="recipient_mail" ng-model="recipient.mail"/>
+                <br/>
+              </p> 
+              <p>
+                <button ng-click="validator.validateForm(recipient_form) && addRecipient(item, recipient)"> Add </button>
+                <br/>
+              </p>
+             <br/>
+             <p ng-show="recipient_form.recipient_name.$invalid && recipient_form.submitted" class="error-message"> Please enter the Recipients full name</p>
+              <p ng-show="recipient_form.recipient_mail.$invalid && recipient_form.submitted" class="error-message"> Please enter a valid email address</p>
+                </div>
+              </form>
+            <div ng-if="item.recipient">
+             <h5>Recipient </h5>
+              <p ng-if="item.recipient"> Name: <small> {{ item.recipient }} </small> </p>
+              <p ng-if="item.recipient_mail"> Email: <small> {{ item.recipient_mail }} </small> </p>
+            </div>
+        </p>
+        </td>
+        <td class="text-right">
+          {{ item.deal.price | currency }}
+        </td>
+        <td class="text-center">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"  ng-click="removeDeal(item)"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default bb-event-card" ng-repeat="deal in deals">
+  <div class="panel-body">  
+    <div class="row vertical-row-align">
+
+      <div class="col-sm-9 col-xs-12 deal-details">
+        <h3 >{{deal.name}}</h3>
+        <ul class="deal-summary-list">
+          <li class="deal-description">
+            <span>{{ deal.description }}</span>
+          </li>
+          <li class="price">
+            <span class="bb-icon icon-price"></span>
+            <span>{{deal.price | currency}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-3 deal-select">
+        <button type="button" ng-click="selectDeal(deal)" class="btn btn-primary btn-block">
+          <span >Buy</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div ng-if="bb.stacked_items && bb.stacked_items[0].deal">
+  <button type="button" class="btn btn-primary btn-block" ng-click="purchaseDeals()"><span>Buy Gift Certificates</span></button>
+</div>
+<div class="row bb-step-navigation">
+  <button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span>Back</span></button>
+</div>
+
+</div>
