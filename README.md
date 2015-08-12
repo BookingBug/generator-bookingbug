@@ -23,6 +23,10 @@ Run `yo bookingbug`
 ```
 yo bookingbug
 ```
+### Types of application currently supported
+
+* public booking application
+* member application
 
 ### Yo options
 `yo bookingbug --help` or `yo bookingbug -h` for help
