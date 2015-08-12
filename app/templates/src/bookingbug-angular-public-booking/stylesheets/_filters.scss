@@ -1,0 +1,49 @@
+.bb-filters {
+
+  .panel:last-child {
+    margin-bottom: 0;
+  }
+
+  .panel-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .panel-heading {
+    cursor: pointer;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .panel-title {
+    font-size: $font-size-base;
+    padding-bottom: 0px;
+  }
+
+  .panel-body {
+    padding-bottom: 0;
+  }
+
+  .form-group {
+    padding-right: 15px;
+    @media (max-width: $screen-xs-max) {
+      padding-right: 0;
+    }
+  }
+
+  .date-picker {
+    width: 240px;
+    table {
+      outline: none;
+    }
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
+  }
+
+  [bb-price-filter] {
+    width: 240px;
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{title}}</h3>
+</div>
+<form name="booking_form" ng-submit="submit(modal_form)">
+  <div class="member_booking_form_content" >
+    <p>{{form_model.full_describe}}</p>
+    <p>{{form_model.describe}}</p>
+  </div>
+  <div class="modal-body" sf-schema="schema" sf-form="form"
+    sf-model="form_model" sf-options="{formDefaults: {feedback: false}}">
+  </div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-primary" value="OK">
+    <button class="btn btn-default" ng-click="cancel($event)">Dismiss</button>
+  </div>
+</form>

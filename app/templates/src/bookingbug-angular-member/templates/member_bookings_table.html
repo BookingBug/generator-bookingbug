@@ -1,0 +1,25 @@
+<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
+<table tr-ng-grid="" items="bookings" enable-filtering="false"
+  ng-hide="loading" fields="fields">
+  <thead>
+    <tr>
+      <th field-name="describe" display-name="Date/Time"></th>
+      <th field-name="full_describe" display-name="Description"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <button class="btn btn-default btn-sm"
+          ng-click="delete(gridItem.id)">
+            Cancel
+        </button>
+        <button class="btn btn-default btn-sm"
+          ng-click="edit(gridItem.id)">
+            Details
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
