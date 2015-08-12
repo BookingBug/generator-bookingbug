@@ -1,0 +1,172 @@
+.bb-subcontent {
+  min-height: 400px;
+  @media (max-width: $screen-xs-max) {
+    min-height: 100px;
+  }
+}
+
+.bb-content {
+  color: #000;
+  min-height: 400px;
+}
+
+.content {
+  min-height: 420px;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: #333;
+  text-decoration: underline;
+  &:hover, &:focus {
+    color: #333;
+    text-decoration: none;
+  }
+}
+
+p {
+  margin-bottom: 10px; margin-bottom: 1rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.page-header {
+  margin: 20px 0 25px 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.page-heading-wrapper {
+  margin: 0 0 10px 0;
+}
+
+.page-heading {
+  font-size: $font-size-h3;
+  padding: 0;
+  display: inline;
+  border-bottom: none;
+}
+
+.page-sub-heading {
+  font-size: $font-size-base;
+}
+
+.page-intro, .page-summary {
+  margin-bottom: 30px;
+}
+
+.seperator {
+  margin: 30px 0;
+}
+
+#loading_icon{
+  height:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  background-color:#FFF;
+  padding-top:100px;
+  filter:alpha(opacity=70);
+  -moz-opacity:0.7;
+  -khtml-opacity: 0.7;
+  opacity: 0.7;
+  z-index: 2000;
+}
+#loading_icon div {
+  display:block;
+  margin:0 auto;
+}
+#loading_icon #wait_graphic {
+  background:url("images/BB_wait.gif");
+  width:118px;
+  height:118px;
+}
+
+.powered-by {
+  font-size: $font-size-base;
+  // margin-top: 20px;
+  // padding-top: 20px;
+  margin-bottom: 20px;
+  text-align: right;
+
+  @media print{
+    text-align: center;
+  }
+
+}
+
+.text-block {
+  margin-bottom: 20px;
+}
+
+.bb-member {
+  font-size: $font-size-base;
+}
+
+.bb-section-title {
+  border-bottom: 1px solid #666;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: $font-size-h3;
+}
+
+.bb-step-navigation {
+  margin-top: 75px;
+  margin-bottom: 20px;
+  border-top: 1px solid #999;
+  padding-top: 20px;
+  @media (max-width: $screen-xs-max) {
+    margin-top: 60px;
+    border-top: 1px solid #666;
+    padding-top: 20px;
+  }
+
+  .btn {
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+
+}
+
+@media (min-width: $screen-sm) {
+
+  .row.bb-vertical-align-center {
+    display: table;
+  } 
+
+  .row.bb-vertical-align-center [class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+}
+
+.bb-thankyou-focus {
+  margin:10% 3% 10%;
+
+  h2 {
+    // color:#087f94; 
+    text-align:center; 
+    margin:10% 3% 10%;
+  }
+}
+
+.angular-google-map-container { 
+  height: 200px; 
+}

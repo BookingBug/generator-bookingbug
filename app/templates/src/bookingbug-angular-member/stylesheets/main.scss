@@ -1,0 +1,22 @@
+[bb-member-past-bookings],
+[bb-member-upcoming-bookings] {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  .booking-row {
+    margin-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  .type {
+    div {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+    }
+  }
+}

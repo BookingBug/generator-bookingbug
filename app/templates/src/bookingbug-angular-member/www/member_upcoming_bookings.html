@@ -1,0 +1,28 @@
+<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
+<div ng-hide="loading" class="bb-upcoming clearfix">
+  <div class="bb-head">
+    <span id="your_bookings">Your future appointments:</span>
+  </div>
+  <div id="bookings">
+    <div ng-if="upcoming_bookings.length == 0">
+      <h3>You don't currently have any appointments.</h3>
+    </div>
+    <div ng-repeat="booking in upcoming_bookings | filter:{deleted: false} |
+      orderBy: 'datetime.unix()' " class="booking-row">
+      <div class="type">
+        <div style="background-color:{{booking.getColour()}}"></div>
+      </div>
+      <div class="datetime">
+        <div>{{booking.datetime.format('Do MMM YYYY HH:mm')}}</div>
+      </div>
+      <div class="describe">
+        <div class="detail">{{booking.full_describe}}</div>
+        <div class="resource">{{booking.resource}}</div>
+      </div>
+      <div class="bb-bookings-action">
+        <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
+        <button ng-click="edit(booking)" class="btn bb-push">Details</button>
+      </div>
+    </div>
+  </div>
+</div>

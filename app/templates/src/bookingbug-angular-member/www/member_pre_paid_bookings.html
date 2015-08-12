@@ -1,0 +1,14 @@
+<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
+<div ng-hide="loading" class="bb-upcoming clearfix">
+  <div id="bookings">
+    <div ng-if="pre_paid_bookings.length == 0">
+      <h3>You don't currently have any pre-paid bookings.</h3>
+    </div>
+    <div ng-repeat="booking in pre_paid_bookings" class="booking-row">
+      <div class="describe">
+        <div class="detail">{{booking.service_name}}</div>
+        <div class="resource">{{booking.remaining}} of {{booking.num_bookings}} remaining</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.bb-basket, div[bb-basket-list] {
+
+  table.table {
+    color: #000000;
+  }
+
+  .bb-coupon-box {
+    margin-bottom: 100px;
+    text-align: center;
+  }
+
+  .bb-empty-basket-full-screen {
+    text-align: center;
+    padding-top: 60px;
+    @media (max-width: $screen-xs-max) {
+      padding-top: 10px;
+    }
+  }
+
+}

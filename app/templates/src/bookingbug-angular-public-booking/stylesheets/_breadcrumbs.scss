@@ -1,0 +1,33 @@
+.breadcrumb {
+  padding: 0px;
+  list-style: none;
+  background-color: transparent;
+  margin-bottom: 30px;
+  li {
+    @include make-xs-column(2);
+    button {
+      color: #fff;
+      border: 1px solid #fff;
+      font-size: 12px;
+      background-color: transparent;
+      width: 100%;
+    }
+    button:hover{
+      border: 1px solid #fff;
+      color: #fff;
+      background-color: #383838;
+      text-decoration: none;
+    }
+    button.active {
+      background-color: #fff;
+      color: #383838;
+    }
+    button.passed {
+      background-color: #383838;
+      border-color: #383838;
+    }
+  }
+  > li + li:before {
+    content: none;
+  }
+}

@@ -1,0 +1,121 @@
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 15px;
+  font-weight: 300;
+}
+
+// Alerts
+
+.alert {
+  font-size: $font-size-base;
+}
+
+// Page
+.page-header {
+  border-bottom: none;
+}
+
+// Breadcrumb
+
+.breadcrumb {
+  padding: 0px;
+  list-style: none;
+  background-color: transparent;
+  margin-bottom: 30px;
+  li {
+    button {
+      color: #fff;
+      font-size: $font-size-small;
+      width: 100%;
+    }
+    button.active {
+      color: #000000;
+      @media (max-width: 768px) {
+        padding-left: 0px;
+      }
+    }
+    button.passed {
+      color: #CCC;
+    }
+  }
+  > li + li:before {
+    content: none;
+  }
+
+  .glyphicon-chevron-right {
+    padding-left: 24px;
+  }
+}
+
+// Form (see _form.scss)
+
+// Modals
+
+.modal-title {
+  font-size: $font-size-h3;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-body {
+  padding-bottom: 0;
+  font-size: $font-size-base;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.move-booking-container {
+  min-height: 800px;
+}
+
+// Panels
+
+.panel {
+  border-top: none;
+  &:first-child {
+    border-top: 1px solid #dddddd;
+  }
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  background-color: #fff;
+  box-shadow: none;
+  margin-bottom: 15px;
+  &:last-child {
+    margin-bottom: 20px;
+  }
+}
+
+// .panel:hover {
+//   background-color: #f4f4f4;
+// }
+
+.panel-group .panel + .panel {
+  margin-top: 0;
+  border-top: none;
+}
+
+.panel-title {
+  font-size: $font-size-h3;
+  font-weight: 300;
+  padding-bottom: 15px;
+}
+
+// Check boxes.
+
+.radio label, .checkbox label {
+  font-weight: 400;
+}
+
+.glyphicon-trash:hover {
+  cursor: pointer;
+}
+
+.glyphicon-shopping-cart:hover {
+  cursor: pointer;
+}
