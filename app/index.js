@@ -52,13 +52,7 @@ module.exports = generators.Base.extend({
     var prompts = [{
       type: 'input',
       name: 'companyId',
-      message: 'What is your BookingBug company id?',
-      validate: function(companyId) {
-        if(companyId == parseInt(companyId, 10))
-          return true;
-        else
-          return false;
-      }
+      message: 'What is your BookingBug company id?'
     }, {
       type: 'input',
       name: 'apiUrl',
