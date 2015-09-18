@@ -61,7 +61,7 @@ gulp.task('javascripts', ['bower', 'templates'], function() {
 gulp.task('templates', ['bower'], function() {
   return gulp.src('src/templates/<%= appType %>/**/*.html')
     .pipe(templateCache('booking-widget-templates.js', {module: 'BB'}))
-    .pipe(gulp.dest('src/javascripts'));
+    .pipe(gulp.dest('release'));
 });
 
 gulp.task('images', function() {
@@ -101,7 +101,12 @@ gulp.task('fonts', function() {
 
 
 gulp.task('watch', ['assets'], function() {
-  return gulp.watch(['./src/**/*', '!./**/*~'], ['assets']);
+  gulp.watch(['./src/javascripts/*', '!./**/*~'], ['javascripts']);
+  gulp.watch(['./src/stylesheets/*', '!./**/*~'], ['stylesheets']);
+  gulp.watch(['./src/images/*', '!./**/*~'], ['images']);
+  gulp.watch(['./src/templates/*', '!./**/*~'], ['templates']);
+  gulp.watch(['./src/www/*', '!./**/*~'], ['www']);
+  gulp.watch(['./src/fonts/*', '!./**/*~'], ['fonts']);
 });
 
 gulp.task('webserver', ['assets'], function() {
