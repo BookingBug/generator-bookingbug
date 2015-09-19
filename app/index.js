@@ -53,12 +53,6 @@ module.exports = generators.Base.extend({
       type: 'input',
       name: 'companyId',
       message: 'What is your BookingBug company id?',
-      validate: function(companyId) {
-        if(companyId == parseInt(companyId, 10))
-          return true;
-        else
-          return false;
-      }
     }, {
       type: 'input',
       name: 'apiUrl',
