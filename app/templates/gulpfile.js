@@ -15,7 +15,6 @@ var gulp = require('gulp');
     sass = require('gulp-sass');
     mainBowerFiles = require('main-bower-files');
     uglify = require('gulp-uglify');
-    git = require('gulp-git');
 var bower = require('gulp-bower');
     path = require('path')
 
@@ -46,7 +45,7 @@ gulp.task('www', function() {
 
 gulp.task('javascripts', ['bower', 'templates'], function() {
   src = mainBowerFiles({filter: new RegExp('.js$')})
-  src.push('src/<%= appType %>/javascripts/**/*')
+  src.push('src/javascripts/**/*')
   return gulp.src(src)
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function(e) {
       gutil.log(e)
@@ -59,20 +58,20 @@ gulp.task('javascripts', ['bower', 'templates'], function() {
 });
 
 gulp.task('templates', ['bower'], function() {
-  return gulp.src('src/templates/<%= appType %>/**/*.html')
+  return gulp.src('src/templates/**/*.html')
     .pipe(templateCache('booking-widget-templates.js', {module: 'BB'}))
     .pipe(gulp.dest('release'));
 });
 
 gulp.task('images', function() {
-  return gulp.src('src/<%= appType %>/images/*')
+  return gulp.src('src/images/*')
     .pipe(flatten())
     .pipe(gulp.dest('release/images'));
 });
 
 function filterStylesheets(path) {
   if (path.match(new RegExp('.css$')) && 
-     !path.match(new RegExp('bookingbug-angular-public-booking.css$'))){
+     !path.match(new RegExp('<%= appType %>.css$'))){
     return true;
   } else {
     return false;
@@ -94,7 +93,7 @@ gulp.task('stylesheets', ['bower'], function() {
 
 
 gulp.task('fonts', function() {
-  return gulp.src('src/<%= appType %>/fonts/*')
+  return gulp.src('src/fonts/*')
     .pipe(flatten())
     .pipe(gulp.dest('release/fonts'));
 });

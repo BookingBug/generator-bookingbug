@@ -52,7 +52,7 @@ module.exports = generators.Base.extend({
     var prompts = [{
       type: 'input',
       name: 'companyId',
-      message: 'What is your BookingBug company id?'
+      message: 'What is your BookingBug company id?',
     }, {
       type: 'input',
       name: 'apiUrl',
@@ -139,7 +139,7 @@ module.exports = generators.Base.extend({
 
   installBowerDependencies: function () {
     if (!this.options['skip-bower']) {
-      this.bowerInstall([this.appType], {
+      this.bowerInstall(['bookingbug-angular-public-booking', 'bookingbug-angular-member'], {
         "save": true
       });
       if(this.appType === 'bookingbug-angular-member') {
