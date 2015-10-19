@@ -92,7 +92,8 @@ module.exports = generators.Base.extend({
     this.fs.copyTpl(
       this.templatePath('_package.json'),
       this.destinationPath('package.json'),
-      { name: this.appName }
+      { name: this.appName,
+        type: this.appType }
     );
   },
 
@@ -133,8 +134,8 @@ module.exports = generators.Base.extend({
         'gulp-uglify',
         'gulp-bower',
         'path'
-      ], { 'save': true, 'cache-min': 3600 })
-    };
+      ], { 'save': true, 'cache-min': 3600 });
+    }
   },
 
   installBowerDependencies: function () {
@@ -147,7 +148,7 @@ module.exports = generators.Base.extend({
           "save": true
         });
       }
-    };
+    }
   }
 
 });
