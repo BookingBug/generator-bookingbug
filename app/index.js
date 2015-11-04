@@ -133,7 +133,7 @@ module.exports = generators.Base.extend({
         'gulp-uglify',
         'gulp-bower',
         'path'
-      ], { 'save': true, 'cache-min': 3600 })
+      ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' })
     };
   },
 
