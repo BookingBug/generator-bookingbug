@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var generators = require('yeoman-generator');
 var _ = require('lodash');
@@ -9,6 +9,18 @@ module.exports = generators.Base.extend({
   constructor: function () {
     generators.Base.apply(this, arguments);
 
+    this.option('name', {
+      desc: "Project name"
+    });
+    this.option('type', {
+      desc: ""
+    });
+    this.option('companyId', {
+      desc: "Company ID"
+    });
+    this.option('apiUrl', {
+      desc: "API URL"
+    });
     this.option('skip-npm', {
       desc: "Skip installing npm dependencies"
     });
@@ -18,58 +30,71 @@ module.exports = generators.Base.extend({
   },
 
   getName: function () {
-    var done = this.async();
-    this.prompt({
-      type: 'input',
-      name: 'appName',
-      message: 'What is the name of your project?'
-    }, function (response) {
-      this.appName = response.appName;
-      done();
-    }.bind(this));
+    if (this.options.name) {
+      this.appName = this.options.name;
+    } else {
+      var done = this.async();
+      this.prompt({
+        type: 'input',
+        name: 'appName',
+        message: 'What is the name of your project?'
+      }, function (response) {
+        this.appName = response.appName;
+        done();
+      }.bind(this));
+    }
   },
 
-   getProjectType: function() {
-    var done = this.async();
-    this.prompt({
-      type: 'list',
-      name: 'appType',
-      message: 'What type of application do you want?',
-      choices: [{
-      name: 'Public-bookings application',
-      value: 'bookingbug-angular-public-booking'
-    }, {
-      name: 'Member application',
-      value: 'bookingbug-angular-member'
-    }] }, function(response){
-      this.appType = response.appType;
-      done();
-    }.bind(this));
+  getProjectType: function() {
+    if (this.options.type) {
+      this.appType = this.options.type;
+    } else {
+      var done = this.async();
+      this.prompt({
+        type: 'list',
+        name: 'appType',
+        message: 'What type of application do you want?',
+        choices: [{
+        name: 'Public-bookings application',
+        value: 'bookingbug-angular-public-booking'
+      }, {
+        name: 'Member application',
+        value: 'bookingbug-angular-member'
+      }] }, function(response){
+        this.appType = response.appType;
+        done();
+      }.bind(this));
+    }
   },
 
   getConfig: function () {
-    var done = this.async();
-    var prompts = [{
-      type: 'input',
-      name: 'companyId',
-      message: 'What is your BookingBug company id?',
-    }, {
-      type: 'input',
-      name: 'apiUrl',
-      message: 'What is the API URL?',
-      default: 'https://www.bookingbug.com',
-      validate: function(apiUrl) {
-        if(apiUrl.substring(0, 8) !== 'https://' && apiUrl.substring(0, 7) !== 'http://')
-          return false;
-        else
-          return true;
-      }
-    }];
-    this.prompt(prompts, function (response) {
-      this.companyId = response.companyId;
-      this.apiUrl = response.apiUrl;
-      done();
-    }.bind(this));
+    if (this.options.companyId && this.options.apiUrl) {
+      this.companyId = this.options.companyId;
+      this.apiUrl = this.options.apiUrl;
+    } else {
+      var done = this.async();
+      var prompts = [{
+        type: 'input',
+        name: 'companyId',
+        message: 'What is your BookingBug company id?',
+      }, {
+        type: 'input',
+        name: 'apiUrl',
+        message: 'What is the API URL?',
+        default: 'https://www.bookingbug.com',
+        validate: function(apiUrl) {
+          if(apiUrl.substring(0, 8) !== 'https://' && apiUrl.substring(0, 7) !== 'http://')
+            return false;
+          else
+            return true;
+        }
+      }];
+      this.prompt(prompts, function (response) {
+        this.companyId = response.companyId;
+        this.apiUrl = response.apiUrl;
+        done();
+      }.bind(this));
+    }
   },
 
   enforceFolderName: function () {
@@ -133,21 +158,19 @@ module.exports = generators.Base.extend({
         'gulp-uglify',
         'gulp-bower',
         'path'
-      ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' })
-    };
+      ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
+    }
   },
 
   installBowerDependencies: function () {
     if (!this.options['skip-bower']) {
-      this.bowerInstall(['bookingbug-angular-public-booking', 'bookingbug-angular-member'], {
-        "save": true
-      });
+      this.bowerInstall();
       if(this.appType === 'bookingbug-angular-member') {
         this.bowerInstall(['angular-slick', 'angular-recaptcha'], {
           "save": true
         });
       }
-    };
+    }
   }
 
 });
