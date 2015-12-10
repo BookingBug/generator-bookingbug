@@ -80,7 +80,7 @@ function filterStylesheets(path) {
 
 gulp.task('stylesheets', ['bower'], function() {
   src = mainBowerFiles({filter: filterStylesheets});
-  src.push('src/bookingbug-angular-<%= type %>/stylesheets/main.scss');
+  src.push('src/stylesheets/main.scss');
   return gulp.src(src)
     .pipe(gulpif(/.*scss$/, sass({errLogToConsole: true})))
     .pipe(gulpif(argv.env == 'development' || argv.env == 'dev',
