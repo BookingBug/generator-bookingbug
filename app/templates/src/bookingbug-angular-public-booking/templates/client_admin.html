@@ -1,0 +1,103 @@
+<div bb-client-details ng-init="checkStepTitle('Client Details')">
+
+  <div bb-include="_service_item_aggregate" ng-if="bb.service">
+  </div>
+
+  <div class="bb-subcontent">
+
+    <form name="client_form" class="form-horizontal" role="form" ng-submit="validator.validateForm(client_form)" bb-form-resettable bb-form novalidate>
+
+      <div>
+        <h2 class="booking-form-header">Client details<h2>
+      </div>
+      
+      <div class="form-group" 
+      ng-class="{'has-error': client_form.first_name.$invalid && (!client_form.first_name.$pristine || client_form.submitted)}">
+        <label for="" class="control-label col-sm-4">First Name*:</label>
+        <div class="col-sm-5">
+          <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autofocus bb-resettable ng-pattern="validator.alpha" />
+        </div>
+        <div class="col-sm-offset-4 messages">
+          <div class="error-message" ng-show="client_form.first_name.$invalid && client_form.submitted">
+            Please enter your first name
+          </div>
+        </div> 
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (!client_form.last_name.$pristine || client_form.submitted)}">
+        <label class="control-label col-sm-4">Last Name*:</label>
+        <div class="col-sm-5">
+          <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" bb-resettable ng-pattern="validator.alpha" />
+        </div>
+        <div class="col-sm-offset-4 messages">
+          <div class="error-message" ng-show="client_form.last_name.$invalid && client_form.submitted">
+            Please enter your last name
+          </div>          
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (!client_form.email.$pristine || client_form.submitted)}">
+        <label for="" class="control-label col-sm-4">Email:</label>
+        <div class="col-sm-5">
+          <input type="email" name="email" id="email" ng-model="client.email" class="form-control" bb-resettable />
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': (client_form.mobile.$invalid && (!client_form.mobile.$pristine || client_form.submitted)) && (!client_form.mobile.$focused || client_form.mobile.$error.required)}">
+        <label for="mobile" class="control-label col-sm-4">Mobile:</label>
+        <div class="col-sm-5">
+          <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" bb-resettable ng-pattern="validator.getMobilePattern()" />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-5">
+           <p class="form-control-static">*Required fields</p>
+        </div>
+      </div>
+
+      <div ng-show="client_details.hasQuestions">
+        <div>
+          <h2 class="booking-form-header">Questions</h2>
+        </div>
+
+        <div 
+        class="form-group" 
+        ng-repeat="question in client_details.questions" 
+        bb-question-line 
+        ng-if="question.currentlyShown && !question.admin_only" 
+        ng-class="{'has-error': client_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].dirty || booking_form.submitted)}">
+          <label 
+          class="control-label col-sm-4"
+          bb-question-label="question" for="{{question.id}}"
+          >{{question.name}}<span ng-show="question.required">*</span>:</label>
+          <div class="col-sm-5">
+            <input bb-question="question"/ class="form-control">
+          </div>
+          <div class="col-sm-offset-4" ng-show="question.help_text & & !client_form['q' + question.id].$invalid && !client_form.submitted">
+            <small >{{question.help_text}}</small>
+          </div>
+          <div class="col-sm-offset-4 messages">
+            <div class="error-message" ng-show="client_form['q' + question.id].$invalid && client_form.submitted">
+              This field is required
+            </div>
+          </div> 
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="bb-step-navigation">
+    <div class="row">
+      <div class="col-sm-9 col-sm-push-3 text-right">
+        <button type="submit" class="btn btn-primary pull-right" ng-click="validator.validateForm(client_form) && validateClient(client_form)">Continue</button>
+      </div>
+      <div class="col-sm-3 col-sm-pull-9 col-md-2 col-lg-2 text-left">
+        <button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span>Back</span></button>
+        <button type="button" class="btn btn-default" ng-click="resetForm()">Clear</button>
+      </div>
+    </div>
+  </div> 
+
+</div>

@@ -1,0 +1,12 @@
+<form name="pick_company_form" ng-submit="selectedCompany()" role="form">
+  <p>Pick Company</p>
+  <div ng-repeat="admin in administrators" class="radio">
+    <label>
+      <input id="company{{admin.company_id}}" type="radio"
+        ng-model="$parent.selected_admin" ng-value="admin" required
+        name="company">
+      {{admin.company_name}}
+    </label>
+  </div>
+  <input type="submit" class="btn btn-default">
+</form>

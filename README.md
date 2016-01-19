@@ -23,13 +23,17 @@ Run `yo bookingbug`
 ```
 yo bookingbug
 ```
+### Types of application currently supported
+
+* public booking application
+* member application
 
 ### Yo options
-
 `yo bookingbug --help` or `yo bookingbug -h` for help
 
-* `--skipNpm` skip installing npm dependencies
-* `--skipBower` skip installing bower dependencies
+* `--skip-npm` skip installing npm dependencies
+* `--skip-bower` skip installing bower dependencies
+
 
 ### Use Gulp tasks
 

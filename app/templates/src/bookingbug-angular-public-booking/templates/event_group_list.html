@@ -1,0 +1,27 @@
+<div bb-event-groups>
+
+  <div class="panel panel-default" ng-repeat="item in items">
+    <div class="panel-body">
+      <h2 class="panel-title item-name">{{item.name}}</h2>
+      <div class="row">
+<!--         <div class="col-sm-2 service-image">
+          <img ng-src="{{item.extra.image_url}}" class="img-responsive"/>
+        </div> -->
+        <div class="col-sm-8 col-xs-9 item-description">
+          {{item.description}}
+        </div>
+        <div class="col-sm-2 col-xs-3 item-price" ng-if="item.price">
+          <span class="currency-symbol">£</span>{{item.price}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-10 service-select">
+          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block">Select</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+

@@ -1,0 +1,26 @@
+<div bb-companies ng-init="checkStepTitle('Select a Company')">
+
+  <div class="panel panel-default" ng-repeat="item in companies | orderBy: name">
+    <div class="panel-body">
+      <!-- add bb-vertical-align-center class below or something similar -->
+      <div class="row">
+        <div class="col-sm-10">
+          <h2 class="panel-title">{{item.name}}</h2>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block">Select</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="bb-step-navigation" ng-show="bb.current_step > 1">
+  <div class="row">
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-default pull-left" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div bb-item-details ng-init="checkStepTitle('Booking Summary')">
+
+  <div bb-include="_service_item_aggregate">
+  </div>
+
+  <div class="bb-subcontent">
+
+    <form name="booking_form" class="form-horizontal" ng-submit="validator.validateForm(booking_form)" role="form" bb-raise-alert-when-invalid>
+
+      <div bb-custom-booking-text class="bb-message-node">
+        <div ng-repeat="msg in messages" ng-bind-html="msg"></div>
+      </div>
+
+      <div ng-show="item_details.hasQuestions" class="question-node">
+        <div ng-form="booking_questions_form" role="form" novalidate>
+          <h3 class="booking-form-header">Questions</h3>
+
+          <div ng-repeat="question in item_details.questions" bb-question-line ng-show="question.currentlyShown">
+            <div class="form-group" ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].dirty || booking_form.submitted)}">
+              <label bb-question-label="question" class="control-label col-sm-offset-1 col-sm-3" ng-show="question.name" for="{{question.id}}"
+              >{{question.name}}<span ng-show="question.required">*</span>:
+              </label>
+              <div class="col-sm-5">
+                <input bb-question="question"/>
+                <br/>
+                <small ng-show="question.help_text">{{question.help_text}}<hr/></small>
+              </div>
+              <div class="col-sm-offset-4 messages">
+                <div class="error-message" ng-show="question.required.$invalid && booking_form.submitted">
+                  This field is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4">&nbsp;</label>
+            <div class="col-sm-5">
+              <div class="bb-checkbox" ng-if="item">
+                <label><input type="checkbox" ng-model="item.settings.send_email_reminder" ng-initial="true">Send me an email reminder</label>
+                <label><input type="checkbox" ng-model="item.settings.send_sms_reminder" ng-initial="true">Send me a SMS reminder</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+  <div class="bb-step-navigation">
+    <div class="row">
+      <div class="col-sm-9 col-sm-push-3 text-right">
+        <button type="submit" class="btn btn-primary pull-right" ng-click="confirm(booking_form)">Book</button>
+      </div>
+      <div class="col-sm-3 col-sm-pull-9">
+        <button type="button" class="btn btn-default pull-left" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>

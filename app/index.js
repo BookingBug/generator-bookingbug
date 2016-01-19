@@ -3,29 +3,17 @@
 var generators = require('yeoman-generator');
 var _ = require('lodash');
 var path = require('path');
-var github = require('octonode');
-var fs = require('fs');
-var os = require('os');
-var AdmZip = require('adm-zip');
-var request = require('request');
-var mkdirp = require('mkdirp');
-var glob = require('glob');
 
-var BookingBugGenerator = generators.Base.extend();
-
-module.exports = BookingBugGenerator.extend({
+module.exports = generators.Base.extend({
 
   constructor: function () {
     generators.Base.apply(this, arguments);
 
-    this.argument('type', {
-      type: String,
-      required: false,
-      defaults: 'public-booking'
-    });
-
     this.option('name', {
       desc: "Project name"
+    });
+    this.option('type', {
+      desc: ""
     });
     this.option('companyId', {
       desc: "Company ID"
@@ -33,10 +21,10 @@ module.exports = BookingBugGenerator.extend({
     this.option('apiUrl', {
       desc: "API URL"
     });
-    this.option('skipNpm', {
+    this.option('skip-npm', {
       desc: "Skip installing npm dependencies"
     });
-    this.option('skipBower', {
+    this.option('skip-bower', {
       desc: "Skip installing bower dependencies"
     });
   },
@@ -52,6 +40,28 @@ module.exports = BookingBugGenerator.extend({
         message: 'What is the name of your project?'
       }, function (response) {
         this.appName = response.appName;
+        done();
+      }.bind(this));
+    }
+  },
+
+  getProjectType: function() {
+    if (this.options.type) {
+      this.appType = this.options.type;
+    } else {
+      var done = this.async();
+      this.prompt({
+        type: 'list',
+        name: 'appType',
+        message: 'What type of application do you want?',
+        choices: [{
+        name: 'Public-bookings application',
+        value: 'bookingbug-angular-public-booking'
+      }, {
+        name: 'Member application',
+        value: 'bookingbug-angular-member'
+      }] }, function(response){
+        this.appType = response.appType;
         done();
       }.bind(this));
     }
@@ -122,45 +132,12 @@ module.exports = BookingBugGenerator.extend({
   },
 
   copySrc: function () {
-    this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { type: this.type });
-  },
-
-  getArchive: function () {
-    var version = 'v0.1.0-4';
-    var tmpPath = os.tmpdir() + '/bookingbug/' + version;
-    mkdirp(tmpPath, function(err) {
-      var zipPath = tmpPath + '/bookingbug-angular.zip';
-      var ghclient = github.client();
-      var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
-      try {
-        fs.lstatSync(zipPath);
-      } catch (e) {
-        ghrepo.archive('zipball', version, function(err, url, headers) {
-          request(url)
-            .pipe(fs.createWriteStream(zipPath))
-            .on('close', function() {
-              var zip = new AdmZip(zipPath);
-              zip.extractAllTo(tmpPath);
-            });
-        });
-      }
-    });
-  },
-
-  installStylesheets: function () {
-    var version = 'v0.1.0-4';
-    var tmpPath = os.tmpdir() + '/bookingbug/' + version;
-    this.fs.copy(glob.sync(tmpPath + "/*/src/public-booking/stylesheets/**"), "src/stylesheets");
-  },
-
-  installTemplates: function () {
-    var version = 'v0.1.0-4';
-    var tmpPath = os.tmpdir() + '/bookingbug/' + version;
-    this.fs.copy(glob.sync(tmpPath + "/*/src/public-booking/templates/**"), "src/templates");
+    this.fs.copy(this.templatePath("src/" + this.appType), "src");
+    this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { appType: this.appType });
   },
 
   installNpmDependencies: function () {
-    if (!this.options.skipNpm) {
+    if (!this.options['skip-npm']) {
       this.npmInstall([
         'gulp',
         'gulp-coffee',
@@ -186,9 +163,9 @@ module.exports = BookingBugGenerator.extend({
   },
 
   installBowerDependencies: function () {
-    if (!this.options.skipBower) {
+    if (!this.options['skip-bower']) {
       this.bowerInstall();
-      if(this.type === 'member') {
+      if(this.appType === 'bookingbug-angular-member') {
         this.bowerInstall(['angular-slick', 'angular-recaptcha'], {
           "save": true
         });

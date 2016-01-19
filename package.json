@@ -15,16 +15,8 @@
   "author": "Ed Clements <ed@bookingbug.com>",
   "license": "MIT",
   "dependencies": {
-    "adm-zip": "^0.4.7",
-    "glob": "^6.0.1",
-    "gulp-flatten": "^0.2.0",
-    "gulp-rename": "^1.2.2",
     "lodash": "^3.10.0",
-    "mkdirp": "^0.5.1",
-    "octonode": "^0.7.4",
     "path": "^0.11.14",
-    "q": "^1.4.1",
-    "request": "^2.67.0",
     "yeoman-generator": "^0.20.1"
   }
 }

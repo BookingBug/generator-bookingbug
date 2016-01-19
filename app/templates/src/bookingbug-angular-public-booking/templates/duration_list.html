@@ -1,0 +1,38 @@
+<div bb-include="_service_item_aggregate">
+</div>
+
+<div class="bb-subcontent">
+
+  <div bb-durations ng-init="checkStepTitle('Select Duration')" class="bb-duration-list">
+    <div class="panel panel-default" ng-repeat="duration in durations">
+      <div class="panel-body">
+        <div class="row bb-vertical-align-center">
+          <div class="col-sm-8 col-xs-6">
+            <h2 class="panel-title">{{duration.pretty}}</h2>
+            <div ng-if="duration.description">
+              {{duration.description}}
+            </div>
+          </div>
+          <div class="col-sm-2 col-xs-6">
+            <div class="bb-duration-price">
+              <span ng-show="duration.price > 0">{{duration.price | currency}}</span>
+              <span ng-show="duration.price == 0">Free</span>
+            </div>
+          </div>
+          <div class="col-sm-2 col-xs-12">
+            <button type="button" ng-click="selectDuration(duration)" class="btn btn-primary btn-block">Select</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bb-step-navigation">
+  <div class="row">
+    <div class="col-sm-3">
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+  </div>
+</div>

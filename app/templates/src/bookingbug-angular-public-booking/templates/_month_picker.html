@@ -1,0 +1,31 @@
+<div slick init-onload="true" data="months" slides-to-show="{{slidesToShow}}" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next">
+
+  <div class="bb-month" ng-repeat="month in months" ng-class="{'hidden-xs': month.selected}">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="7" class="months">{{month.start_date.format("MMMM")}}</th>
+        </tr>
+        <tr>
+          <th ng-repeat="day in month.weeks[0].days" class="days">{{day.date | datetime: "ddd" : false}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="week in month.weeks">
+          <td ng-repeat="day in week.days" 
+            ng-class="{'available': day.available, 
+                       'selected': day.selected,
+                       'today': day.today,
+                       'past': day.past,
+                       'disabled': day.disabled
+                      }" 
+              ng-click="showDay(day)" 
+              ng-disabled="day.disabled || day.past">
+            <div class="circle">{{day.date.date()}}</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,71 @@
+<div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8">
+
+      <div class="bb-subcontent">
+        <div class="confirmation-header bb-confirmation-border-margin">
+          <h2>Payment Confirmation</h2>
+          <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. Your payment was successful. We have you emailed you the details below.</p>
+          <div class="row hidden-print text-right">
+            <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> Print</button>
+            <div bb-booking-export class="bb-booking-export"></div>
+          </div>
+        </div>
+
+        <div>
+          <ul class="confirmation-summary" ng-repeat="i in total.items">
+            <li ng-if="i.id" class="row confirmation-summary-item">
+              <div class="col-sm-3">Booking Reference:</div>
+              <div class="col-sm-9">{{i.id}}</div>
+            </li>
+            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+              <div class="col-sm-3">Service:</div>
+              <div class="col-sm-9">{{i.full_describe}}</div>
+            </li>
+            <li ng-if="i.describe" class="row confirmation-summary-item">
+              <div class="col-sm-3">Date/Time:</div>
+              <div class="col-sm-9">{{i.describe}}</div>
+            </li>
+            <li ng-if="i.price" class="row confirmation-summary-item">
+              <div class="col-sm-3">Price:</div>
+              <div class="col-sm-9">{{i.price | currency }}</div>
+            </li>
+          </ul>
+          <ul ng-show="total.items[0].address.lat" class="confirmation-summary">
+            <li class="row confirmation-summary-item">
+              <div class="col-sm-12">
+                <div bb-address-map="total.items[0].address">
+                  <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
+                    <ui-gmap-marker coords="marker.coords" idkey="marker.id">
+                    </ui-gmap-marker>
+                  </ui-gmap-google-map>
+                </div>
+              </div>
+            </li>
+            <li class="row confirmation-summary-item">
+              <div class="col-sm-12">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>{{total.items[0].address | address_single_line }}
+              </div>
+            </li>
+          </ul>
+
+          <div bb-custom-confirmation-text class="bb-message">
+            <div ng-repeat="msg in messages" ng-bind-html="msg"></div>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="bb-step-navigation">
+</div>
+
+<div ng-show="isLoaded" class="powered-by visible-print">
+  <p>Bookings powered by <span style="color:#087f94">booking</span><span style="color:#88c66f">bug</p>
+  <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
+</div>
