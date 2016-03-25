@@ -114,7 +114,8 @@ module.exports = BookingBugGenerator.extend({
   createConfig: function () {
     var config = {
       "company_id": this.companyId,
-      "api_url": this.apiUrl
+      "api_url": this.apiUrl,
+      "assets_url": ""
     };
     this.fs.writeJSON("config.json", config);
     this.fs.writeJSON("config.staging.json", config);
@@ -122,6 +123,9 @@ module.exports = BookingBugGenerator.extend({
   },
 
   copySrc: function () {
+    var src = path.join(this.sourceRoot(), 'src/**/*');
+    var dest = path.join(this.destinationPath(), 'src');
+    this.fs.copy(src, dest);
     this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { type: this.type });
   },
 
@@ -143,7 +147,7 @@ module.exports = BookingBugGenerator.extend({
         that.log(zipPath);
         try {
           that.log('Check for archive');
-          that.fs.lstatSync(zipPath);
+          fs.lstatSync(zipPath);
           that.log('Found archive');
           done();
         } catch (e) {
