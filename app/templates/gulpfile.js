@@ -16,15 +16,15 @@ var gulp = require('gulp');
     mainBowerFiles = require('main-bower-files');
     uglify = require('gulp-uglify');
 var bower = require('gulp-bower');
-    path = require('path')
+    path = require('path');
 
-var devConfig = './config.dev.json'
-    stagingConfig = './config.staging.json'
-    prodConfig = './config.json'
+var devConfig = './config.dev.json';
+    stagingConfig = './config.staging.json';
+    prodConfig = './config.json';
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
-  cb()
+  cb();
 });
 
 /*gulp.task('repo_clone', function(cb) {
@@ -44,12 +44,12 @@ gulp.task('www', function() {
 });
 
 gulp.task('javascripts', ['bower', 'templates'], function() {
-  src = mainBowerFiles({filter: new RegExp('.js$')})
-  src.push('src/javascripts/**/*')
+  src = mainBowerFiles({filter: new RegExp('.js$')});
+  src.push('src/javascripts/**/*');
   return gulp.src(src)
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function(e) {
-      gutil.log(e)
-      this.emit('end')
+      gutil.log(e);
+      this.emit('end');
     })))
     .pipe(gulpif(argv.env != 'development' && argv.env != 'dev',
             uglify({mangle: false}))).on('error', gutil.log)
@@ -71,7 +71,7 @@ gulp.task('images', function() {
 
 function filterStylesheets(path) {
   if (path.match(new RegExp('.css$')) && 
-     !path.match(new RegExp('<%= appType %>.css$'))){
+     !path.match(new RegExp('bookingbug-angular-<%= type %>.css$'))){
     return true;
   } else {
     return false;
@@ -79,8 +79,8 @@ function filterStylesheets(path) {
 }
 
 gulp.task('stylesheets', ['bower'], function() {
-  src = mainBowerFiles({filter: filterStylesheets})
-  src.push('src/<%= appType %>/stylesheets/main.scss')
+  src = mainBowerFiles({filter: filterStylesheets});
+  src.push('src/stylesheets/main.scss');
   return gulp.src(src)
     .pipe(gulpif(/.*scss$/, sass({errLogToConsole: true})))
     .pipe(gulpif(argv.env == 'development' || argv.env == 'dev',
@@ -119,10 +119,10 @@ gulp.task('webserver', ['assets'], function() {
 });
 
 gulp.task('bower', function() {
-  return bower();
+  return bower({directory: './bower_components'});
 });
 
-gulp.task('assets', ['clean', 'templates', 'javascripts', 'stylesheets', 'images', 'www', 'fonts'])
+gulp.task('assets', ['clean', 'templates', 'javascripts', 'stylesheets', 'images', 'www', 'fonts']);
 
 gulp.task('default', ['assets', 'watch', 'webserver'], function(){
     setTimeout(function(){console.log("All tasks done!");}, 30);
