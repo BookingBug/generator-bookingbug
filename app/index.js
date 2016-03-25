@@ -126,36 +126,51 @@ module.exports = BookingBugGenerator.extend({
   },
 
   getArchive: function () {
-    var version = 'v0.1.0-4';
-    var tmpPath = os.tmpdir() + '/bookingbug/' + version;
-    mkdirp(tmpPath, function(err) {
-      var zipPath = tmpPath + '/bookingbug-angular.zip';
-      var ghclient = github.client();
-      var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
-      try {
-        fs.lstatSync(zipPath);
-      } catch (e) {
-        ghrepo.archive('zipball', version, function(err, url, headers) {
-          request(url)
-            .pipe(fs.createWriteStream(zipPath))
-            .on('close', function() {
-              var zip = new AdmZip(zipPath);
-              zip.extractAllTo(tmpPath);
-            });
-        });
-      }
+    this.log('Get archive');
+    var that = this;
+    var done = this.async();
+    var ghclient = github.client();
+    var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
+    ghrepo.releases(function(err, releases, headers) {
+      if (err) that.log(err);
+      that.version = releases[0].tag_name;
+      that.log('Latest version is ' + that.version);
+      var tmpPath = os.tmpdir() + 'bookingbug/' + that.version;
+      that.log(tmpPath);
+      mkdirp(tmpPath, function(err) {
+        if (err) that.log(err);
+        var zipPath = tmpPath + '/bookingbug-angular.zip';
+        that.log(zipPath);
+        try {
+          that.log('Check for archive');
+          that.fs.lstatSync(zipPath);
+          that.log('Found archive');
+          done();
+        } catch (e) {
+          that.log('Archive not found, fetching');
+          ghrepo.archive('zipball', that.version, function(err, url, headers) {
+            if (err) that.log(err);
+            that.log('Archive URL: ' + url);
+            request(url)
+              .pipe(fs.createWriteStream(zipPath))
+              .on('close', function() {
+                var zip = new AdmZip(zipPath);
+                zip.extractAllTo(tmpPath);
+                done();
+              });
+          });
+        }
+      });
     });
   },
 
   installStylesheets: function () {
-    var version = 'v0.1.0-4';
-    var tmpPath = os.tmpdir() + '/bookingbug/' + version;
+    var tmpPath = os.tmpdir() + '/bookingbug/' + this.version;
     this.fs.copy(glob.sync(tmpPath + "/*/src/public-booking/stylesheets/**"), "src/stylesheets");
   },
 
   installTemplates: function () {
-    var version = 'v0.1.0-4';
-    var tmpPath = os.tmpdir() + '/bookingbug/' + version;
+    var tmpPath = os.tmpdir() + '/bookingbug/' + this.version;
     this.fs.copy(glob.sync(tmpPath + "/*/src/public-booking/templates/**"), "src/templates");
   },
 
