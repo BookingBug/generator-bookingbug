@@ -139,11 +139,11 @@ module.exports = BookingBugGenerator.extend({
       if (err) that.log(err);
       that.version = releases[0].tag_name;
       that.log('Latest version is ' + that.version);
-      var tmpPath = os.tmpdir() + 'bookingbug/' + that.version;
+      var tmpPath = path.join(os.tmpdir(), 'bookingbug', that.version);
       that.log(tmpPath);
       mkdirp(tmpPath, function(err) {
         if (err) that.log(err);
-        var zipPath = tmpPath + '/bookingbug-angular.zip';
+        var zipPath = path.join(tmpPath, 'bookingbug-angular.zip');
         that.log(zipPath);
         try {
           that.log('Check for archive');
@@ -169,13 +169,13 @@ module.exports = BookingBugGenerator.extend({
   },
 
   installStylesheets: function () {
-    var tmpPath = os.tmpdir() + '/bookingbug/' + this.version;
-    this.fs.copy(glob.sync(tmpPath + "/*/src/public-booking/stylesheets/**"), "src/stylesheets");
+    var tmpPath = path.join(os.tmpdir(), 'bookingbug', this.version);
+    this.fs.copy(glob.sync(path.join(tmpPath, "/*/src/public-booking/stylesheets/**")), "src/stylesheets");
   },
 
   installTemplates: function () {
-    var tmpPath = os.tmpdir() + '/bookingbug/' + this.version;
-    this.fs.copy(glob.sync(tmpPath + "/*/src/public-booking/templates/**"), "src/templates");
+    var tmpPath = path.join(os.tmpdir(), 'bookingbug', this.version);
+    this.fs.copy(glob.sync(path.join(tmpPath, "/*/src/public-booking/templates/**")), "src/templates");
   },
 
   installNpmDependencies: function () {
