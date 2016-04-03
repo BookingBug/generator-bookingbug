@@ -9,41 +9,27 @@ var gulp = require('gulp');
     rename = require('gulp-rename');
     flatten = require('gulp-flatten');
     promptly = require('promptly');
-    argv = require('yargs').argv;
     replace = require('gulp-replace');
     template = require('gulp-template');
     sass = require('gulp-sass');
     mainBowerFiles = require('main-bower-files');
     uglify = require('gulp-uglify');
-var bower = require('gulp-bower');
     path = require('path');
 
-var devConfig = './config.dev.json';
-    stagingConfig = './config.staging.json';
-    prodConfig = './config.json';
+var config = require('./config.json');
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
   cb();
 });
 
-/*gulp.task('repo_clone', function(cb) {
-  git.clone("https://github.com/BookingBug/bookingbug-angular.git", {cwd: "./src/"}, function(err){
-    //console.log(err);
-    cb(null);
-  });
-});*/
 gulp.task('www', function() {
   return gulp.src(['src/www/*'])
-      .pipe(gulpif(argv.env == 'development' || argv.env == 'dev',
-                   template(require(devConfig)),
-                   gulpif(argv.env == 'production' || argv.production,
-                          template(require(prodConfig)),
-                          template(require(stagingConfig)))))
+      .pipe(template(config))
       .pipe(gulp.dest('release'));
 });
 
-gulp.task('javascripts', ['bower', 'templates'], function() {
+gulp.task('javascripts', function() {
   src = mainBowerFiles({filter: new RegExp('.js$')});
   src.push('src/javascripts/**/*');
   return gulp.src(src)
@@ -51,13 +37,12 @@ gulp.task('javascripts', ['bower', 'templates'], function() {
       gutil.log(e);
       this.emit('end');
     })))
-    .pipe(gulpif(argv.env != 'development' && argv.env != 'dev',
-            uglify({mangle: false}))).on('error', gutil.log)
+    .pipe(uglify({mangle: false}).on('error', gutil.log))
     .pipe(concat('booking-widget.js'))
     .pipe(gulp.dest('release'));
 });
 
-gulp.task('templates', ['bower'], function() {
+gulp.task('templates', function() {
   return gulp.src('src/templates/**/*.html')
     .pipe(templateCache('booking-widget-templates.js', {module: 'BB'}))
     .pipe(gulp.dest('release'));
@@ -78,26 +63,22 @@ function filterStylesheets(path) {
   }
 }
 
-gulp.task('stylesheets', ['bower'], function() {
+gulp.task('stylesheets', function() {
   src = mainBowerFiles({filter: filterStylesheets});
   src.push('src/stylesheets/main.scss');
   return gulp.src(src)
     .pipe(gulpif(/.*scss$/, sass({errLogToConsole: true})))
-    .pipe(gulpif(argv.env == 'development' || argv.env == 'dev',
-       template(require(devConfig)),
-       template(require(prodConfig))))
+    .pipe(template(config))
     .pipe(flatten())
     .pipe(concat('booking-widget.css'))
     .pipe(gulp.dest('release'));
 });
-
 
 gulp.task('fonts', function() {
   return gulp.src('src/fonts/*')
     .pipe(flatten())
     .pipe(gulp.dest('release/fonts'));
 });
-
 
 gulp.task('watch', ['assets'], function() {
   gulp.watch(['./src/javascripts/*', '!./**/*~'], ['javascripts']);
@@ -116,10 +97,6 @@ gulp.task('webserver', ['assets'], function() {
     ],
     port: 8000
   });
-});
-
-gulp.task('bower', function() {
-  return bower({directory: './bower_components'});
 });
 
 gulp.task('assets', ['clean', 'templates', 'javascripts', 'stylesheets', 'images', 'www', 'fonts']);

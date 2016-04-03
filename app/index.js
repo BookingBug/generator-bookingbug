@@ -174,8 +174,6 @@ module.exports = BookingBugGenerator.extend({
       "sdk_version": this.version
     };
     this.fs.writeJSON("config.json", config);
-    this.fs.writeJSON("config.staging.json", config);
-    this.fs.writeJSON("config.dev.json", config);
   },
 
   copySrc: function () {
@@ -209,13 +207,11 @@ module.exports = BookingBugGenerator.extend({
         'gulp-rename',
         'gulp-flatten',
         'promptly',
-        'yargs',
         'gulp-replace',
         'gulp-template',
         'gulp-sass',
         'main-bower-files',
         'gulp-uglify',
-        'gulp-bower',
         'path'
       ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
     }
