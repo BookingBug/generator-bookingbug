@@ -39,6 +39,9 @@ module.exports = BookingBugGenerator.extend({
     this.option('skipBower', {
       desc: "Skip installing bower dependencies"
     });
+    this.option('sdkVersion', {
+      desc: "BookingBug SDK version"
+    });
   },
 
   getName: function () {
@@ -87,6 +90,58 @@ module.exports = BookingBugGenerator.extend({
     }
   },
 
+  getVersion: function() {
+    if (this.options.sdkVersion) {
+      this.version = this.options.sdkVersion;
+      this.log('Latest version is ' + this.version);
+    } else {
+      var that = this;
+      var done = this.async();
+      var ghclient = github.client();
+      var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
+      ghrepo.releases(function(err, releases, headers) {
+        if (err) that.log(err);
+        that.version = releases[0].tag_name;
+        that.log('Latest version is ' + that.version);
+        done();
+      });
+    }
+  },
+
+  getArchive: function () {
+    this.log('Get archive');
+    var that = this;
+    var done = this.async();
+    var ghclient = github.client();
+    var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
+    var tmpPath = path.join(os.tmpdir(), 'bookingbug', this.version);
+    this.log(tmpPath);
+    mkdirp(tmpPath, function(err) {
+      if (err) that.log(err);
+      var zipPath = path.join(tmpPath, 'bookingbug-angular.zip');
+      that.log(zipPath);
+      try {
+        that.log('Check for archive');
+        fs.lstatSync(zipPath);
+        that.log('Found archive');
+        done();
+      } catch (e) {
+        that.log('Archive not found, fetching');
+        ghrepo.archive('zipball', that.version, function(err, url, headers) {
+          if (err) that.log(err);
+          that.log('Archive URL: ' + url);
+          request(url)
+            .pipe(fs.createWriteStream(zipPath))
+            .on('close', function() {
+              var zip = new AdmZip(zipPath);
+              zip.extractAllTo(tmpPath);
+              done();
+            });
+        });
+      }
+    });
+  },
+
   enforceFolderName: function () {
     if (this.appName !== _.last(this.destinationRoot().split(path.sep))) {
       this.destinationRoot(this.appName);
@@ -99,7 +154,7 @@ module.exports = BookingBugGenerator.extend({
     this.fs.copyTpl(
       this.templatePath('_bower.json'),
       this.destinationPath('bower.json'),
-      { name: this.appName }
+      { name: this.appName, version: this.version.slice(1) }
     );
   },
 
@@ -115,7 +170,8 @@ module.exports = BookingBugGenerator.extend({
     var config = {
       "company_id": this.companyId,
       "api_url": this.apiUrl,
-      "assets_url": ""
+      "assets_url": "",
+      "sdk_version": this.version
     };
     this.fs.writeJSON("config.json", config);
     this.fs.writeJSON("config.staging.json", config);
@@ -127,45 +183,6 @@ module.exports = BookingBugGenerator.extend({
     var dest = path.join(this.destinationPath(), 'src');
     this.fs.copy(src, dest);
     this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { type: this.type });
-  },
-
-  getArchive: function () {
-    this.log('Get archive');
-    var that = this;
-    var done = this.async();
-    var ghclient = github.client();
-    var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
-    ghrepo.releases(function(err, releases, headers) {
-      if (err) that.log(err);
-      that.version = releases[0].tag_name;
-      that.log('Latest version is ' + that.version);
-      var tmpPath = path.join(os.tmpdir(), 'bookingbug', that.version);
-      that.log(tmpPath);
-      mkdirp(tmpPath, function(err) {
-        if (err) that.log(err);
-        var zipPath = path.join(tmpPath, 'bookingbug-angular.zip');
-        that.log(zipPath);
-        try {
-          that.log('Check for archive');
-          fs.lstatSync(zipPath);
-          that.log('Found archive');
-          done();
-        } catch (e) {
-          that.log('Archive not found, fetching');
-          ghrepo.archive('zipball', that.version, function(err, url, headers) {
-            if (err) that.log(err);
-            that.log('Archive URL: ' + url);
-            request(url)
-              .pipe(fs.createWriteStream(zipPath))
-              .on('close', function() {
-                var zip = new AdmZip(zipPath);
-                zip.extractAllTo(tmpPath);
-                done();
-              });
-          });
-        }
-      });
-    });
   },
 
   installStylesheets: function () {
