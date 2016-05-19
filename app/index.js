@@ -52,7 +52,13 @@ module.exports = BookingBugGenerator.extend({
       this.prompt({
         type: 'input',
         name: 'appName',
-        message: 'What is the name of your project?'
+        message: 'What is the name of your project? (please use no spaces or illegal characters)',
+        validate: function(appName) {
+          if (appName.match(/^[a-zA-Z0-9]+$/))
+            return true;
+          else
+            return false;
+        }
       }, function (response) {
         this.appName = response.appName;
         done();
