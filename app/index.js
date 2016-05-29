@@ -176,8 +176,7 @@ module.exports = BookingBugGenerator.extend({
     var config = {
       "company_id": this.companyId,
       "api_url": this.apiUrl,
-      "assets_url": "",
-      "sdk_version": this.version
+      "assets_url": ""
     };
     this.fs.writeJSON("config.json", config);
   },
@@ -187,11 +186,6 @@ module.exports = BookingBugGenerator.extend({
     var dest = path.join(this.destinationPath(), 'src');
     this.fs.copy(src, dest);
     this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { type: this.type });
-  },
-
-  installStylesheets: function () {
-    var tmpPath = path.join(os.tmpdir(), 'bookingbug', this.version);
-    this.fs.copy(glob.sync(path.join(tmpPath, "/*/src/public-booking/stylesheets/**")), "src/stylesheets");
   },
 
   installTemplates: function () {

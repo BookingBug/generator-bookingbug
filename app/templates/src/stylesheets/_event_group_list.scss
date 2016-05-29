@@ -1,0 +1,53 @@
+.event-group .panel-default {
+  @include make-xs-column(12);
+  @include make-sm-column(6);
+  border: none;
+  margin-bottom: 30px;
+  .panel-body {
+    padding: 0px;
+  }
+  .btn-primary {
+    color: #000;
+  }
+  .btn-primary:hover {
+    background-color: #000;
+    color: #d33826;
+  }
+  .item-name {
+    font-size: 14px;
+    text-transform: uppercase;
+    line-height: 35px;
+  }
+  .item-desc {
+    position: absolute;
+    display: none;
+    z-index: 100;
+    p {
+      padding: 15px;
+    }
+  }
+  .item-img {
+    padding: 0px;
+    background-color: #000;
+  }
+  .item-description {
+    background: #000;
+  }
+  .service-select {
+    background: #000;
+  }
+}
+.event-group .panel-default:hover  {
+  .btn-primary {
+    background-color: #000;
+    color: #d33826;
+  }
+  .item-desc {
+    display: block;
+  }
+  .item-img img {
+    opacity:.6;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+    filter: alpha(opacity=60); 
+  }
+}

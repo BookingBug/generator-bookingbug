@@ -54,20 +54,16 @@ gulp.task('images', function() {
     .pipe(gulp.dest('release/images'));
 });
 
-function filterStylesheets(path) {
-  if (path.match(new RegExp('.css$')) && 
-     !path.match(new RegExp('bookingbug-angular-<%= type %>.css$'))){
-    return true;
-  } else {
-    return false;
-  }
-}
+var sassOptions = {
+  includePaths: [path.join(__dirname, 'bower_components/bootstrap-sass-official/assets/stylesheets')],
+  errLogToConsole: true
+};
 
 gulp.task('stylesheets', function() {
-  src = mainBowerFiles({filter: filterStylesheets});
+  src = mainBowerFiles({filter: new RegExp('.css')});
   src.push('src/stylesheets/main.scss');
   return gulp.src(src)
-    .pipe(gulpif(/.*scss$/, sass({errLogToConsole: true})))
+    .pipe(gulpif(/.*scss$/, sass(sassOptions)))
     .pipe(template(config))
     .pipe(flatten())
     .pipe(concat('booking-widget.css'))

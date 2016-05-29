@@ -1,0 +1,48 @@
+.bb-day, div[bb-month-availability] {
+
+  // Button styling
+
+  .btn-link {
+    color: #000000;
+  }
+
+  .glyphicon-chevron-left {
+    margin-right: 5px;
+  }
+
+  .glyphicon-chevron-right {
+    margin-left: 5px;
+  }
+
+  // Table styling
+
+  table.table {
+    color: #000000;
+  }
+
+  // Active and inactive month and day style
+
+  .bb-month-highlight {
+    background-color: #f8f8f8;
+  }
+
+  .bb-today {
+    border: 2px solid #337ab7;
+  }
+
+  p.bb-past {
+    color: #CCC;
+  }
+
+  // Hover states
+
+  td.bb-go-ok:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+
+  td.bb-no-go:hover {
+    cursor: initial;
+  } 
+
+}

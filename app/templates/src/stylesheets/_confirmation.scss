@@ -1,0 +1,105 @@
+.confirmation-header {
+  font-size: $font-size-base;
+  text-align: center;
+  button{
+    &:hover, &:focus{
+      box-shadow: 2px 2px 15px #ddd;
+    }
+  }
+}
+
+.confirmation-heading {
+  margin-bottom: 15px;
+}
+
+.confirmation-summary {
+  font-size: $font-size-base;
+  border-bottom: 1px solid #dddddd;  
+  margin: 6px 0 0px 0;
+  padding: 20px 10px 10px 10px;
+  &:first-child {
+    border-top: 1px solid #dddddd;
+  }
+}
+
+.confirmation-summary-item {
+  margin-bottom: 10px;
+}
+
+.confirmation-summary{
+  .confirmation-summary-item{
+    .bb-summary-label, .bb-summary-value{
+      float: left;
+      min-width: 115px;
+      padding: 0px 15px 5px 15px;
+      color: #555;
+    }
+    .bb-summary-value{
+      width: auto;
+      color: inherit;
+    }
+  }
+}
+
+.confirmation-summary-address{
+  div{
+    padding-top: 5px;
+    font-size: 14px;
+  }
+}
+
+.address-item {
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.move-done-msg {
+  color: green;
+}
+
+.bb-checkout, div[bb-checkout] {
+
+  a {
+    text-decoration: none;
+  }
+
+  .btn-link {
+    margin-top: 25px;
+    color: #000;
+  }
+
+  .bb-confirmation-border-margin {
+    margin-top: 30px;
+    // margin-bottom: 20px;
+  }
+
+  .bb-confirmation-p-alignment {
+    margin-bottom: 5px;
+  }
+
+  .bb-checkout-pay-button {
+    text-align: right;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 15px;
+  }
+
+  .bb-message {
+    padding: 20px 10px 10px 10px;
+
+    p {
+      margin: 10px 0 5px;
+    }
+  }
+}
+
+.angular-google-map-container { 
+  height: 200px; 
+}
+
+.bb-booking-export {
+  display: inline;
+}

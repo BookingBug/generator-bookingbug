@@ -1,0 +1,80 @@
+.bb-basket, div[bb-basket-list] {
+
+  table.table {
+    color: #000000;
+  }
+
+  .bb-coupon-box {
+    margin-bottom: 100px;
+    text-align: center;
+  }
+
+  .bb-empty-basket-full-screen {
+    text-align: center;
+    padding-top: 60px;
+    @media (max-width: $screen-xs-max) {
+      padding-top: 10px;
+    }
+  }
+
+}
+
+// Basket Summary List
+.bb-item-summary{
+  border-bottom: 1px $secondary-border-color solid;
+  padding-bottom: 0;
+  margin-top: 20px;
+  margin-bottom: 0;
+
+  .bb-summary-label{
+    padding-top: 10px;
+    color: $brand-primary;
+    margin-right: 10px;
+    width: 100%;
+    @media (max-width: $screen-xs-max) {
+      padding-top: 15px;
+      width: auto;
+      margin-right: 0;
+      display: inline-block;
+    }
+  }
+  .bb-summary-value{
+    padding-bottom: 10px;
+    color: #909090;
+    @media (max-width: $screen-xs-max) {
+      width: auto;
+      display: inline-block;
+      padding: 0;
+    }
+  }
+  .bb-confirmation-summary-item {
+    display: inline-block;
+    margin-right: 50px;
+    padding: 10px 0 10px 0;
+    font-weight: bold;
+    @media (max-width: $screen-xs-max) {
+      float: none;
+      width: auto;
+      padding: 0;
+    }
+  }
+  .bb-item-summary-header {
+    height: 1px;
+    border-bottom: 1px $secondary-border-color solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .bb-item-summary-header-text{
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    display: inline-block;
+    bottom: 12px;
+    color: $brand-primary;
+    background-color: white;
+    font-size: $font-size-large;
+    text-align: center;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,84 @@
+.bb-time, [bb-times] {
+
+  td:hover {
+    background-color: #f1f1f1;
+  }
+
+  p.bb-past {
+    color: #CCC;
+  }
+
+  li[bb-slot-grouper] {
+    @media ( min-width: $screen-sm-min ) {
+      min-height: 400px;
+    }
+  }
+
+  .bb-time-slot {
+    margin-bottom: 15px;
+  }
+
+  .bb-service-unavailable {
+    color: #ccc;
+    font-size: $font-size-large;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin-bottom: 0px
+  }
+
+  small {
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  .bb-time-section-separator {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    @media ( max-width: $screen-xs-max ) {
+      border: none;
+    }
+  }
+
+  .btn-link {
+    color: #000000;
+  }
+
+  .glyphicon-chevron-left {
+    margin-right: 5px;
+  }
+
+  .glyphicon-chevron-right {
+    margin-left: 5px;
+  }
+
+  .panel-heading {
+    cursor: pointer;
+  }
+
+  // disabled panel
+  .panel-default[disabled], .panel[disabled].expanded {
+    background: none;
+
+    .panel-heading {
+      cursor: default;
+      padding-bottom: 15px;
+    }
+    .panel-collapse {
+      display: none;
+    }
+    .panel-title {
+      color: #CCC;
+    }
+
+    small {
+      font-weight: inherit;
+      color: inherit;
+    }
+  }
+
+}

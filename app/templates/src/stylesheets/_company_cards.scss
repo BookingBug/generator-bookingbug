@@ -1,0 +1,21 @@
+// company cards
+.card{
+  margin: 10px;
+  min-height: 340px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  .btn-primary{
+    position: absolute;
+    bottom: 20px;
+    right: 36px;
+
+  }
+  h4{
+    font-size: 18px;
+    margin: 0px;
+    padding-bottom: 5px;
+  }
+  .card-block{
+    padding: 10px;
+  }
+}

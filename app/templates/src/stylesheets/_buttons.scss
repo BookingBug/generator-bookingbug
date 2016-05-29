@@ -1,0 +1,52 @@
+.btn-icon {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  &:active {
+    box-shadow: none;
+  }
+  &:focus {
+    outline: none;
+  }
+  &[disabled] {
+    color: #CCC;
+  }
+}
+
+.btn-xl {
+  font-size: 50px;
+}
+
+.button-group{
+  padding-top: 15px;
+  .btn {
+    width: 100%;
+    @media (min-width: $screen-sm-min) {
+      width: auto;
+    }
+    @media (max-width: $screen-xs-max) {
+      margin-top: 10px;
+    }
+  }
+  &.bordered {
+    border-top: 1px solid #DDD;
+    margin-top: 30px;
+  }
+}
+
+// .date-picker .input-group-btn .btn {
+//   height: 36px;
+//   margin-bottom: 15px;
+// }
+
+.btn {
+  .fa {
+    height: 18px;
+  }
+
+  &.btn-lg .fa {
+    height: 22px;
+  }
+
+}

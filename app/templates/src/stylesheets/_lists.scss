@@ -1,0 +1,131 @@
+/* .summary-list used in survey only*/
+.summary-list {
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.bb-summary-list {
+  margin-bottom: 20px;
+  line-height: 1.4;
+
+  .bb-confirmation-summary-item {
+    @include make-row();
+
+    .bb-summary-label {
+      @include make-sm-column(2);
+      @include make-md-column(2);
+      @include make-lg-column(1);
+    }
+
+    .bb-summary-value {
+      @include make-sm-column(10);
+      @include make-md-column(10);
+      @include make-lg-column(11);
+    }
+
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 10px;
+      margin-top: 10px;
+      .bb-summary-value {
+        font-weight: bold;
+      }
+    }
+
+  }
+}
+
+.bb-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  > li {
+    padding-bottom: 15px;
+  }
+
+  > li span.glyphicon {
+    padding-right: 5px;
+  }
+
+  &.bb-list-fade-in {
+    
+    .ng-enter {
+      -webkit-animation: fadeIn 1s;
+      -moz-animation: fadeIn 1s;
+      -o-animation: fadeIn 1s;
+      animation: fadeIn 1s;
+    }
+
+  }
+
+  &.bb-list-banded {
+
+    > li:nth-child(even) {
+      background-color: transparent;
+    }
+
+    > li:nth-child(odd) {
+      background-color: $gray-lighter;
+    }
+  }
+
+  &.bb-list-bordered {
+
+    > li:last-child {
+      border-bottom: 1px solid $table-border-color;
+    }
+
+    > li {
+      padding-top: 15px;
+      border-top: 1px solid $table-border-color;
+    }
+
+  }
+
+  &.bb-list-horizontal {
+
+    > li {
+      display: inline-block;
+      padding: 0 15px 5px 0;
+    }
+
+  }
+
+  .bb-list-heading {
+    margin: 15px 0 5px 0;
+    font-weight: bold;
+  }
+
+  &.bb-list-sm {
+    > li {
+      padding-bottom: 5px;
+    }
+  }
+
+}
+
+
+.bb-bullet-list {
+  list-style: disc outside none;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  float: left;
+
+  > li {
+    padding: 0 0 5px 0;
+  }
+
+}
+
+.event-summary-list {
+  margin-bottom: 5px;
+  li {
+    padding-bottom: 5px;
+    .bb-icon, .glyphicon {
+      color: #666;
+    }
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}

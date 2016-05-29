@@ -1,0 +1,13 @@
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// EXPORT TO CALENDAR POPOVER
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/
+.popover{
+  span{
+    color: #777;
+    cursor: pointer;
+    padding-top: 5px;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}

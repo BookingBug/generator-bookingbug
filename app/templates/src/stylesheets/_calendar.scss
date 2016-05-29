@@ -1,0 +1,291 @@
+.bb-calendar, [bb-time-ranges],  {
+  padding-bottom: 30px;
+
+  .week {
+    padding: 0 15px;
+    list-style: none;
+  }
+
+  .day {
+    width: 12.85%;
+    float: left;
+    padding-right: 10px;
+    @media (max-width: $screen-xs-max) {
+      padding: 0 20px;
+      width: 100%;
+    }
+  }
+
+  .day.navigation {
+    width: 5%;
+    float: left;
+    .btn-icon {
+      font-size: $font-size-h2;
+      color: inherit;
+      float: left;
+      margin-top: 92px;
+    }
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+
+  .month-header {
+    margin-bottom: 30px;
+     .month-heading {
+      margin: 0;
+      text-align: center;
+      line-height: 33px;
+      font-size: $font-size-large;
+    }
+  }
+
+
+  .day-header {
+    .previous {
+      text-align: left;
+    }
+    .next {
+      text-align: right;
+    }
+    .icon {
+      font-size: $font-size-h3;
+    }
+    .day-heading {
+      //text-transform: uppercase;
+      text-align: center;
+      font-size: $font-size-base;
+      @media (min-width: $screen-sm) {
+        text-align: left;
+        padding-left: 30px;
+      }
+    }
+
+  }
+
+  .date-picker {
+    @media (max-width: $screen-xs-max) {
+      padding-bottom: 15px;
+    }
+  }
+
+  // panel styling
+  .panel-group {
+    .panel {
+      border-radius: 0;
+      margin: 0;
+      border: none;
+      border-bottom: 1px rgb(221, 221, 221) solid;
+      box-shadow: none;
+    }
+
+    .accordion-group:first-child .panel {
+      border-top: 1px rgb(221, 221, 221) solid;
+    }
+  }
+
+  .panel-default > .panel-heading {
+    background: none;
+    padding: 10px 4px 10px 4px;
+    position: relative;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .collapse-control {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: position;
+  }
+
+  .panel-default > .panel-heading + .panel-collapse .panel-body {
+    border: none;
+  }
+
+   .panel-body {
+    padding: 0;
+  }
+
+  .panel-title {
+    font-size: inherit;
+    padding-bottom: 0;
+  }
+
+  .period-label {
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-size: $font-size-small;
+    // font-size: 0.9rem;
+  }
+
+  .selected-time {
+    display: block;
+    text-align: center;
+  //   font-size: 12px;
+  //   font-size: 1.2rem;
+  }
+
+  .time-slot {
+    padding: 15px 25px;
+    cursor: pointer;
+    text-align: center;
+    &:hover, &.selected {
+      background-color: #333;
+      color: #FFF;
+    }
+  }
+
+  .period-label-icon {
+    width: 10px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  // expanded or selected panel
+  .panel-group .panel.expanded {
+    background-color: #EEE;
+  }
+
+  .panel-group .panel.selected {
+    background-color: #777;
+    color: #FFF;
+  }
+
+  .panel-default.expanded > .panel-heading {
+    padding-bottom: 5px;
+  }
+
+  // disabled panel
+  .panel-default[disabled], .panel[disabled].expanded {
+    background: none;
+
+    .panel-heading {
+      cursor: default;
+    }
+    .panel-collapse {
+      display: none;
+    }
+    .panel-title {
+      color: #CCC;
+    }
+  }
+
+// calendar hidden column functionality
+@media (max-width: $screen-md-max) {
+  .cal-col-6, .cal-col-7{
+    display: none;
+  }
+  .cal-col-1, .cal-col-2, .cal-col-3, .cal-col-4, .cal-col-5{
+    width: 17.99%;
+  }
+}
+@media (max-width: $screen-sm-max) {
+  .cal-col-6, .cal-col-7, .cal-col-4, .cal-col-5{
+    display: none;
+  }
+  .cal-col-1, .cal-col-2, .cal-col-3{
+    width: 29.98%;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .cal-col-1{
+    width: 100%;
+    padding: 0;
+  }
+  .cal-col-2, .cal-col-3, .cal-col-4, .cal-col-5{
+    display: none;
+  }
+}
+  // actions
+
+  .actions {
+    text-align: right;
+    @media (max-width: $screen-xs-max) {
+      padding-right: 20px;
+    }
+  }
+
+}
+
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// KEEP CHEVRONS SPACED EVENLY AT EITHER SIDE OF THE CALENDAR
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+.calendar{
+  .day.navigation{
+    .btn-icon{
+    span.glyphicon{
+       font-size: 40px;
+       width: 100%;
+      }   
+    }
+    button{
+      width: 100%;
+    }  
+  }
+}
+
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// DATEPICKER DEFAULT SCHEMA
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+
+[datepicker-popup-wrap]{
+  padding: 10px;
+}
+
+[datepicker], [bb-events] .date-picker{
+  &:active, &:focus{
+    outline: none;
+    border: none;
+  }
+
+  table{
+    &:active, &:focus{
+      outline: none;
+      border: none;
+    }
+
+    th{
+      padding: 2px;
+    }
+
+    button{
+      background: transparent;
+      border-radius: 0px;
+      border: solid 1px #ddd;
+      color: #777;
+      &:disabled{
+        opacity: .5;
+      }
+      span{
+        color: #777;
+      }
+    }
+
+    button.btn-default.active{
+      background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
+      span{
+        font-weight: bold;
+      }
+    }
+
+    button.btn-default{       
+        &:hover, &:active, &:focus{
+           background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
+           outline: none;
+           span{
+            font-weight: bold;
+           }
+        }        
+    }
+    
+  }
+}
+
+
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// DATEPICKER DEFAULT SCHEMA end
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
