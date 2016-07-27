@@ -1,60 +1,26 @@
-@charset "UTF-8";
-@import "bootstrap";
-@import "animate";
-@import "fonts";
-@import "mixins";
-
-// Modules & Variables
-$heading-text-color         : #222222;
-$page-background-color      : #FFFFFF;
-$hyperlink-color            : #609ABE;
-$placeholder-text           : #A5A5A5;
-
-$primary-text-color         : #222222;
-$primary-background-color   : #EEEEEE;
-$primary-border-color       : #666666;
-
-$secondary-text-color       : #255B93;
-$secondary-background-color : #FAFAFA;
-$secondary-border-color     : #D5D5D5;
+// @todo add back when new admin gets merged into master
+// Font awesome
+// $fa-font-path: "fonts";
+// @import "../../bower_components/fontawesome/scss/font-awesome";
 
 #bb {
+  @import "bootstrap";
+  @import "bootstrap-variables";
+  @import "bb-variables";
+  @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
-  // font-family: 'Source Sans Pro', sans-serif;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 400;
+  // BB SDK styles
+  @import "../../bower_components/bookingbug-angular-core/src/stylesheets/main";
+  @import "../../bower_components/bookingbug-angular-public-booking/src/stylesheets/main";
+
+  // Bespoke project styles
+  margin: 0;
+  font-family: $font-family-base;
   font-size: $font-size-base;
-  color: $primary-text-color;
-  background-color: $page-background-color;
-  margin: 0; // remove default body margin
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $body-bg;
 
-  //
-  // ADD THEME HERE
-  //
-
-
-  // Page Elements
-  @import "buttons";
-  @import "form";
-  @import "alerts";
-  @import "helpers";
-  @import "lists";
-  @import "page";
-
-  // Partials
-  @import "basket";
-  @import "basket_mini";
-  @import "calendar";
-  @import "confirmation";
-  @import "day";
-  @import "duration_list";
-  @import "event_group_list";
-  @import "event_list";
-  @import "map";
-  @import "service_list";
-  @import "event";
-  @import "time";
-  @import "filters";
-  @import "popovers";
-  @import "company_cards";
+  // All custom styles and overrides should be stored in the following .scss file:
+  @import "<%= project_name %>_theme";
 }

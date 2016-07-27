@@ -176,21 +176,23 @@ module.exports = BookingBugGenerator.extend({
     var config = {
       "company_id": this.companyId,
       "api_url": this.apiUrl,
-      "assets_url": ""
+      "assets_url": "",
+      "server_port": 8000
     };
     this.fs.writeJSON("config.json", config);
   },
 
   copySrc: function () {
     var src = path.join(this.sourceRoot(), 'src/**/*');
-    var dest = path.join(this.destinationPath(), 'src');
+    var dest = this.destinationPath('src');
     this.fs.copy(src, dest);
     this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { type: this.type });
-  },
-
-  installTemplates: function () {
-    var tmpPath = path.join(os.tmpdir(), 'bookingbug', this.version);
-    this.fs.copy(glob.sync(path.join(tmpPath, "/*/src/public-booking/templates/**")), "src/templates");
+    this.fs.copyTpl(
+      this.templatePath("src/stylesheets/main.scss"),
+      this.destinationPath("src/stylesheets/main.scss"),
+      { project_name: this.appName }
+    );
+    this.template("_theme.scss", "src/stylesheets/" + this.appName + "_theme.scss")
   },
 
   installNpmDependencies: function () {
@@ -212,7 +214,12 @@ module.exports = BookingBugGenerator.extend({
         'gulp-sass',
         'main-bower-files',
         'gulp-uglify',
-        'path'
+        'path',
+        'gulp-sourcemaps',
+        'gulp-plumber',
+        'gulp-css-selector-limit',
+        'connect-modrewrite',
+        'gulp-open'
       ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
     }
   },
