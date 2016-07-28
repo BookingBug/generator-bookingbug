@@ -73,29 +73,29 @@ module.exports = BookingBugGenerator.extend({
 
   getConfig: function () {
     if (this.options['company-id'] && this.options['api-url']) {
-      this.company_id = this.options['company-id'];
-      this.api_url = this.options['api-url'];
+      this.companyId = this.options['company-id'];
+      this.apiUrl = this.options['api-url'];
     } else {
       var done = this.async();
       var prompts = [{
         type: 'input',
-        name: 'company_id',
+        name: 'companyId',
         message: 'What is your BookingBug company id?',
       }, {
         type: 'input',
-        name: 'api_url',
+        name: 'apiUrl',
         message: 'What is the API URL?',
         default: 'https://www.bookingbug.com',
-        validate: function(api_url) {
-          if(api-url.substring(0, 8) !== 'https://' && api-url.substring(0, 7) !== 'http://')
+        validate: function(apiUrl) {
+          if(apiUrl.substring(0, 8) !== 'https://' && apiUrl.substring(0, 7) !== 'http://')
             return false;
           else
             return true;
         }
       }];
       this.prompt(prompts, function (response) {
-        this.company_id = response.company_id;
-        this.api_url = response.api_url;
+        this.companyId = response.companyId;
+        this.apiUrl = response.apiUrl;
         done();
       }.bind(this));
     }
@@ -179,8 +179,8 @@ module.exports = BookingBugGenerator.extend({
 
   createConfig: function () {
     var config = {
-      company_id: this.company_id,
-      api_url: this.api_url,
+      company_id: this.companyId,
+      api_url: this.apiUrl,
       assets_url: "",
       server_port: 8000
     };
