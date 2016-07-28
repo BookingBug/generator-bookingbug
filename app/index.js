@@ -27,20 +27,25 @@ module.exports = BookingBugGenerator.extend({
     this.option('name', {
       desc: "Project name"
     });
-    this.option('companyId', {
+    this.option('company-id', {
       desc: "Company ID"
     });
-    this.option('apiUrl', {
+    this.option('api-url', {
       desc: "API URL"
     });
-    this.option('skipNpm', {
+    this.option('skip-npm', {
       desc: "Skip installing npm dependencies"
     });
-    this.option('skipBower', {
+    this.option('skip-bower', {
       desc: "Skip installing bower dependencies"
     });
-    this.option('sdkVersion', {
+    this.option('sdk-version', {
       desc: "BookingBug SDK version"
+    });
+    this.option('bb-dev', {
+      desc: "Use the BookingBug SDK in development mode",
+      type: Boolean,
+      defaults: false
     });
   },
 
@@ -67,38 +72,38 @@ module.exports = BookingBugGenerator.extend({
   },
 
   getConfig: function () {
-    if (this.options.companyId && this.options.apiUrl) {
-      this.companyId = this.options.companyId;
-      this.apiUrl = this.options.apiUrl;
+    if (this.options['company-id'] && this.options['api-url']) {
+      this.company_id = this.options['company-id'];
+      this.api_url = this.options['api-url'];
     } else {
       var done = this.async();
       var prompts = [{
         type: 'input',
-        name: 'companyId',
+        name: 'company_id',
         message: 'What is your BookingBug company id?',
       }, {
         type: 'input',
-        name: 'apiUrl',
+        name: 'api_url',
         message: 'What is the API URL?',
         default: 'https://www.bookingbug.com',
-        validate: function(apiUrl) {
-          if(apiUrl.substring(0, 8) !== 'https://' && apiUrl.substring(0, 7) !== 'http://')
+        validate: function(api_url) {
+          if(api-url.substring(0, 8) !== 'https://' && api-url.substring(0, 7) !== 'http://')
             return false;
           else
             return true;
         }
       }];
       this.prompt(prompts, function (response) {
-        this.companyId = response.companyId;
-        this.apiUrl = response.apiUrl;
+        this.company_id = response.company_id;
+        this.api_url = response.api_url;
         done();
       }.bind(this));
     }
   },
 
   getVersion: function() {
-    if (this.options.sdkVersion) {
-      this.version = this.options.sdkVersion;
+    if (this.options['sdk-version']) {
+      this.version = this.options['sdk-version'];
       this.log('Latest version is ' + this.version);
     } else {
       var that = this;
@@ -174,11 +179,26 @@ module.exports = BookingBugGenerator.extend({
 
   createConfig: function () {
     var config = {
-      "company_id": this.companyId,
-      "api_url": this.apiUrl,
-      "assets_url": "",
-      "server_port": 8000
+      company_id: this.company_id,
+      api_url: this.api_url,
+      assets_url: "",
+      server_port: 8000
     };
+    if (this.options['bb-dev']) {
+      config = {
+        local: _.extend({}, config),
+        development: _.extend({}, config),
+        staging: _.extend({}, config),
+        production: _.extend({}, config)
+      }
+      config.local.api_url = "http://localhost:3000"
+      config.production.cache_control_max_age = '300'
+      config.staging.cache_control_max_age = '10'
+      config.development.cache_control_max_age = '10'
+      config.production.deploy_path = "/" + this.appName + "/"
+      config.staging.deploy_path = "/" + this.appName + "/staging/"
+      config.development.deploy_path = "/" + this.appName + "/development/"
+    }
     this.fs.writeJSON("config.json", config);
   },
 
@@ -186,7 +206,7 @@ module.exports = BookingBugGenerator.extend({
     var src = path.join(this.sourceRoot(), 'src/**/*');
     var dest = this.destinationPath('src');
     this.fs.copy(src, dest);
-    this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { type: this.type });
+    this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { bb_dev: this.options['bb-dev'] });
     this.fs.copyTpl(
       this.templatePath("src/stylesheets/main.scss"),
       this.destinationPath("src/stylesheets/main.scss"),
@@ -196,7 +216,7 @@ module.exports = BookingBugGenerator.extend({
   },
 
   installNpmDependencies: function () {
-    if (!this.options.skipNpm) {
+    if (!this.options['skip-npm']) {
       this.npmInstall([
         'gulp',
         'gulp-coffee',
@@ -221,11 +241,22 @@ module.exports = BookingBugGenerator.extend({
         'connect-modrewrite',
         'gulp-open'
       ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
+      if (this.options['bb-dev']) {
+        this.npmInstall([
+          'gulp-awspublish',
+          'gulp-environments',
+          'git-user-name',
+          'git-user-email',
+          'gulp-slack',
+          'yargs',
+          'lodash'
+        ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
+      }
     }
   },
 
   installBowerDependencies: function () {
-    if (!this.options.skipBower) {
+    if (!this.options['skip-bower']) {
       this.bowerInstall();
       if(this.type === 'member') {
         this.bowerInstall(['angular-slick', 'angular-recaptcha'], {
