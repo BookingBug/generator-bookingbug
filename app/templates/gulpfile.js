@@ -32,6 +32,10 @@ var email = require('git-user-email');
 var argv = require('yargs').argv;
 var rename = require('gulp-rename');
 var _ = require('lodash');
+var glob = require('glob');
+var rimraf = require('rimraf');
+var bower = require('gulp-bower');
+var bowerLink = require('gulp-bower-link');
 var webhook_config = {
   url: process.env.BB_SDK_SLACK_URL,
   user: "ROBO",
@@ -41,8 +45,6 @@ var slack = require('gulp-slack')(webhook_config);
 <% } %>
 var config;
 <% if (bb_dev) { %>
-environments.current(staging);
-
 function getEnv() {
   return environments.current().$name;
 }
@@ -63,7 +65,7 @@ gulp.task('www', ['get-config'], function() {
       .pipe(gulp.dest('release'));
 });
 
-gulp.task('dependency-javascripts', function() {
+gulp.task('dependency-javascripts', <% if (bb_dev) { %>['bower-link'], <% } %>function() {
   return gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
     .pipe(uglify({mangle: false}).on('error', gutil.log))
     .pipe(concat('booking-widget-dependencies.js'))
@@ -103,13 +105,13 @@ function filterStylesheets(path) {
   );
 }
 
-gulp.task('dependency-stylesheets', function() {
+gulp.task('dependency-stylesheets', <% if (bb_dev) { %>['bower-link'], <% } %>function() {
   return gulp.src(mainBowerFiles({ includeDev: true, filter: filterStylesheets }))
     .pipe(concat('booking-widget-dependencies.css'))
     .pipe(gulp.dest('release'));
 });
 
-gulp.task('stylesheets', function() {
+gulp.task('stylesheets', <% if (bb_dev) { %>['bower-link'], <% } %>function() {
   return gulp.src('src/stylesheets/main.scss')
     .pipe(sourcemaps.init())
     .pipe(plumber())
@@ -240,6 +242,55 @@ gulp.task('deploy', ['assets','get-config'], function() {
     .pipe(awspublish.reporter())
     .pipe(slack(getUserDetails() + " deployed `test2` to " + getEnv() + " with SDK version " + getVersion()));
 
+});
+
+function isLink(f) {
+  try {
+    var stat = fs.lstatSync(f);
+    return stat && stat.isSymbolicLink();
+  } catch(e) {
+    return false
+  }
+}
+
+function isNotLink(f) {
+  return !isLink(f);
+}
+
+function doBowerLink(folders, i, cb) {
+  if (!process.env.BB_SDK_SRC_DIR)
+    throw new Error('Missing environment variable BB_SDK_SRC_DIR');
+  if (folders.length == 0) {
+    cb();
+    return
+  }
+  var f = folders[i];
+  var module = f.match(/.*(bookingbug-angular-.*)/)[1];
+  var name = f.match(/bookingbug-angular-(.*)/)[1];
+  var dir = process.env.BB_SDK_SRC_DIR + '/build/' + name
+  bowerLink(dir, module, null, {force: true})
+  .on('finish', function() {
+    i += 1;
+    if (i < folders.length) {
+      doBowerLink(folders, i, cb);
+    } else {
+      cb();
+    }
+  });
+}
+
+gulp.task('bower-link', ['get-config'], function(cb) {
+  glob("./bower_components/bookingbug-angular-*", function(err, folders) {
+    if (!config.bower_link && _.some(folders, isLink)) {
+      rimraf('./bower_components', function() {
+        bower().on('end', cb);
+      })
+    } else if (config.bower_link) {
+      doBowerLink(_.filter(folders, isNotLink), 0, cb);
+    } else {
+      cb();
+    }
+  });
 });
 <% } %>
 

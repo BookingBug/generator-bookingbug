@@ -192,6 +192,10 @@ module.exports = BookingBugGenerator.extend({
         production: _.extend({}, config)
       }
       config.local.api_url = "http://localhost:3000"
+      config.local.bower_link = true
+      config.production.bower_link = false
+      config.staging.bower_link = false
+      config.development.bower_link = false
       config.production.cache_control_max_age = '300'
       config.staging.cache_control_max_age = '10'
       config.development.cache_control_max_age = '10'
@@ -249,7 +253,14 @@ module.exports = BookingBugGenerator.extend({
           'git-user-email',
           'gulp-slack',
           'yargs',
-          'lodash'
+          'lodash',
+          'glob',
+          'rimraf',
+          'gulp-bower',
+          'gulp-bower-link',
+          'through2',
+          'walk',
+          'bower'
         ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
       }
     }
