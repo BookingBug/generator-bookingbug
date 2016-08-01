@@ -119,40 +119,6 @@ module.exports = BookingBugGenerator.extend({
     }
   },
 
-  getArchive: function () {
-    this.log('Get archive');
-    var that = this;
-    var done = this.async();
-    var ghclient = github.client();
-    var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
-    var tmpPath = path.join(os.tmpdir(), 'bookingbug', this.version);
-    this.log(tmpPath);
-    mkdirp(tmpPath, function(err) {
-      if (err) that.log(err);
-      var zipPath = path.join(tmpPath, 'bookingbug-angular.zip');
-      that.log(zipPath);
-      try {
-        that.log('Check for archive');
-        fs.lstatSync(zipPath);
-        that.log('Found archive');
-        done();
-      } catch (e) {
-        that.log('Archive not found, fetching');
-        ghrepo.archive('zipball', that.version, function(err, url, headers) {
-          if (err) that.log(err);
-          that.log('Archive URL: ' + url);
-          request(url)
-            .pipe(fs.createWriteStream(zipPath))
-            .on('close', function() {
-              var zip = new AdmZip(zipPath);
-              zip.extractAllTo(tmpPath);
-              done();
-            });
-        });
-      }
-    });
-  },
-
   enforceFolderName: function () {
     if (this.appName !== _.last(this.destinationRoot().split(path.sep))) {
       this.destinationRoot(this.appName);
@@ -210,7 +176,11 @@ module.exports = BookingBugGenerator.extend({
     var src = path.join(this.sourceRoot(), 'src/**/*');
     var dest = this.destinationPath('src');
     this.fs.copy(src, dest);
-    this.fs.copyTpl(this.templatePath("gulpfile.js"), "gulpfile.js", { bb_dev: this.options['bb-dev'] });
+    this.fs.copyTpl(
+      this.templatePath("gulpfile.js"),
+      "gulpfile.js",
+      { bb_dev: this.options['bb-dev'] }
+    );
     this.fs.copyTpl(
       this.templatePath("src/stylesheets/main.scss"),
       this.destinationPath("src/stylesheets/main.scss"),
