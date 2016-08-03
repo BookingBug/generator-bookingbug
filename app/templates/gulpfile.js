@@ -97,10 +97,8 @@ gulp.task('images', function() {
 
 function filterStylesheets(path) {
   return (
-    path.match(new RegExp('.css$'))
-    &&
-    !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)'))
-    &&
+    path.match(new RegExp('.css$')) &&
+    !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)')) &&
     path.indexOf('boostrap.') == -1
   );
 }
@@ -135,7 +133,7 @@ gulp.task('fonts', function() {
 gulp.task('dependencies', ['dependency-javascripts', 'dependency-stylesheets']);
 
 gulp.task('watch', ['assets'], function() {
-  gulp.watch(mainBowerFiles(), ['dependencies'])
+  gulp.watch(mainBowerFiles(), ['dependencies']);
   gulp.watch(['./src/javascripts/*', '!./**/*~'], ['javascripts']);
   gulp.watch(['./src/stylesheets/*', '!./**/*~'], ['stylesheets']);
   gulp.watch(['./src/images/*', '!./**/*~'], ['images']);
@@ -202,7 +200,7 @@ function getVersion() {
 function getUserDetails() {
   var user = username();
   var mail = email();
-  if (user && user != undefined) {
+  if (user && user !== undefined) {
     return mail += " | " + user;
   } else {
     return mail;
@@ -223,19 +221,20 @@ gulp.task('deploy', ['assets','get-config'], function() {
       Bucket: 'bespoke.bookingbug.com'
     },
     region: 'eu-west-1'
-  })
+  });
   logInfo("Deploying to " + getEnv() + " using SDK version " + getVersion());
   headers = {
     'Cache-Control': 'max-age=' + config.age
-  }
-  if (argv["media"]) {
-    var release_files = ['./release/images/**', './release/fonts/**'];
+  };
+  var release_files;
+  if (argv.media) {
+    release_files = ['./release/images/**', './release/fonts/**'];
   } else {
-    var release_files = './release/**';
+    release_files = './release/**';
   }
   return gulp.src(release_files)
     .pipe(rename(function(path) {
-      path.dirname = config.deploy_path + path.dirname
+      path.dirname = config.deploy_path + path.dirname;
     }))
     .pipe(awspublish.gzip({ext: ''}))
     .pipe(publisher.publish(headers, {force: true}))
@@ -249,7 +248,7 @@ function isLink(f) {
     var stat = fs.lstatSync(f);
     return stat && stat.isSymbolicLink();
   } catch(e) {
-    return false
+    return false;
   }
 }
 
@@ -260,14 +259,14 @@ function isNotLink(f) {
 function doBowerLink(folders, i, cb) {
   if (!process.env.BB_SDK_SRC_DIR)
     throw new Error('Missing environment variable BB_SDK_SRC_DIR');
-  if (folders.length == 0) {
+  if (folders.length === 0) {
     cb();
-    return
+    return;
   }
   var f = folders[i];
   var module = f.match(/.*(bookingbug-angular-.*)/)[1];
   var name = f.match(/bookingbug-angular-(.*)/)[1];
-  var dir = process.env.BB_SDK_SRC_DIR + '/build/' + name
+  var dir = process.env.BB_SDK_SRC_DIR + '/build/' + name;
   bowerLink(dir, module, null, {force: true})
   .on('finish', function() {
     i += 1;
@@ -284,7 +283,7 @@ gulp.task('bower-link', ['get-config'], function(cb) {
     if (!config.bower_link && _.some(folders, isLink)) {
       rimraf('./bower_components', function() {
         bower().on('end', cb);
-      })
+      });
     } else if (config.bower_link) {
       doBowerLink(_.filter(folders, isNotLink), 0, cb);
     } else {
