@@ -40,7 +40,7 @@ var webhook_config = {
   url: process.env.BB_SDK_SLACK_URL,
   user: "ROBO",
   icon_emoji: ":cow:"
-}
+};
 var slack = require('gulp-slack')(webhook_config);
 <% } %>
 var config;

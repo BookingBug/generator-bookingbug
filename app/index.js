@@ -57,12 +57,12 @@ module.exports = BookingBugGenerator.extend({
       this.prompt({
         type: 'input',
         name: 'appName',
-        message: 'What is the name of your project? (please use no spaces or illegal characters)',
+        message: 'What is the name of your project?',
         validate: function(appName) {
           if (appName.match(/^[a-zA-Z0-9]+$/))
             return true;
           else
-            return false;
+            return "Alphanumeric characters only";
         }
       }, function (response) {
         this.appName = response.appName;
@@ -71,34 +71,80 @@ module.exports = BookingBugGenerator.extend({
     }
   },
 
+  _validateUrl: function(apiUrl) {
+    if (apiUrl.match(/http[s]?:\/\//))
+      return true;
+    else
+      return "Invalid protocol. Should be http:// or https://";
+  },
+
   getConfig: function () {
-    if (this.options['company-id'] && this.options['api-url']) {
+    var prompts = [];
+    if (this.options['company-id']) {
       this.companyId = this.options['company-id'];
-      this.apiUrl = this.options['api-url'];
     } else {
-      var done = this.async();
-      var prompts = [{
+      prompts.push({
         type: 'input',
         name: 'companyId',
         message: 'What is your BookingBug company id?',
-      }, {
-        type: 'input',
-        name: 'apiUrl',
-        message: 'What is the API URL?',
-        default: 'https://www.bookingbug.com',
-        validate: function(apiUrl) {
-          if(apiUrl.substring(0, 8) !== 'https://' && apiUrl.substring(0, 7) !== 'http://')
-            return false;
-          else
-            return true;
-        }
-      }];
-      this.prompt(prompts, function (response) {
-        this.companyId = response.companyId;
-        this.apiUrl = response.apiUrl;
-        done();
-      }.bind(this));
+      });
     }
+    if (this.options['bb-dev']) {
+      if (this.options['development-api-url']) {
+        this.developmentApiUrl = this.options['development-api-url'];
+      } else {
+        prompts.push({
+          type: 'input',
+          name: 'developmentApiUrl',
+          message: 'What is the development API URL?',
+          default: 'https://' + this.appName.toLowerCase() + '-dev.bookingbug.com',
+          validate: this._validateUrl
+        });
+      }
+      if (this.options['staging-api-url']) {
+        this.stagingApiUrl = this.options['staging-api-url'];
+      } else {
+        prompts.push({
+          type: 'input',
+          name: 'stagingApiUrl',
+          message: 'What is the staging API URL?',
+          default: 'https://' + this.appName.toLowerCase() + '-staging.bookingbug.com',
+          validate: this._validateUrl
+        });
+      }
+      if (this.options['production-api-url']) {
+        this.productionApiUrl = this.options['production-api-url'];
+      } else {
+        prompts.push({
+          type: 'input',
+          name: 'productionApiUrl',
+          message: 'What is the production API URL?',
+          default: 'https://' + this.appName.toLowerCase() + '.bookingbug.com',
+          validate: this._validateUrl
+        });
+      }
+    } else {
+      if (this.options['api-url']) {
+        this.apiUrl = this.options['api-url'];
+      } else {
+        prompts.push({
+          type: 'input',
+          name: 'apiUrl',
+          message: 'What is the API URL?',
+          default: 'https://www.bookingbug.com',
+          validate: this._validateUrl
+        });
+      }
+    }
+    var done = this.async();
+    this.prompt(prompts, function(response) {
+      if (response.companyId) this.companyId = response.companyId;
+      if (response.apiUrl) this.apiUrl = response.apiUrl;
+      if (response.developmentApiUrl) this.developmentApiUrl = response.developmentApiUrl;
+      if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
+      if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
+      done();
+    }.bind(this));
   },
 
   getVersion: function() {
@@ -156,18 +202,21 @@ module.exports = BookingBugGenerator.extend({
         development: _.extend({}, config),
         staging: _.extend({}, config),
         production: _.extend({}, config)
-      }
-      config.local.api_url = "http://localhost:3000"
-      config.local.bower_link = true
-      config.production.bower_link = false
-      config.staging.bower_link = false
-      config.development.bower_link = false
-      config.production.cache_control_max_age = '300'
-      config.staging.cache_control_max_age = '10'
-      config.development.cache_control_max_age = '10'
-      config.production.deploy_path = "/" + this.appName + "/"
-      config.staging.deploy_path = "/" + this.appName + "/staging/"
-      config.development.deploy_path = "/" + this.appName + "/development/"
+      };
+      config.local.api_url = "http://localhost:3000";
+      config.local.bower_link = true;
+      config.production.bower_link = false;
+      config.staging.bower_link = false;
+      config.development.bower_link = false;
+      config.production.cache_control_max_age = '300';
+      config.staging.cache_control_max_age = '10';
+      config.development.cache_control_max_age = '10';
+      config.production.deploy_path = "/" + this.appName + "/";
+      config.staging.deploy_path = "/" + this.appName + "/staging/";
+      config.development.deploy_path = "/" + this.appName + "/development/";
+      config.development.api_url = this.developmentApiUrl;
+      config.staging.api_url = this.stagingApiUrl;
+      config.production.api_url = this.productionApiUrl;
     }
     this.fs.writeJSON("config.json", config);
   },
@@ -186,7 +235,7 @@ module.exports = BookingBugGenerator.extend({
       this.destinationPath("src/stylesheets/main.scss"),
       { project_name: this.appName }
     );
-    this.template("_theme.scss", "src/stylesheets/" + this.appName + "_theme.scss")
+    this.template("_theme.scss", "src/stylesheets/" + this.appName + "_theme.scss");
   },
 
   installNpmDependencies: function () {
