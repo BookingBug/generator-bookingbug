@@ -240,7 +240,7 @@ gulp.task('deploy', ['assets','get-config'], function() {
     .pipe(awspublish.gzip({ext: ''}))
     .pipe(publisher.publish(headers, {force: true}))
     .pipe(awspublish.reporter())
-    .pipe(slack(getUserDetails() + " deployed `test2` to " + getEnv() + " with SDK version " + getVersion()));
+    .pipe(slack(getUserDetails() + " deployed `" + config.app_name + "` to " + getEnv() + " with SDK version " + getVersion()));
 
 });
 

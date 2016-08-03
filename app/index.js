@@ -191,6 +191,7 @@ module.exports = BookingBugGenerator.extend({
 
   createConfig: function () {
     var config = {
+      app_name: this.appName,
       company_id: this.companyId,
       api_url: this.apiUrl,
       assets_url: "",
