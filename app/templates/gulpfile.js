@@ -51,7 +51,8 @@ function getEnv() {
 
 gulp.task('get-config', function() {
   if (!process.env.NODE_ENV && !argv.env) environments.current(staging);
-  config = require('./config.json')[getEnv()];
+  var all_config = require('./config.json');
+  config = _.extend(all_config.general, all_config[getEnv()]);
 });
 <% } else { %>
 gulp.task('get-config', function() {

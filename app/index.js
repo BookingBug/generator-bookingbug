@@ -198,26 +198,30 @@ module.exports = BookingBugGenerator.extend({
       server_port: 8000
     };
     if (this.options['bb-dev']) {
+      delete config.api_url;
+      delete config.assets_url;
       config = {
-        local: _.extend({}, config),
-        development: _.extend({}, config),
-        staging: _.extend({}, config),
-        production: _.extend({}, config)
+        general: _.extend({
+          cache_control_max_age: '10',
+          bower_link: false
+        }, config),
+        local: {},
+        development: {},
+        staging: {},
+        production: {}
       };
-      config.local.api_url = "http://localhost:3000";
-      config.local.bower_link = true;
-      config.production.bower_link = false;
-      config.staging.bower_link = false;
-      config.development.bower_link = false;
       config.production.cache_control_max_age = '300';
-      config.staging.cache_control_max_age = '10';
-      config.development.cache_control_max_age = '10';
       config.production.deploy_path = "/" + this.appName + "/";
       config.staging.deploy_path = "/" + this.appName + "/staging/";
       config.development.deploy_path = "/" + this.appName + "/development/";
+      config.local.api_url = "http://localhost:3000";
       config.development.api_url = this.developmentApiUrl;
       config.staging.api_url = this.stagingApiUrl;
       config.production.api_url = this.productionApiUrl;
+      config.local.assets_url = "";
+      config.development.assets_url = "https://bespoke.bookingbug.com/" + this.appName + "/development";
+      config.staging.assets_url = "https://bespoke.bookingbug.com/" + this.appName + "/staging";
+      config.production.assets_url = "https://bespoke.bookingbug.com/" + this.appName;
     }
     this.fs.writeJSON("config.json", config);
   },
