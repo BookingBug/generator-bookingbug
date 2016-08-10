@@ -51,6 +51,7 @@ function getEnv() {
 
 gulp.task('get-config', function() {
   if (!process.env.NODE_ENV && !argv.env) environments.current(staging);
+  delete require.cache[path.join(process.cwd(), 'config.json')];
   var all_config = require('./config.json');
   config = _.extend(all_config.general, all_config[getEnv()]);
 });
@@ -66,20 +67,20 @@ gulp.task('www', ['get-config'], function() {
       .pipe(gulp.dest('release'));
 });
 
-gulp.task('dependency-javascripts', <% if (bb_dev) { %>['bower-link'], <% } %>function() {
+gulp.task('dependency-javascripts', ['get-config'<% if (bb_dev) { %>, 'bower-link'<% } %>], function() {
   return gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
-    .pipe(uglify({mangle: false}).on('error', gutil.log))
+    .pipe(gulpif(config.uglify, uglify({mangle: false}).on('error', gutil.log)))
     .pipe(concat('booking-widget-dependencies.js'))
     .pipe(gulp.dest('release'));
 });
 
-gulp.task('javascripts', function() {
+gulp.task('javascripts', ['get-config'], function() {
   return gulp.src('src/javascripts/**/*')
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function(e) {
       gutil.log(e);
       this.emit('end');
     })))
-    .pipe(uglify({mangle: false}).on('error', gutil.log))
+    .pipe(gulpif(config.uglify, uglify({mangle: false}).on('error', gutil.log)))
     .pipe(concat('booking-widget.js'))
     .pipe(gulp.dest('release'));
 });
@@ -142,6 +143,7 @@ gulp.task('watch', ['assets'], function() {
   gulp.watch(['./src/www/*', '!./**/*~'], ['www']);
   gulp.watch(['./src/fonts/*', '!./**/*~'], ['fonts']);
   gulp.watch(['./release/*'], ['reload']);
+  gulp.watch(['./config.json'], ['get-config','dependencies','assets']);
 });
 
 gulp.task('webserver', ['assets','get-config'], function() {

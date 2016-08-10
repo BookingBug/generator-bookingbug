@@ -203,13 +203,15 @@ module.exports = BookingBugGenerator.extend({
       config = {
         general: _.extend({
           cache_control_max_age: '10',
-          bower_link: false
+          bower_link: false,
+          uglify: true
         }, config),
         local: {},
         development: {},
         staging: {},
         production: {}
       };
+      config.local.uglify = false;
       config.production.cache_control_max_age = '300';
       config.production.deploy_path = "/" + this.appName + "/";
       config.staging.deploy_path = "/" + this.appName + "/staging/";
@@ -241,6 +243,7 @@ module.exports = BookingBugGenerator.extend({
       { project_name: this.appName }
     );
     this.template("_theme.scss", "src/stylesheets/" + this.appName + "_theme.scss");
+    this.template(".gitignore", ".gitignore");
   },
 
   installNpmDependencies: function () {
