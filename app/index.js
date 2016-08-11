@@ -66,8 +66,8 @@ module.exports = BookingBugGenerator.extend({
 
   _validateName: function(appName) {
     var defer = require('q').defer();
-    if (appName.match(/^[a-zA-Z0-9]+$/)) {
-      if (this.options['bb-dev']) {
+    if (appName.match(/^[a-zA-Z0-9-]+$/)) {
+      if (this.options['bb-dev'] && !this.options['force-name']) {
         this._validateNameForBespoke(appName, defer);
       } else {
         defer.resolve(true);
