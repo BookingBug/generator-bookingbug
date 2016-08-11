@@ -49,6 +49,35 @@ module.exports = BookingBugGenerator.extend({
     });
   },
 
+  _validateNameForBespoke: function(appName, defer) {
+    var s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
+    s3Client.s3.listObjects({
+      Bucket: 'bespoke.bookingbug.com',
+      Prefix: appName + '/'
+    }, function(err, data) {
+      if (err) defer.resolve(err);
+      if (data.Contents.length > 0) {
+        defer.resolve("Already taken on bespoke");
+      } else {
+        defer.resolve(true);
+      }
+    });
+  },
+
+  _validateName: function(appName) {
+    var defer = require('q').defer();
+    if (appName.match(/^[a-zA-Z0-9]+$/)) {
+      if (this.options['bb-dev']) {
+        this._validateNameForBespoke(appName, defer);
+      } else {
+        defer.resolve(true);
+      }
+    } else {
+      defer.resolve("Alphanumeric characters only");
+    }
+    return defer.promise;
+  },
+
   getName: function () {
     if (this.options.name) {
       this.appName = this.options.name;
@@ -58,12 +87,7 @@ module.exports = BookingBugGenerator.extend({
         type: 'input',
         name: 'appName',
         message: 'What is the name of your project?',
-        validate: function(appName) {
-          if (appName.match(/^[a-zA-Z0-9]+$/))
-            return true;
-          else
-            return "Alphanumeric characters only";
-        }
+        validate: this._validateName.bind(this)
       }, function (response) {
         this.appName = response.appName;
         done();
