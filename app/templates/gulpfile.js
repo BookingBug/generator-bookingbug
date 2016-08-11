@@ -271,6 +271,9 @@ function doBowerLink(folders, i, cb) {
   var name = f.match(/bookingbug-angular-(.*)/)[1];
   var dir = process.env.BB_SDK_SRC_DIR + '/build/' + name;
   bowerLink(dir, module, null, {force: true})
+  .on('error', function(e) {
+    console.log(e.message);
+  })
   .on('finish', function() {
     i += 1;
     if (i < folders.length) {
