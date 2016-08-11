@@ -234,6 +234,7 @@ module.exports = BookingBugGenerator.extend({
         production: {}
       };
       config.local.uglify = false;
+      config.local.bower_link = true;
       config.production.cache_control_max_age = '300';
       config.production.deploy_path = "/" + this.appName + "/";
       config.staging.deploy_path = "/" + this.appName + "/staging/";
