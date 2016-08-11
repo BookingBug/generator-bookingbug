@@ -136,14 +136,14 @@ gulp.task('dependencies', ['dependency-javascripts', 'dependency-stylesheets']);
 
 gulp.task('watch', ['assets'], function() {
   gulp.watch(mainBowerFiles(), ['dependencies']);
-  gulp.watch(['./src/javascripts/*', '!./**/*~'], ['javascripts']);
-  gulp.watch(['./src/stylesheets/*', '!./**/*~'], ['stylesheets']);
-  gulp.watch(['./src/images/*', '!./**/*~'], ['images']);
-  gulp.watch(['./src/templates/*', '!./**/*~'], ['templates']);
-  gulp.watch(['./src/www/*', '!./**/*~'], ['www']);
-  gulp.watch(['./src/fonts/*', '!./**/*~'], ['fonts']);
-  gulp.watch(['./release/*'], ['reload']);
-  gulp.watch(['./config.json'], ['get-config','dependencies','assets']);
+  gulp.watch(['src/javascripts/*', '!./**/*~'], ['javascripts']);
+  gulp.watch(['src/stylesheets/*', '!./**/*~'], ['stylesheets']);
+  gulp.watch(['src/images/*', '!./**/*~'], ['images']);
+  gulp.watch(['src/templates/*', '!./**/*~'], ['templates']);
+  gulp.watch(['src/www/*', '!./**/*~'], ['www']);
+  gulp.watch(['src/fonts/*', '!./**/*~'], ['fonts']);
+  gulp.watch(['release/*'], ['reload']);
+  gulp.watch(['config.json'], ['get-config','dependencies','assets']);
 });
 
 gulp.task('webserver', ['assets','get-config'], function() {
