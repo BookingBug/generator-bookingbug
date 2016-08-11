@@ -218,12 +218,10 @@ module.exports = BookingBugGenerator.extend({
       app_name: this.appName,
       company_id: this.companyId,
       api_url: this.apiUrl,
-      assets_url: "",
       server_port: 8000
     };
     if (this.options['bb-dev']) {
       delete config.api_url;
-      delete config.assets_url;
       config = {
         general: _.extend({
           cache_control_max_age: '10',
@@ -244,10 +242,6 @@ module.exports = BookingBugGenerator.extend({
       config.development.api_url = this.developmentApiUrl;
       config.staging.api_url = this.stagingApiUrl;
       config.production.api_url = this.productionApiUrl;
-      config.local.assets_url = "";
-      config.development.assets_url = "https://bespoke.bookingbug.com/" + this.appName + "/development";
-      config.staging.assets_url = "https://bespoke.bookingbug.com/" + this.appName + "/staging";
-      config.production.assets_url = "https://bespoke.bookingbug.com/" + this.appName;
     }
     this.fs.writeJSON("config.json", config);
   },
