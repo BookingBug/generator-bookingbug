@@ -128,7 +128,7 @@ gulp.task('stylesheets', <% if (bb_dev) { %>['bower-link'], <% } %>function() {
 });
 
 gulp.task('fonts', function() {
-  return gulp.src('src/fonts/*')
+  return gulp.src(mainBowerFiles('**/*.{eot,svg,ttf,woff,woff2,otf}').concat('src/fonts/*'))
     .pipe(flatten())
     .pipe(gulp.dest('release/fonts'));
 });
