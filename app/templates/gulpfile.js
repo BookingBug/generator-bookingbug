@@ -36,6 +36,7 @@ var glob = require('glob');
 var rimraf = require('rimraf');
 var bower = require('gulp-bower');
 var bowerLink = require('gulp-bower-link');
+var inquirer = require('inquirer');
 var webhook_config = {
   url: process.env.BB_SDK_SLACK_URL,
   user: "ROBO",
@@ -173,7 +174,7 @@ gulp.task('webserver', ['assets','get-config'], function() {
 
 gulp.task('openbrowser', ['webserver'], function() {
   return gulp.src('')
-    .pipe(open({ uri: 'http://localhost:' + config.server_port + '/new_booking.html' }));
+    .pipe(open({ uri: 'http://localhost:' + config.server_port + config.default_html }));
 });
 
 gulp.task('reload', function() {
@@ -279,7 +280,11 @@ function doBowerLink(folders, i, cb) {
     if (i < folders.length) {
       doBowerLink(folders, i, cb);
     } else {
-      cb();
+      bower({interactive: true})
+      .on('prompt', function(prompts, callback) {
+        inquirer.prompt(prompts, callback);
+      })
+      .on('end', cb);
     }
   });
 }
@@ -288,7 +293,11 @@ gulp.task('bower-link', ['get-config'], function(cb) {
   glob("./bower_components/bookingbug-angular-*", function(err, folders) {
     if (!config.bower_link && _.some(folders, isLink)) {
       rimraf('./bower_components', function() {
-        bower().on('end', cb);
+        bower()
+        .on('prompt', function(prompts, callback) {
+          inquirer.prompt(prompts, callback);
+        })
+        .on('end', cb);
       });
     } else if (config.bower_link) {
       doBowerLink(_.filter(folders, isNotLink), 0, cb);

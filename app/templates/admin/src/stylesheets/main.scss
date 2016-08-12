@@ -1,0 +1,40 @@
+@import "bootstrap";
+@import "bootstrap-variables";
+@import "adminlte-variables";
+@import "bb-variables";
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "adminlte";
+
+#bb {
+  // BB specific styles
+  @import "../../bower_components/bookingbug-angular-core/src/stylesheets/main";
+  @import "../../bower_components/bookingbug-angular-member/src/stylesheets/main";
+  @import "../../bower_components/bookingbug-angular-services/src/stylesheets/main";
+  @import "../../bower_components/bookingbug-angular-public-booking/src/stylesheets/main";
+  @import "../../bower_components/bookingbug-angular-admin-booking/src/stylesheets/main";
+
+  // Bespoke project styles
+  margin: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $body-bg;
+
+  a {
+    text-decoration: none;
+  }
+
+  // All custom styles and overrides should be stored in the following .scss file:
+  @import "<%= project_name %>_theme";
+}
+// Font awesome
+$fa-font-path: "fonts";
+@import "../../bower_components/fontawesome/scss/font-awesome";
+// BB admin styles
+@import "../../bower_components/bookingbug-angular-admin-dashboard/src/stylesheets/main";
+
+// #bb {
+//   @import "../../bower_components/bookingbug-angular-admin-dashboard/src/stylesheets/adminlte-mixins";
+//   @import "custom-skin";
+// }

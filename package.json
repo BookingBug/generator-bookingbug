@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "camelcase": "^3.0.0",
     "glob": "^6.0.1",
     "gulp-flatten": "^0.2.0",
     "lodash": "^3.10.0",

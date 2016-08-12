@@ -10,6 +10,7 @@ var AdmZip = require('adm-zip');
 var request = require('request');
 var mkdirp = require('mkdirp');
 var glob = require('glob');
+var camelCase = require('camelcase');
 
 var BookingBugGenerator = generators.Base.extend();
 
@@ -201,7 +202,7 @@ module.exports = BookingBugGenerator.extend({
     this.fs.copyTpl(
       this.templatePath('_bower.json'),
       this.destinationPath('bower.json'),
-      { name: this.appName, version: this.version.slice(1) }
+      { name: this.appName, version: this.version.slice(1), type: this.type }
     );
   },
 
@@ -214,11 +215,13 @@ module.exports = BookingBugGenerator.extend({
   },
 
   createConfig: function () {
+    var default_html = (this.type == 'public-booking') ? '/new_booking.html' : '/index.html';
     var config = {
       app_name: this.appName,
       company_id: this.companyId,
       api_url: this.apiUrl,
-      server_port: 8000
+      server_port: 8000,
+      default_html: default_html
     };
     if (this.options['bb-dev']) {
       delete config.api_url;
@@ -226,7 +229,7 @@ module.exports = BookingBugGenerator.extend({
         general: _.extend({
           cache_control_max_age: '10',
           bower_link: false,
-          uglify: true
+          uglify: true,
         }, config),
         local: {},
         development: {},
@@ -248,21 +251,48 @@ module.exports = BookingBugGenerator.extend({
   },
 
   copySrc: function () {
-    var src = path.join(this.sourceRoot(), 'src/**/*');
+    var src = path.join(this.sourceRoot(), this.type, 'src', '**', '*');
     var dest = this.destinationPath('src');
     this.fs.copy(src, dest);
-    this.fs.copyTpl(
-      this.templatePath("gulpfile.js"),
-      "gulpfile.js",
-      { bb_dev: this.options['bb-dev'] }
-    );
-    this.fs.copyTpl(
-      this.templatePath("src/stylesheets/main.scss"),
-      this.destinationPath("src/stylesheets/main.scss"),
+    this.template("gulpfile.js", "gulpfile.js", { bb_dev: this.options['bb-dev'] });
+    this.template(
+      path.join(this.type, 'src', 'stylesheets', 'main.scss'),
+      path.join('src', 'stylesheets', 'main.scss'),
       { project_name: this.appName }
     );
-    this.template("_theme.scss", "src/stylesheets/" + this.appName + "_theme.scss");
-    this.template(".gitignore", ".gitignore");
+    if (this.type == 'admin') {
+      this.template(
+        path.join(this.type, 'src', 'www', 'index.html'),
+        path.join('src', 'www', 'index.html'),
+        { module_name: camelCase(this.appName) }
+      );
+    } else if (this.type == 'public-booking') {
+      this.template(
+        path.join(this.type, 'src', 'www', 'new_booking.html'),
+        path.join('src', 'www', 'new_booking.html'),
+        { module_name: camelCase(this.appName) }
+      );
+      this.template(
+        path.join(this.type, 'src', 'www', 'new_booking_event.html'),
+        path.join('src', 'www', 'new_booking_event.html'),
+        { module_name: camelCase(this.appName) }
+      );
+      this.template(
+        path.join(this.type, 'src', 'www', 'view_booking.html'),
+        path.join('src', 'www', 'view_booking.html'),
+        { module_name: camelCase(this.appName) }
+      );
+    }
+    this.template(
+      path.join(this.type, 'src', 'javascripts', 'main.js.coffee'),
+      path.join('src', 'javascripts', 'main.js.coffee'),
+      { module_name: camelCase(this.appName) }
+    );
+    this.copy(
+      "_theme.scss",
+      path.join('src', 'stylesheets', this.appName + '_theme.scss')
+    );
+    this.copy(".gitignore", ".gitignore");
   },
 
   installNpmDependencies: function () {
@@ -306,7 +336,8 @@ module.exports = BookingBugGenerator.extend({
           'gulp-bower-link',
           'through2',
           'walk',
-          'bower'
+          'bower',
+          'inquirer'
         ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
       }
     }

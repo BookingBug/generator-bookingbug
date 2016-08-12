@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="BB" bb-api-url="<%= api_url %>">
+<html lang="en" ng-app="<%= module_name %>" bb-api-url="<%%= api_url %%>">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -22,8 +22,9 @@
 <body id="bb">
 
   <div bb-widget="{
-    company_id: qs('companyId') || '<%= company_id %>',
+    company_id: qs('companyId') || '<%%= company_id %%>',
     clear_member: true,
+    item_defaults: {merge_resources: true, merge_people: true},
     route_format: '/{page}'
     }" bb-scroll-to="page:loaded" class="container"></div>
 

@@ -9,10 +9,72 @@
     "tests"
   ],
   "dependencies": {
+<% if (type == 'admin') { -%>
+    "bookingbug-angular-admin-dashboard": "<%= version %>",
+    "bookingbug-angular-events": "1.4.52",
+<% } -%>
     "bookingbug-angular-public-booking": "<%= version %>",
     "bookingbug-angular-member": "<%= version %>"
   },
+<% if (type == 'admin') { -%>
+  "overrides": {
+    "bootstrap-sass": {
+      "main": [
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.eot",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.svg",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.ttf",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff2"
+      ]
+    },
+    "fontawesome": {
+      "main": [
+        "fonts/fontawesome-webfont.eot",
+        "fonts/fontawesome-webfont.svg",
+        "fonts/fontawesome-webfont.ttf",
+        "fonts/fontawesome-webfont.woff",
+        "fonts/fontawesome-webfont.woff2"
+      ]
+    },
+    "components-font-awesome": {
+      "ignore": true
+    },
+    "ionicons": {
+      "ignore": true
+    },
+    "bootstrap": {
+      "ignore": true
+    },
+    "bootstrap-sass-official": {
+      "ignore": true
+    },
+    "ngScrollable": {
+      "main": [
+        "min/ng-scrollable.min.js"
+      ]
+    },
+    "adminlte-bower": {
+      "main": [
+        "dist/css/AdminLTE.css"
+      ]
+    },
+    "bootstrap-datepicker": {
+      "ignore": "true"
+    },
+    "pace": {
+      "ignore": true
+    }
+  },
+<% } -%>
   "resolutions": {
-    "angular": "1.2.28"
+<% if (type == 'public-booking') { -%>
+    "angular": "1.5.8"
+<% } else if (type == 'admin') { -%>
+    "fullcalendar": "~2.9.1",
+    "jquery": "~1.11.2",
+    "moment": "~2.14.0",
+    "components-font-awesome": "~4.1.0",
+    "angular": "1.5.8"
+<% } -%>
   }
 }
