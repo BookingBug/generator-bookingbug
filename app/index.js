@@ -105,14 +105,16 @@ module.exports = BookingBugGenerator.extend({
 
   getConfig: function () {
     var prompts = [];
-    if (this.options['company-id']) {
-      this.companyId = this.options['company-id'];
-    } else {
-      prompts.push({
-        type: 'input',
-        name: 'companyId',
-        message: 'What is your BookingBug company id?',
-      });
+    if (this.type == 'public-booking') {
+      if (this.options['company-id']) {
+        this.companyId = this.options['company-id'];
+      } else {
+        prompts.push({
+          type: 'input',
+          name: 'companyId',
+          message: 'What is your BookingBug company id?',
+        });
+      }
     }
     if (this.options['bb-dev']) {
       if (this.options['development-api-url']) {
@@ -218,11 +220,11 @@ module.exports = BookingBugGenerator.extend({
     var default_html = (this.type == 'public-booking') ? '/new_booking.html' : '/index.html';
     var config = {
       app_name: this.appName,
-      company_id: this.companyId,
       api_url: this.apiUrl,
       server_port: 8000,
       default_html: default_html
     };
+    if (this.type == 'public-booking') config.company_id = this.companyId;
     if (this.options['bb-dev']) {
       delete config.api_url;
       config = {
