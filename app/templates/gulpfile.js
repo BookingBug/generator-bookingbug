@@ -88,7 +88,7 @@ gulp.task('javascripts', ['get-config'], function() {
 
 gulp.task('templates', function() {
   return gulp.src('src/templates/**/*.html')
-    .pipe(templateCache('booking-widget-templates.js', {module: 'BB'}))
+    .pipe(templateCache('booking-widget-templates.js', {module: 'TemplateOverrides', standalone: true}))
     .pipe(gulp.dest('release'));
 });
 
