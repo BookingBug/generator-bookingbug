@@ -228,7 +228,7 @@ gulp.task('deploy', ['assets','get-config'], function() {
   });
   logInfo("Deploying to " + getEnv() + " using SDK version " + getVersion());
   headers = {
-    'Cache-Control': 'max-age=' + config.age
+    'Cache-Control': 'max-age=' + config.cache_control_max_age
   };
   var release_files;
   if (argv.media) {
