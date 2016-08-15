@@ -1,7 +1,6 @@
-// @todo add back when new admin gets merged into master
 // Font awesome
-// $fa-font-path: "fonts";
-// @import "../../bower_components/fontawesome/scss/font-awesome";
+$fa-font-path: "fonts";
+@import "../../bower_components/fontawesome/scss/font-awesome";
 
 #bb {
   @import "bootstrap-variables";
