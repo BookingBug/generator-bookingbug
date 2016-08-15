@@ -294,7 +294,7 @@ module.exports = BookingBugGenerator.extend({
       "_theme.scss",
       path.join('src', 'stylesheets', this.appName + '_theme.scss')
     );
-    this.copy(".gitignore", ".gitignore");
+    this.copy("gitignore", ".gitignore");
   },
 
   installNpmDependencies: function () {
