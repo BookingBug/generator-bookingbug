@@ -31,10 +31,10 @@
         }
 
         function fontsWatchTask(cb) {
-            var fontsSrcGlob = path.join(plugins.config.projectRootPath, 'src/fonts/*.*');
+            var fontsSrcGlob = plugins.config.projectRootPath + '/src/fonts/*.*';
 
             gulp.watch(fontsSrcGlob, ['tmp-fonts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/public-booking/fonts/**/*') ], ['build-sdk:public-booking:fonts', 'webserver:reload']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/public-booking/fonts/**/*' ], ['build-sdk:public-booking:fonts', 'webserver:reload']);
 
             cb();
         }

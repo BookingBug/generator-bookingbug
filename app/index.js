@@ -367,6 +367,7 @@ module.exports = BookingBugGenerator.extend({
         "gulp-uglify",
         "gulp-util",
         "gulp-watch",
+        "gulp-watch-sequence",
         "include-all",
         "jasmine-core",
         "jsonfile",

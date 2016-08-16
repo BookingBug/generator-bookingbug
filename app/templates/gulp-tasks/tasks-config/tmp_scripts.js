@@ -18,12 +18,12 @@
         var mainBowerFiles = require('main-bower-files');
 
         var projectFiles = [
-            path.join(plugins.config.projectRootPath, 'src/javascripts/**/*.js'),
-            path.join(plugins.config.projectRootPath, 'src/javascripts/**/*.js.coffee'),
-            path.join('!**/*.spec.js'),
-            path.join('!**/*.spec.js.coffee'),
-            path.join('!**/*.js.js'),
-            path.join('!**/*.js.map')
+            plugins.config.projectRootPath + '/src/javascripts/**/*.js',
+            plugins.config.projectRootPath + '/src/javascripts/**/*.js.coffee',
+            '!**/*.spec.js',
+            '!**/*.spec.js.coffee',
+            '!**/*.js.js',
+            '!**/*.js.map'
         ];
 
         function scriptsVendorsTask() {
@@ -46,20 +46,20 @@
 
             gulp.watch(projectFiles, ['tmp-scripts:client', 'webserver:reload']);
 
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin/javascripts/**/*')], ['build-sdk:admin:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin-booking/javascripts/**/*')], ['build-sdk:admin-booking:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin-dashboard/javascripts/**/*')], ['build-sdk:admin-dashboard:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/core/javascripts/**/*')], ['build-sdk:core:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/events/javascripts/**/*')], ['build-sdk:events:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/member/javascripts/**/*')], ['build-sdk:member:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/public-booking/javascripts/**/*')], ['build-sdk:public-booking:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/services/javascripts/**/*')], ['build-sdk:services:javascripts']);
-            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/settings/javascripts/**/*')], ['build-sdk:settings:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/core/javascripts/**/*'], ['build-sdk:core:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/events/javascripts/**/*'], ['build-sdk:events:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/member/javascripts/**/*'], ['build-sdk:member:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/public-booking/javascripts/**/*'], ['build-sdk:public-booking:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/services/javascripts/**/*'], ['build-sdk:services:javascripts']);
+            gulp.watch([plugins.config.sdkRootPath + '/src/settings/javascripts/**/*'], ['build-sdk:settings:javascripts']);
 
             gulp.watch(
                 [
-                    path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/*.js'),
-                    '!' + path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/*-templates.js')
+                    plugins.config.projectRootPath, '/bower_components/bookingbug-angular-*/*.js',
+                    '!' + plugins.config.projectRootPath, '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
                 ['tmp-scripts:sdk-no-templates', 'webserver:reload']
             );
