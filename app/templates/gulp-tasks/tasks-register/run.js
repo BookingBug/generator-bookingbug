@@ -7,11 +7,11 @@
         gulp.task('run:watch', runWatchtask);
 
         function runTask(cb) {
-            plugins.sequence('build-tmp', 'webserver', cb);
+            plugins.sequence('build-tmp', 'webserver', 'webserver:open-browser', cb);
         }
 
         function runWatchtask(cb) {
-            plugins.sequence('build-tmp:watch', 'webserver', cb);
+            plugins.sequence('build-tmp:watch', 'webserver', 'webserver:open-browser', cb);
         }
 
     };
