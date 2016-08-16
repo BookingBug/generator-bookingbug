@@ -3,13 +3,15 @@
 
     module.exports = function (gulp, plugins, path) {
 
-        gulp.task('tmp-stylesheets', stylesheetsTask);
+        gulp.task('tmp-stylesheets:vendors', stylesheetsVendorsTask);
+        gulp.task('tmp-stylesheets:client', stylesheetsClientTask);
         gulp.task('tmp-stylesheets:watch', stylesheetsWatchTask);
 
         var args = require('../helpers/args.js');
         var gulpFlatten = require('gulp-flatten');
         var gulpConcat = require('gulp-concat');
         var gulpCssSelectorLimit = require('gulp-css-selector-limit');
+        var gulpPlumber = require('gulp-plumber');
         var gulpPlumber = require('gulp-plumber');
         var gulpTemplate = require('gulp-template');
         var gulpSass = require('gulp-sass');
@@ -19,10 +21,15 @@
         var projectConfig = require('../helpers/project_config.js');
         var streamqueue = require('streamqueue');
 
-        function stylesheetsTask() {
+        function filterStylesheets(path) {
+            return (
+                path.match(new RegExp('.css$')) &&
+                !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)')) &&
+                path.indexOf('boostrap.') == -1
+            );
+        }
 
-            var src = path.join(plugins.config.projectRootPath, 'src/stylesheets/main.scss');
-
+        function stylesheetsVendorsTask() {
             var dependenciesCssFiles = mainBowerFiles({
                 includeDev: true,
                 paths: {
@@ -30,39 +37,35 @@
                     bowerrc: path.join(plugins.config.projectRootPath, '.bowerrc'),
                     bowerJson: path.join(plugins.config.projectRootPath, 'bower.json')
                 },
-                filter: function (path) {
-                    return path.match(new RegExp('.css$')) && !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)')) && path.indexOf('boostrap.') === -1;
-                }
+                filter: filterStylesheets
             });
 
-            var dependenciesCssStream = gulp.src(dependenciesCssFiles)
-                .pipe(gulpSourcemaps.init());
+            gulp.src(dependenciesCssFiles)
+                .pipe(gulpConcat('vendors.css'))
+                .pipe(gulp.dest(plugins.config.projectTmpPath));
+        }
+
+        function stylesheetsClientTask() {
+
+            var src = path.join(plugins.config.projectRootPath, 'src/stylesheets/main.scss');
 
             var gulpSassOptions = {
-                onError: function (e) {
-                    return console.log(e);
-                }
+                errLogToConsole: true,
+                includePaths: ['bower_components/bootstrap-sass/assets/stylesheets']
             };
 
             if (args.getEnvironment() !== 'dev') {
                 gulpSassOptions.outputStyle = 'compressed';
             }
 
-            var appSCSSStream = gulp.src(src)
+            return gulp.src(src)
                 .pipe(gulpSourcemaps.init())
-                .pipe(gulpTemplate(projectConfig.getConfig()))
-                .pipe(gulpSass(gulpSassOptions).on('error', gulpUtil.log));
-
-            return streamqueue({
-                objectMode: true
-            }, dependenciesCssStream, appSCSSStream)
                 .pipe(gulpPlumber())
-                .pipe(gulpFlatten())
-                .pipe(gulpConcat('styles.css'))
+                .pipe(gulpSass(gulpSassOptions))
+                .pipe(gulpConcat('client.css'))
+                .pipe(gulpTemplate(projectConfig.getConfig()))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
-                .pipe(gulpSourcemaps.write('maps', {
-                    includeContent: false
-                }))
+                .pipe(gulpSourcemaps.write('maps', { includeContent: false }))
                 .pipe(gulp.dest(plugins.config.projectTmpPath));
         }
 
