@@ -17,9 +17,7 @@
             var templatesSrcGlob = path.join(plugins.config.projectRootPath, 'src/templates/*.html');
 
             var stream = gulp.src(templatesSrcGlob)
-                .pipe(gulpAngularTemplateCache('client_templates.js', {
-                    module: 'BB'
-                }))
+                .pipe(gulpAngularTemplateCache('client_templates.js', {module: 'TemplateOverrides', standalone: true}))
                 .pipe(gulpFlatten())
                 .pipe(gulpTemplate(projectConfig.getConfig()))
                 .pipe(gulp.dest(plugins.config.projectTmpPath));

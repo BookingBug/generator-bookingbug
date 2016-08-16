@@ -32,7 +32,7 @@
             gulpUtil.log(gulpUtil.colors.green(msg));
 
             var headers = {
-                'Cache-Control': 'max-age=' + config.age
+                'Cache-Control': 'max-age=' + config.cache_control_max_age
             };
 
             var releaseFiles = './release/**';
