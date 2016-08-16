@@ -58,8 +58,8 @@
 
             gulp.watch(
                 [
-                    plugins.config.projectRootPath, '/bower_components/bookingbug-angular-*/*.js',
-                    '!' + plugins.config.projectRootPath, '/bower_components/bookingbug-angular-*/*-templates.js'
+                    plugins.config.projectRootPath + '/bower_components/bookingbug-angular-*/*.js',
+                    '!' + plugins.config.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
                 ['tmp-scripts:sdk-no-templates', 'webserver:reload']
             );
