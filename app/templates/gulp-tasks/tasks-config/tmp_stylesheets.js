@@ -73,16 +73,17 @@
 
             var src = path.join(plugins.config.projectRootPath, 'src/stylesheets/main.scss');
 
-            gulp.watch(src, ['tmp-stylesheets']);
-            gulp.watch(['src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets']);
-            gulp.watch(['src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets']);
-            gulp.watch(['src/core/stylesheets/**/*'], ['build-sdk:core:stylesheets']);
-            gulp.watch(['src/member/stylesheets/**/*'], ['build-sdk:member:stylesheets']);
-            gulp.watch(['src/public-booking/stylesheets/**/*'], ['build-sdk:public-booking:stylesheets']);
+            gulp.watch(src, ['tmp-stylesheets:client', 'webserver:reload']);
+
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin-booking/stylesheets/**/*')], ['build-sdk:admin-booking:stylesheets']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin-dashboard/stylesheets/**/*')], ['build-sdk:admin-dashboard:stylesheets']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/core/stylesheets/**/*')], ['build-sdk:core:stylesheets']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/member/stylesheets/**/*')], ['build-sdk:member:stylesheets']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/public-booking/stylesheets/**/*')], ['build-sdk:public-booking:stylesheets']);
 
             gulp.watch(
                 [path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/**/*.scss')],
-                ['tmp-stylesheets']
+                ['tmp-stylesheets:client', 'webserver:reload']
             );
 
             cb();

@@ -24,9 +24,9 @@
 
             gulp.watch(imagesSrcGlob, ['tmp-images']);
 
-            gulp.watch(['src/admin/images/**/*'], ['build-sdk:admin:images']);
-            gulp.watch(['src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images']);
-            gulp.watch(['src/public-booking/images/**/*'], ['build-sdk:public-booking:images']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin/images/**/*')], ['build-sdk:admin:images', 'webserver:reload']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/admin-dashboard/images/**/*')], ['build-sdk:admin-dashboard:images', 'webserver:reload']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/public-booking/images/**/*')], ['build-sdk:public-booking:images', 'webserver:reload']);
             cb();
         }
     };

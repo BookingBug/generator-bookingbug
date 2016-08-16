@@ -28,7 +28,7 @@
 
         function buildTmpWatchTask(cb) {
             plugins.sequence(
-                'build-project',
+                'build-tmp',
                 'tmp-scripts:watch',
                 'tmp-templates:watch',
                 'tmp-stylesheets:watch',

@@ -34,7 +34,7 @@
             var fontsSrcGlob = path.join(plugins.config.projectRootPath, 'src/fonts/*.*');
 
             gulp.watch(fontsSrcGlob, ['tmp-fonts']);
-            gulp.watch(['src/public-booking/fonts/**/*'], ['build-sdk:public-booking:fonts']);
+            gulp.watch([path.join(plugins.config.sdkRootPath, 'src/public-booking/fonts/**/*') ], ['build-sdk:public-booking:fonts', 'webserver:reload']);
 
             cb();
         }
