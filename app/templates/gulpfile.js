@@ -3,7 +3,7 @@ var path  = require('path');
 var gulp = require('gulp');
 
 var sdkGulpFilePath = path.join(process.env.BB_SDK_SRC_DIR, 'gulp-tasks/gulpfile.js.coffee');
-var clientGulpFilePath = './gulp-tasks/gulpfile.js.coffee';
+var clientGulpFilePath = './gulp-tasks/gulpfile.js';
 
 cs.register();
 
