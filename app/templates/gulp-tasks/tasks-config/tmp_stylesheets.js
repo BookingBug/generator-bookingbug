@@ -1,8 +1,10 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
 
-        gulp.task('build-project-stylesheets', stylesheetsTask);
-        gulp.task('build-project-stylesheets:watch', stylesheetsWatchTask);
+        gulp.task('tmp-stylesheets', stylesheetsTask);
+        gulp.task('tmp-stylesheets:watch', stylesheetsWatchTask);
 
         var args = require('../helpers/args.js');
         var gulpFlatten = require('gulp-flatten');
@@ -68,7 +70,7 @@
 
             var src = path.join(plugins.config.projectRootPath, 'src/stylesheets/main.scss');
 
-            gulp.watch(src, ['build-project-stylesheets']);
+            gulp.watch(src, ['tmp-stylesheets']);
             gulp.watch(['src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets']);
             gulp.watch(['src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets']);
             gulp.watch(['src/core/stylesheets/**/*'], ['build-sdk:core:stylesheets']);
@@ -77,7 +79,7 @@
 
             gulp.watch(
                 [path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/**/*.scss')],
-                ['build-project-stylesheets']
+                ['tmp-stylesheets']
             );
 
             cb();

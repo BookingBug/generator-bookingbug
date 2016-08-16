@@ -1,5 +1,10 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
+
+        gulp.task('tmp-templates', templatesTask);
+        gulp.task('tmp-templates:watch', templatesWatchTask);
 
         var args = require('../helpers/args.js');
         var gulpAngularTemplateCache = require('gulp-angular-templatecache');
@@ -8,9 +13,6 @@
         var gulpUglify = require('gulp-uglify');
         var gulpTemplate = require('gulp-template');
         var projectConfig = require('../helpers/project_config.js');
-
-        gulp.task('build-project-templates', templatesTask);
-        gulp.task('build-project-templates:watch', templatesWatchTask);
 
         function templatesTask() {
 
@@ -38,7 +40,7 @@
 
             var templatesSrcGlob = path.join(plugins.config.projectRootPath, 'src/templates/*.html');
 
-            gulp.watch(templatesSrcGlob, ['build-project-templates']);
+            gulp.watch(templatesSrcGlob, ['tmp-templates']);
 
             gulp.watch(['src/admin/templates/**/*'], ['build-sdk:admin:templates']);
             gulp.watch(['src/admin-booking/templates/**/*'], ['build-sdk:admin-booking:templates']);
@@ -52,7 +54,7 @@
 
             gulp.watch(
                 [path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/*templates.js')],
-                ['build-project-scripts:sdk-only-templates']
+                ['tmp-scripts:sdk-only-templates']
             );
             cb();
         }

@@ -1,13 +1,14 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
+
+        gulp.task('tmp-fonts', fontsTask);
+        gulp.task('tmp-fonts:watch', fontsWatchTask);
 
         var args = require('../helpers/args.js');
         var gulpFlatten = require('gulp-flatten');
         var mainBowerFiles = require('main-bower-files');
-
-        gulp.task('build-project-fonts', fontsTask);
-
-        gulp.task('build-project-fonts:watch', fontsWatchTask);
 
         function fontsTask() {
 
@@ -32,7 +33,7 @@
         function fontsWatchTask(cb) {
             var fontsSrcGlob = path.join(plugins.config.projectRootPath, 'src/fonts/*.*');
 
-            gulp.watch(fontsSrcGlob, ['build-project-fonts']);
+            gulp.watch(fontsSrcGlob, ['tmp-fonts']);
             gulp.watch(['src/public-booking/fonts/**/*'], ['build-sdk:public-booking:fonts']);
 
             cb();

@@ -1,14 +1,15 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
+
+        gulp.task('tmp-bower-install', bowerInstallTask);
 
         var args = require('../helpers/args.js');
         var del = require('del');
         var gulpBower = require('gulp-bower');
         var gulpShell = require('gulp-shell');
         var mkdirp = require('mkdirp');
-
-
-        gulp.task('build-project-bower-install', bowerInstallTask);
 
         function bowerInstallTask() {
 

@@ -1,17 +1,17 @@
 (function () {
     'use strict';
 
-    var argv = require('yargs').argv;
-    var gulpAwsPublish = require('gulp-awspublish');
-    var gitUserName = require('git-user-name');
-    var gitUserEmail = require('git-user-email');
-    var gulpUtil = require('gulp-util');
-    var gulpRename = require('gulp-rename');
-    var gulpSlack = require('gulp-slack');
-
     module.exports = function (gulp, plugins, path) {
 
         gulp.task('deploy', deployTask);
+
+        var argv = require('yargs').argv;
+        var gulpAwsPublish = require('gulp-awspublish');
+        var gitUserName = require('git-user-name');
+        var gitUserEmail = require('git-user-email');
+        var gulpUtil = require('gulp-util');
+        var gulpRename = require('gulp-rename');
+        var gulpSlack = require('gulp-slack');
 
         function deployTask() {
 

@@ -1,11 +1,13 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
 
-        gulp.task('build-project-scripts:vendors', scriptsVendorsTask);
-        gulp.task('build-project-scripts:sdk-no-templates', scriptsSdkNoTemplates);
-        gulp.task('build-project-scripts:sdk-only-templates', scriptsSdkOnlyTemplates);
-        gulp.task('build-project-scripts:client', scriptsClient);
-        gulp.task('build-project-scripts:watch', scriptsWatch);
+        gulp.task('tmp-scripts:vendors', scriptsVendorsTask);
+        gulp.task('tmp-scripts:sdk-no-templates', scriptsSdkNoTemplates);
+        gulp.task('tmp-scripts:sdk-only-templates', scriptsSdkOnlyTemplates);
+        gulp.task('tmp-scripts:client', scriptsClient);
+        gulp.task('tmp-scripts:watch', scriptsWatch);
 
         var args = require('../helpers/args.js');
         var gulpCoffee = require('gulp-coffee');
@@ -42,7 +44,7 @@
 
         function scriptsWatch(cb) {
 
-            gulp.watch(projectFiles, ['build-project-scripts:client']);
+            gulp.watch(projectFiles, ['tmp-scripts:client']);
 
             gulp.watch(['src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts']);
             gulp.watch(['src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts']);
@@ -58,7 +60,7 @@
                     path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/*.js'),
                     '!' + path.join(plugins.config.projectRootPath, 'bower_components/bookingbug-angular-*/*-templates.js')
                 ],
-                ['build-project-scripts:sdk-no-templates']
+                ['tmp-scripts:sdk-no-templates']
             );
             cb();
         }

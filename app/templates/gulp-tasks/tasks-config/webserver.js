@@ -1,9 +1,11 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
 
-        var gulpConnect = require('gulp-connect');
-
         gulp.task('webserver', webserverTask);
+
+        var gulpConnect = require('gulp-connect');
 
         function webserverTask() {
             return gulpConnect.server({

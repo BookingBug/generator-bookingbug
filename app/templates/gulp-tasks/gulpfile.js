@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, projectRootPath, sdkRootPath) {
 
         var projectConfig = require('./helpers/project_config.js');

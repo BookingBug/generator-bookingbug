@@ -1,11 +1,13 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
+
+        gulp.task('tmp-images', imagesTask);
+        gulp.task('tmp-images:watch', imagesWatchTask);
 
         var args = require('../helpers/args.js');
         var gulpFlatten = require('gulp-flatten');
-
-        gulp.task('build-project-images', imagesTask);
-        gulp.task('build-project-images:watch', imagesWatchTask);
 
         function imagesTask() {
 
@@ -20,7 +22,7 @@
         function imagesWatchTask(cb) {
             var imagesSrcGlob = path.join(plugins.config.projectRootPath, 'src/images/*.*');
 
-            gulp.watch(imagesSrcGlob, ['build-project-images']);
+            gulp.watch(imagesSrcGlob, ['tmp-images']);
 
             gulp.watch(['src/admin/images/**/*'], ['build-sdk:admin:images']);
             gulp.watch(['src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images']);

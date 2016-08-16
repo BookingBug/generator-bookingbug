@@ -1,11 +1,13 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
+
+        gulp.task('tmp-www', wwwTask);
 
         var args = require('../helpers/args.js');
         var gulpTemplate = require('gulp-template');
         var projectConfig = require('../helpers/project_config.js');
-
-        gulp.task('build-project-www', wwwTask);
 
         function wwwTask() {
 

@@ -1,5 +1,9 @@
 (function () {
+    'use strict';
+
     module.exports = function (gulp, plugins, path) {
+
+        gulp.task('tmp-bower-prepare', bowerPrepareTask);
 
         var fs = require('fs');
         var jsonFile = require('jsonfile');
@@ -15,8 +19,6 @@
             'bookingbug-angular-services',
             'bookingbug-angular-settings'
         ];
-
-        gulp.task('build-project-bower-prepare', bowerPrepareTask);
 
         function bowerPrepareTask(cb) {
 

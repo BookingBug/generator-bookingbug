@@ -1,5 +1,11 @@
 (function () {
 
+    'use strict';
+
+    module.exports = {
+        getEnvironment: getEnvironment
+    };
+
     var argv = require('yargs').argv;
     var path = require('path');
     var fs = require('fs');
@@ -20,9 +26,5 @@
         }
         return environment;
     }
-
-    module.exports = {
-        getEnvironment: getEnvironment
-    };
 
 }).call(this);
