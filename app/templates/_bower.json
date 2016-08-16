@@ -16,8 +16,13 @@
     "bookingbug-angular-public-booking": "<%= version %>",
     "bookingbug-angular-member": "<%= version %>"
   },
-<% if (type == 'admin') { -%>
   "overrides": {
+    "bootstrap": {
+      "ignore": true
+    },
+    "bootstrap-datepicker": {
+      "ignore": true
+    },
     "bootstrap-sass": {
       "main": [
         "assets/fonts/bootstrap/glyphicons-halflings-regular.eot",
@@ -26,6 +31,9 @@
         "assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
         "assets/fonts/bootstrap/glyphicons-halflings-regular.woff2"
       ]
+    },
+    "bootstrap-sass-official": {
+      "ignore": true
     },
     "fontawesome": {
       "main": [
@@ -36,16 +44,20 @@
         "fonts/fontawesome-webfont.woff2"
       ]
     },
-    "components-font-awesome": {
-      "ignore": true
-    },
     "ionicons": {
       "ignore": true
     },
-    "bootstrap": {
+    "lodash": {
       "ignore": true
     },
-    "bootstrap-sass-official": {
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/en-gb.js"
+      ]
+    },
+    <% if (type == 'admin') { -%>
+    "components-font-awesome": {
       "ignore": true
     },
     "ngScrollable": {
@@ -58,14 +70,11 @@
         "dist/css/AdminLTE.css"
       ]
     },
-    "bootstrap-datepicker": {
-      "ignore": "true"
-    },
     "pace": {
       "ignore": true
     }
+    <% } -%>
   },
-<% } -%>
   "resolutions": {
 <% if (type == 'public-booking') { -%>
     "angular": "1.5.8"
