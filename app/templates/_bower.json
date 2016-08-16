@@ -55,8 +55,9 @@
         "moment.js",
         "locale/en-gb.js"
       ]
-    },
+    }
     <% if (type == 'admin') { -%>
+    ,
     "components-font-awesome": {
       "ignore": true
     },
