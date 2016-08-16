@@ -6,11 +6,13 @@ root = true
 
 [*]
 indent_style = space
-indent_size = 4
+indent_size = 2
 
 [**.coffee]
-indent_style = space
 indent_size = 2
+
+[**.js]
+indent_size = 4
 
 # It's recommended to keep these unchanged
 end_of_line = lf

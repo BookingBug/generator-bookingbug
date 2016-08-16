@@ -23,9 +23,7 @@
 
         function filterStylesheets(path) {
             return (
-                path.match(new RegExp('.css$')) &&
-                !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)')) &&
-                path.indexOf('boostrap.') == -1
+                path.match(/\.css$/) && path.indexOf('bootstrap.') == -1
             );
         }
 
