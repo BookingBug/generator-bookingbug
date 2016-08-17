@@ -1,12 +1,13 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('tmp-bower-prepare', bowerPrepareTask);
 
         var fs = require('fs');
         var jsonFile = require('jsonfile');
+        var path = require('path');
 
         var bowerBBDependencies = [
             'bookingbug-angular-admin',
@@ -22,18 +23,17 @@
 
         function bowerPrepareTask(cb) {
 
-            var bowerOriginalJsonPath = path.join(plugins.config.projectRootPath, '_bower.json');
-            var bowerJsonPath = path.join(plugins.config.projectRootPath, 'bower.json');
+            var bowerOriginalJsonPath = path.join(configuration.projectRootPath, '_bower.json');
+            var bowerJsonPath = path.join(configuration.projectRootPath, 'bower.json');
             var bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
 
-            var ref = bowerJson.dependencies;
-            for (var depName in ref) {
+            for (var depName in bowerJson.dependencies) {
                 if (isBBDependency(depName)) {
                     bowerJson.dependencies[depName] = generatePathToSdkBuild(depName);
                 }
             }
 
-            for (var i = 0, len = bowerBBDependencies.length; i < len; i++) {
+            for (var i = 0; i < bowerBBDependencies.length; i++) {
                 var depName = bowerBBDependencies[i];
                 if (typeof bowerJson.resolutions[depName] === 'undefined') {
                     bowerJson.resolutions[depName] = "*";
@@ -61,7 +61,7 @@
          *@param {String} dependencyName
          */
         function generatePathToSdkBuild(dependencyName) {
-            return path.join(plugins.config.sdkRootPath, 'build', dependencyName.replace('bookingbug-angular-', ''), '/');
+            return path.join(configuration.sdkRootPath, 'build', dependencyName.replace('bookingbug-angular-', ''), '/');
         }
 
 

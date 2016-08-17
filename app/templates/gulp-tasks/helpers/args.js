@@ -7,8 +7,6 @@
     };
 
     var argv = require('yargs').argv;
-    var path = require('path');
-    var fs = require('fs');
 
     /*
      * @returns {String} ['local'|'dev'|'staging'|'prod']

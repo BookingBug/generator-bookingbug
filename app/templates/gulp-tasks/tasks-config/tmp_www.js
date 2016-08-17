@@ -1,21 +1,20 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('tmp-www', wwwTask);
 
-        var args = require('../helpers/args.js');
         var gulpTemplate = require('gulp-template');
-        var projectConfig = require('../helpers/project_config.js');
+        var path = require('path');
 
         function wwwTask() {
 
-            var src = path.join(plugins.config.projectRootPath, 'src/www/*.*');
+            var src = path.join(configuration.projectRootPath, 'src/www/*.*');
 
             return gulp.src(src)
-                .pipe(gulpTemplate(projectConfig.getConfig()))
-                .pipe(gulp.dest(plugins.config.projectTmpPath));
+                .pipe(gulpTemplate(configuration.projectConfig))
+                .pipe(gulp.dest(configuration.projectTmpPath));
         }
     };
 

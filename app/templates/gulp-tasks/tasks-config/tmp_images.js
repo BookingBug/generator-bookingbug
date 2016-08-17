@@ -1,18 +1,19 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('tmp-images', imagesTask);
         gulp.task('tmp-images:watch', imagesWatchTask);
 
         var args = require('../helpers/args.js');
         var gulpFlatten = require('gulp-flatten');
+        var path = require('path');
 
         function imagesTask() {
 
-            var src = path.join(plugins.config.projectRootPath, 'src/images/*.*');
-            var dest = path.join(plugins.config.projectTmpPath, 'images');
+            var src = path.join(configuration.projectRootPath, 'src/images/*.*');
+            var dest = path.join(configuration.projectTmpPath, 'images');
 
             return gulp.src(src)
                 .pipe(gulpFlatten())
@@ -20,13 +21,13 @@
         }
 
         function imagesWatchTask(cb) {
-            var imagesSrcGlob = plugins.config.projectRootPath + '/src/images/*.*';
+            var imagesSrcGlob = configuration.projectRootPath + '/src/images/*.*';
 
             gulp.watch(imagesSrcGlob, ['tmp-images']);
 
-            gulp.watch([plugins.config.sdkRootPath + '/src/admin/images/**/*'], ['build-sdk:admin:images', 'webserver:reload']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images', 'webserver:reload']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/public-booking/images/**/*'], ['build-sdk:public-booking:images', 'webserver:reload']);
+            gulp.watch([configuration.sdkRootPath + '/src/admin/images/**/*'], ['build-sdk:admin:images', 'webserver:reload']);
+            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images', 'webserver:reload']);
+            gulp.watch([configuration.sdkRootPath + '/src/public-booking/images/**/*'], ['build-sdk:public-booking:images', 'webserver:reload']);
             cb();
         }
     };

@@ -1,14 +1,14 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('tmp-clean', cleanTask);
 
         var del = require('del');
 
         function cleanTask(cb) {
-            del.sync([plugins.config.projectTmpPath]);
+            del.sync([configuration.projectTmpPath]);
             cb();
         }
     };

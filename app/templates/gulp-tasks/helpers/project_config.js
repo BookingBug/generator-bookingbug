@@ -2,48 +2,41 @@
 
     'use strict';
 
-    var path = require('path');
-    var fs = require('fs');
-    var args = require('./args.js');
-    var jsonFile = require('jsonfile');
-
     module.exports = {
         getConfig: getConfig
     };
 
+    var args = require('./args.js');
+    var jsonFile = require('jsonfile');
+
     function getConfig() {
-        var config, configOriginal, configPath, env, environmentFullname, error, error1, prop, propValue, ref, ref1;
-        env = args.getEnvironment();
-        config = {};
-        configOriginal = null;
-        configPath = 'config.json';
+
+        var env = args.getEnvironment();
+        var config = {};
+
+        var configOriginal = null;
         try {
-            configOriginal = jsonFile.readFileSync(configPath);
+            configOriginal = jsonFile.readFileSync('config.json');
         } catch (error1) {
-            error = error1;
             console.log('No config file specified for project');
             return {};
         }
 
-        environmentFullname = 'development';
+        var environmentName = 'development';
         if (env.match(/local/)) {
-            environmentFullname = 'local';
+            environmentName = 'local';
         } else if (env.match(/stag/)) {
-            environmentFullname = 'staging';
+            environmentName = 'staging';
         } else if (env.match(/prod/)) {
-            environmentFullname = 'production';
+            environmentName = 'production';
         }
 
-        ref = configOriginal['general'];
-        for (prop in ref) {
-            propValue = ref[prop];
-            config[prop] = propValue;
+        for (var prop in configOriginal['general']) {
+            config[prop] = configOriginal['general'][prop];
         }
 
-        ref1 = configOriginal[environmentFullname];
-        for (prop in ref1) {
-            propValue = ref1[prop];
-            config[prop] = propValue;
+        for (var prop in configOriginal[environmentName]) {
+            config[prop] = configOriginal[environmentName][prop];
         }
 
         return config;

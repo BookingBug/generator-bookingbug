@@ -1,17 +1,19 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('run', runTask);
         gulp.task('run:watch', runWatchtask);
 
+        var runSequence = require('run-sequence');
+
         function runTask(cb) {
-            plugins.sequence('build-tmp', 'webserver', 'webserver:open-browser', cb);
+            runSequence('build-tmp', 'webserver', 'webserver:open-browser', cb);
         }
 
         function runWatchtask(cb) {
-            plugins.sequence('build-tmp:watch', 'webserver', 'webserver:open-browser', cb);
+            runSequence('build-tmp:watch', 'webserver', 'webserver:open-browser', cb);
         }
 
     };

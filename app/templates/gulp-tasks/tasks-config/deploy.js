@@ -1,21 +1,21 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('deploy', deployTask);
 
         var argv = require('yargs').argv;
-        var gulpAwsPublish = require('gulp-awspublish');
         var gitUserName = require('git-user-name');
         var gitUserEmail = require('git-user-email');
-        var gulpUtil = require('gulp-util');
+        var gulpAwsPublish = require('gulp-awspublish');
         var gulpRename = require('gulp-rename');
         var gulpSlack = require('gulp-slack');
+        var gulpUtil = require('gulp-util');
 
         function deployTask() {
 
-            var config = plugins.config.projectConfig;
+            var config = configuration.projectConfig;
 
             guardEnvironmentVariables();
 
@@ -28,7 +28,7 @@
                 region: 'eu-west-1'
             });
 
-            var msg = "Deploying to " + plugins.config.environment + " using SDK version " + getVersion();
+            var msg = "Deploying to " + configuration.environment + " using SDK version " + getVersion();
             gulpUtil.log(gulpUtil.colors.green(msg));
 
             var headers = {
@@ -56,7 +56,7 @@
                 .pipe(gulpAwsPublish.gzip({ext: ''}))
                 .pipe(publisher.publish(headers, {force: true}))
                 .pipe(gulpAwsPublish.reporter())
-                .pipe(slack(getUserDetails() + " deployed `" + config.app_name + "` to " + plugins.config.environment + " with SDK version " + getVersion()));
+                .pipe(slack(getUserDetails() + " deployed `" + config.app_name + "` to " + configuration.environment + " with SDK version " + getVersion()));
         }
 
         function guardEnvironmentVariables(){

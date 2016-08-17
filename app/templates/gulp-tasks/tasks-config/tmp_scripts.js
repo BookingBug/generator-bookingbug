@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('tmp-scripts:vendors', scriptsVendorsTask);
         gulp.task('tmp-scripts:sdk-no-templates', scriptsSdkNoTemplates);
@@ -16,10 +16,11 @@
         var gulpUglify = require('gulp-uglify');
         var gulpUtil = require('gulp-util');
         var mainBowerFiles = require('main-bower-files');
+        var path = require('path');
 
         var projectFiles = [
-            plugins.config.projectRootPath + '/src/javascripts/**/*.js',
-            plugins.config.projectRootPath + '/src/javascripts/**/*.js.coffee',
+            configuration.projectRootPath + '/src/javascripts/**/*.js',
+            configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
             '!**/*.spec.js',
             '!**/*.spec.js.coffee',
             '!**/*.js.js',
@@ -46,20 +47,20 @@
 
             gulp.watch(projectFiles, ['tmp-scripts:client', 'webserver:reload']);
 
-            gulp.watch([plugins.config.sdkRootPath + '/src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/core/javascripts/**/*'], ['build-sdk:core:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/events/javascripts/**/*'], ['build-sdk:events:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/member/javascripts/**/*'], ['build-sdk:member:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/public-booking/javascripts/**/*'], ['build-sdk:public-booking:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/services/javascripts/**/*'], ['build-sdk:services:javascripts']);
-            gulp.watch([plugins.config.sdkRootPath + '/src/settings/javascripts/**/*'], ['build-sdk:settings:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/core/javascripts/**/*'], ['build-sdk:core:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/events/javascripts/**/*'], ['build-sdk:events:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/member/javascripts/**/*'], ['build-sdk:member:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/public-booking/javascripts/**/*'], ['build-sdk:public-booking:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/services/javascripts/**/*'], ['build-sdk:services:javascripts']);
+            gulp.watch([configuration.sdkRootPath + '/src/settings/javascripts/**/*'], ['build-sdk:settings:javascripts']);
 
             gulp.watch(
                 [
-                    plugins.config.projectRootPath + '/bower_components/bookingbug-angular-*/*.js',
-                    '!' + plugins.config.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
+                    configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*.js',
+                    '!' + configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
                 ['tmp-scripts:sdk-no-templates', 'webserver:reload']
             );
@@ -72,11 +73,11 @@
          */
         function buildScriptsStream(files, filename) {
             var stream;
-            stream = gulp.src(files).pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log))).pipe(gulpConcat(filename + '.js')).pipe(gulp.dest(plugins.config.projectTmpPath));
+            stream = gulp.src(files).pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log))).pipe(gulpConcat(filename + '.js')).pipe(gulp.dest(configuration.projectTmpPath));
             if (args.getEnvironment() !== 'dev') {
                 stream.pipe(gulpUglify({
                     mangle: false
-                })).pipe(gulpConcat(filename + '.min.js')).pipe(gulp.dest(plugins.config.projectTmpPath));
+                })).pipe(gulpConcat(filename + '.min.js')).pipe(gulp.dest(configuration.projectTmpPath));
             }
             return stream;
         }
@@ -90,9 +91,9 @@
             var dependenciesFiles;
             dependenciesFiles = mainBowerFiles({
                 paths: {
-                    bowerDirectory: path.join(plugins.config.projectRootPath, 'bower_components'),
-                    bowerrc: path.join(plugins.config.projectRootPath, '.bowerrc'),
-                    bowerJson: path.join(plugins.config.projectRootPath, 'bower.json')
+                    bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
+                    bowerrc: path.join(configuration.projectRootPath, '.bowerrc'),
+                    bowerJson: path.join(configuration.projectRootPath, 'bower.json')
                 },
                 filter: filter
             });

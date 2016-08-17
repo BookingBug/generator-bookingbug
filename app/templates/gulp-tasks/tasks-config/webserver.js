@@ -1,18 +1,18 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
-        gulp.task('webserver', webserverTask);
+        gulp.task('webserver', webServerTask);
         gulp.task('webserver:open-browser', openBrowserTask);
         gulp.task('webserver:reload', reloadTask);
 
         var gulpOpen = require('gulp-open');
         var gulpConnect = require('gulp-connect');
 
-        function webserverTask() {
+        function webServerTask() {
             return gulpConnect.server({
-                root: [plugins.config.projectTmpPath],
+                root: [configuration.projectTmpPath],
                 port: 8000,
                 livereload: true
             });
@@ -21,7 +21,7 @@
         function openBrowserTask() {
 
             var gulpOpenOptions = {
-                uri: 'http://localhost:' + plugins.config.projectConfig.server_port + plugins.config.projectConfig.default_html
+                uri: 'http://localhost:' + configuration.projectConfig.server_port + configuration.projectConfig.default_html
             };
 
             return gulp.src('')
@@ -29,7 +29,7 @@
         }
 
         function reloadTask() {
-            return gulp.src(plugins.config.projectTmpPath + '/**/*')
+            return gulp.src(configuration.projectTmpPath + '/**/*')
                 .pipe(gulpConnect.reload());
         }
 

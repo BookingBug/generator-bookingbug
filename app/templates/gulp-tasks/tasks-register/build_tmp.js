@@ -1,16 +1,19 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, plugins, path) {
+    module.exports = function (gulp, configuration) {
 
         gulp.task('build-tmp', buildTmpTask);
         gulp.task('build-tmp:watch', buildTmpWatchTask);
 
+        var runSequence = require('run-sequence');
+
         function buildTmpTask(cb) {
-            plugins.sequence(
+            runSequence(
                 'build-sdk',
                 'tmp-clean',
                 'tmp-bower-prepare',
+                'tmp-bower-symlinks',
                 'tmp-bower-install',
                 'tmp-scripts:vendors',
                 'tmp-scripts:sdk-no-templates',
@@ -27,7 +30,7 @@
         }
 
         function buildTmpWatchTask(cb) {
-            plugins.sequence(
+            runSequence(
                 'build-tmp',
                 'tmp-scripts:watch',
                 'tmp-templates:watch',
