@@ -22,6 +22,10 @@
             return {};
         }
 
+        if (typeof configOriginal['general'] === 'undefined') {
+            return configOriginal;
+        }
+
         var environmentName = 'development';
         if (env.match(/local/)) {
             environmentName = 'local';

@@ -112,7 +112,7 @@ module.exports = BookingBugGenerator.extend({
         prompts.push({
           type: 'input',
           name: 'companyId',
-          message: 'What is your BookingBug company id?',
+          message: 'What is your BookingBug company id?'
         });
       }
     }
@@ -357,26 +357,28 @@ module.exports = BookingBugGenerator.extend({
         "run-sequence",
         "sauce-connect-launcher",
         "selenium-server-standalone-jar",
-        "yargs"
+        "yargs",
+
+        "gulp-awspublish",
+        "gulp-environments",
+        "git-user-name",
+        "git-user-email",
+        "gulp-slack",
+        "yargs",
+        "lodash",
+        "glob",
+        "rimraf",
+        "gulp-bower",
+        "gulp-bower-link",
+        "through2",
+        "walk",
+        "bower",
+        "inquire"
 
       ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
       if (this.options['bb-dev']) {
         this.npmInstall([
-          'gulp-awspublish',
-          'gulp-environments',
-          'git-user-name',
-          'git-user-email',
-          'gulp-slack',
-          'yargs',
-          'lodash',
-          'glob',
-          'rimraf',
-          'gulp-bower',
-          'gulp-bower-link',
-          'through2',
-          'walk',
-          'bower',
-          'inquirer'
+
         ], { 'save': true, 'cache-min': 3600, 'loglevel': 'info' });
       }
     }
@@ -384,7 +386,7 @@ module.exports = BookingBugGenerator.extend({
 
   installBowerDependencies: function () {
     if (!this.options['skip-bower']) {
-      this.bowerInstall();
+      //this.bowerInstall();
       if(this.type === 'member') {
         this.bowerInstall(['angular-slick', 'angular-recaptcha'], {
           "save": true
