@@ -9,8 +9,8 @@
         var runSequence = require('run-sequence');
 
         function buildTmpTask(cb) {
-            runSequence(
-                'build-sdk',
+
+            var args = [
                 'tmp-clean',
                 'tmp-bower-prepare',
                 'tmp-bower-symlinks',
@@ -26,7 +26,14 @@
                 'tmp-images',
                 'tmp-www',
                 cb
-            );
+            ];
+
+            if (configuration.projectConfig.local_sdk === true) {
+                args = ['build-sdk'].concat(args);
+            }
+
+            runSequence.apply(null, args);
+
         }
 
         function buildTmpWatchTask(cb) {
