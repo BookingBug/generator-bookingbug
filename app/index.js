@@ -203,7 +203,7 @@ module.exports = BookingBugGenerator.extend({
   createBower: function () {
     this.fs.copyTpl(
       this.templatePath('_bower.json'),
-      this.destinationPath('_bower.json'),
+      this.destinationPath('bower.json'),
       { name: this.appName, version: this.version.slice(1), type: this.type }
     );
   },
@@ -259,6 +259,7 @@ module.exports = BookingBugGenerator.extend({
     this.template("gulpfile.js", "gulpfile.js", { bb_dev: this.options['bb-dev'] });
     this.template("gulp-tasks", "gulp-tasks");
     this.template("editorconfig", ".editorconfig");
+    this.template("bowerrc", ".bowerrc");
     this.template(
       path.join(this.type, 'src', 'stylesheets', 'main.scss'),
       path.join('src', 'stylesheets', 'main.scss'),

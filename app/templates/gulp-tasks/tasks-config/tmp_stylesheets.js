@@ -46,7 +46,7 @@
 
             var gulpSassOptions = {
                 errLogToConsole: true,
-                includePaths: ['bower_components/bootstrap-sass/assets/stylesheets']
+                includePaths: [path.join(configuration.projectRootPath,'bower_components/bootstrap-sass/assets/stylesheets')]
             };
 
             if (args.getEnvironment() !== 'dev') {

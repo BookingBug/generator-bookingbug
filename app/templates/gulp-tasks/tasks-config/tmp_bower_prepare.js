@@ -23,8 +23,8 @@
 
         function bowerPrepareTask(cb) {
 
-            var bowerOriginalJsonPath = path.join(configuration.projectRootPath, '_bower.json');
-            var bowerJsonPath = path.join(configuration.projectRootPath, 'bower.json');
+            var bowerOriginalJsonPath = path.join(configuration.projectRootPath, 'bower.json');
+            var bowerJsonPath = path.join(configuration.projectTmpPath, 'bower.json');
             var bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
 
             for (var depName in bowerJson.dependencies) {
@@ -35,9 +35,7 @@
 
             for (var i = 0; i < bowerBBDependencies.length; i++) {
                 var depName = bowerBBDependencies[i];
-                if (typeof bowerJson.resolutions[depName] === 'undefined') {
-                    bowerJson.resolutions[depName] = "*";
-                }
+                bowerJson.resolutions[depName] = "*";
             }
 
             jsonFile.writeFile(bowerJsonPath, bowerJson, function (err) {

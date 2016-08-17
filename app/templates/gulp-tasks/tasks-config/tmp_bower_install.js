@@ -14,8 +14,8 @@
             mkdirp.sync(path.join(configuration.projectRootPath, 'bower_components'));
 
             return gulpBower({
-                cwd: configuration.projectRootPath,
-                directory: './bower_components'
+                cwd: configuration.projectTmpPath,
+                directory: '../bower_components'
             });
         }
     };

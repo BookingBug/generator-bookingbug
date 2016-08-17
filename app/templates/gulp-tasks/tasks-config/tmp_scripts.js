@@ -78,11 +78,17 @@
          */
         function buildScriptsStream(files, filename) {
             var stream;
-            stream = gulp.src(files).pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log))).pipe(gulpConcat(filename + '.js')).pipe(gulp.dest(configuration.projectTmpPath));
+            stream = gulp.src(files)
+                .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
+                .pipe(gulpConcat(filename + '.js'))
+                .pipe(gulp.dest(configuration.projectTmpPath));
+
             if (args.getEnvironment() !== 'dev') {
                 stream.pipe(gulpUglify({
                     mangle: false
-                })).pipe(gulpConcat(filename + '.min.js')).pipe(gulp.dest(configuration.projectTmpPath));
+                }))
+                    .pipe(gulpConcat(filename + '.min.js'))
+                    .pipe(gulp.dest(configuration.projectTmpPath));
             }
             return stream;
         }
