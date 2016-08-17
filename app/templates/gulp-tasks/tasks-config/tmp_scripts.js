@@ -50,6 +50,16 @@
                 runSequence('tmp-scripts:client', 'webserver:reload');
             });
 
+            sdkScriptsWatch();
+
+            cb();
+        }
+
+        function sdkScriptsWatch() {
+            if (configuration.projectConfig.local_sdk !== true) {
+                return;
+            }
+
             gulp.watch([configuration.sdkRootPath + '/src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts']);
             gulp.watch([configuration.sdkRootPath + '/src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts']);
             gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts']);
@@ -69,7 +79,6 @@
                     runSequence('tmp-scripts:sdk-no-templates', 'webserver:reload');
                 }
             );
-            cb();
         }
 
         /*

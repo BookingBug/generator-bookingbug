@@ -23,8 +23,24 @@
 
         function bowerPrepareTask(cb) {
 
+            if (configuration.projectConfig.local_sdk === true) {
+                prepareBowerFileReferringToLocalSdk();
+                cb();
+            } else {
+                return copyBowerFileToTmp();
+            }
+
+
+        }
+
+        function copyBowerFileToTmp() {
+            return gulp.src(path.join(configuration.projectRootPath, 'bower.json')).pipe(gulp.dest(configuration.projectTmpPath));
+        }
+
+        function prepareBowerFileReferringToLocalSdk() {
             var bowerOriginalJsonPath = path.join(configuration.projectRootPath, 'bower.json');
             var bowerJsonPath = path.join(configuration.projectTmpPath, 'bower.json');
+
             var bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
 
             for (var depName in bowerJson.dependencies) {
@@ -43,8 +59,6 @@
                     return console.log(err);
                 }
             });
-
-            cb();
         }
 
         /*

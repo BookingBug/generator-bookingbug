@@ -11,7 +11,7 @@
   "dependencies": {
 <% if (type == 'admin') { -%>
     "bookingbug-angular-admin-dashboard": "<%= version %>",
-    "bookingbug-angular-events": "1.4.52",
+    "bookingbug-angular-events": "<%= version %>",
 <% } -%>
     "bookingbug-angular-public-booking": "<%= version %>",
     "bookingbug-angular-member": "<%= version %>"

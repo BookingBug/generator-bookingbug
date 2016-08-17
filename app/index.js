@@ -230,7 +230,7 @@ module.exports = BookingBugGenerator.extend({
       config = {
         general: _.extend({
           cache_control_max_age: '10',
-          bower_link: false,
+          local_sdk: false,
           uglify: true,
         }, config),
         local: {},
@@ -239,7 +239,7 @@ module.exports = BookingBugGenerator.extend({
         production: {}
       };
       config.local.uglify = false;
-      config.local.bower_link = true;
+      config.local.local_sdk = true;
       config.production.cache_control_max_age = '300';
       config.production.deploy_path = "/" + this.appName + "/";
       config.staging.deploy_path = "/" + this.appName + "/staging/";

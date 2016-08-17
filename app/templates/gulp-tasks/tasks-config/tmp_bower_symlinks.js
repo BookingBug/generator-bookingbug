@@ -14,6 +14,15 @@
 
         function bowerSymlinksTask(cb) {
 
+            if (configuration.projectConfig.local_sdk === true) {
+                createSymlinks();
+                overrideBBDependenciesInSDKBuilds();
+            }
+
+            cb();
+        }
+
+        function createSymlinks(){
             mkdirp.sync(path.join(configuration.projectRootPath, 'bower_components'));
 
             var delPathGlob = path.join(configuration.projectRootPath, 'bower_components/bookingbug-angular-*');
@@ -35,15 +44,11 @@
                     ignoreErrors: true
                 }
             ));
-
-            overrideBBDependenciesInSDKBuilds();
-
-            cb();
         }
 
-        function overrideBBDependenciesInSDKBuilds(){
+        function overrideBBDependenciesInSDKBuilds() {
 
-            for(var depIndex in configuration.bbDependencies){
+            for (var depIndex in configuration.bbDependencies) {
                 var depName = configuration.bbDependencies[depIndex];
 
                 var sdkBowerPath = path.join(configuration.sdkRootPath, 'build', depName, 'bower.json');

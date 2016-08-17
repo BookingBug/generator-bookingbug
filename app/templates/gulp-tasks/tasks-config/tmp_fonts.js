@@ -33,15 +33,23 @@
 
         function fontsWatchTask(cb) {
 
-            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', function(){
+            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', function () {
                 runSequence('tmp-fonts', 'webserver:reload');
             });
+
+            sdkFontsWatch();
+
+            cb();
+        }
+
+        function sdkFontsWatch() {
+            if (configuration.projectConfig.local_sdk !== true) {
+                return;
+            }
 
             gulp.watch([configuration.sdkRootPath + '/src/public-booking/fonts/**/*'], function () {
                 runSequence('build-sdk:public-booking:fonts', 'webserver:reload');
             });
-
-            cb();
         }
     };
 

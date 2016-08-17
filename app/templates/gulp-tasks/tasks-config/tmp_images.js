@@ -27,6 +27,16 @@
                 runSequence('tmp-images', 'webserver:reload');
             });
 
+            sdkImagesWatch();
+
+            cb();
+        }
+
+        function sdkImagesWatch() {
+            if (configuration.projectConfig.local_sdk !== true) {
+                return;
+            }
+
             gulp.watch([configuration.sdkRootPath + '/src/admin/images/**/*'], function () {
                 runSequence('build-sdk:admin:images', 'webserver:reload');
             });
@@ -38,8 +48,6 @@
             gulp.watch([configuration.sdkRootPath + '/src/public-booking/images/**/*'], function () {
                 runSequence('build-sdk:public-booking:images', 'webserver:reload');
             });
-
-            cb();
         }
     };
 
