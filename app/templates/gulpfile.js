@@ -1,19 +1,21 @@
-var cs = require('coffee-script');
-var fs = require('fs');
-var gulp = require('gulp');
-var path = require('path');
+(function () {
+    'use strict';
 
-var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
+    var cs = require('coffee-script');
+    var fs = require('fs');
+    var gulp = require('gulp');
+    var path = require('path');
+    var projectConfig = require('./gulp-tasks/helpers/project_config');
+    var localSdkValidator = require('./gulp-tasks/helpers/local_sdk_validator.js');
 
-try {
-    fs.accessSync(sdkSrcDir, fs.F_OK);
-    cs.register();
-    var sdkGulpFilePath = path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js.coffee');
-    require(sdkGulpFilePath)(gulp, process.env.BB_SDK_SRC_DIR);
-} catch (e) {
-    console.log('Could not find local BB SDK project using enviroment variable BB_SDK_SRC_DIR="' + sdkSrcDir + '"');
-}
+    var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
 
+    if (projectConfig.getConfig().local_sdk === true) {
+        localSdkValidator.validate();
+        cs.register();
+        require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js.coffee'))(gulp, sdkSrcDir);
+    }
 
-var clientGulpFilePath = './gulp-tasks/gulpfile.js';
-require(clientGulpFilePath)(gulp, __dirname, sdkSrcDir);
+    require('./gulp-tasks/gulpfile.js')(gulp, __dirname, sdkSrcDir);
+
+})(this);
