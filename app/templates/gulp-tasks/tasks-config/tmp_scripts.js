@@ -17,6 +17,7 @@
         var gulpUtil = require('gulp-util');
         var mainBowerFiles = require('main-bower-files');
         var path = require('path');
+        var runSequence = require('run-sequence');
 
         var projectFiles = [
             configuration.projectRootPath + '/src/javascripts/**/*.js',
@@ -45,7 +46,9 @@
 
         function scriptsWatch(cb) {
 
-            gulp.watch(projectFiles, ['tmp-scripts:client', 'webserver:reload']);
+            gulp.watch(projectFiles, function () {
+                runSequence('tmp-scripts:client', 'webserver:reload');
+            });
 
             gulp.watch([configuration.sdkRootPath + '/src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts']);
             gulp.watch([configuration.sdkRootPath + '/src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts']);
@@ -62,7 +65,9 @@
                     configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*.js',
                     '!' + configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
-                ['tmp-scripts:sdk-no-templates', 'webserver:reload']
+                function () {
+                    runSequence('tmp-scripts:sdk-no-templates', 'webserver:reload');
+                }
             );
             cb();
         }

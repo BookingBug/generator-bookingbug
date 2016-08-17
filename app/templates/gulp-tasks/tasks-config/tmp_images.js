@@ -9,6 +9,7 @@
         var args = require('../helpers/args.js');
         var gulpFlatten = require('gulp-flatten');
         var path = require('path');
+        var runSequence = require('run-sequence');
 
         function imagesTask() {
 
@@ -21,13 +22,21 @@
         }
 
         function imagesWatchTask(cb) {
-            var imagesSrcGlob = configuration.projectRootPath + '/src/images/*.*';
 
-            gulp.watch(imagesSrcGlob, ['tmp-images']);
+            gulp.watch(configuration.projectRootPath + '/src/images/*.*', ['tmp-images']);
 
-            gulp.watch([configuration.sdkRootPath + '/src/admin/images/**/*'], ['build-sdk:admin:images', 'webserver:reload']);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images', 'webserver:reload']);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/images/**/*'], ['build-sdk:public-booking:images', 'webserver:reload']);
+            gulp.watch([configuration.sdkRootPath + '/src/admin/images/**/*'], function () {
+                runSequence('build-sdk:admin:images', 'webserver:reload');
+            });
+
+            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/images/**/*'], function () {
+                runSequence('build-sdk:admin-dashboard:images', 'webserver:reload');
+            });
+
+            gulp.watch([configuration.sdkRootPath + '/src/public-booking/images/**/*'], function () {
+                runSequence('build-sdk:public-booking:images', 'webserver:reload');
+            });
+
             cb();
         }
     };

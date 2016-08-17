@@ -16,7 +16,7 @@
         var gulpTemplate = require('gulp-template');
         var mainBowerFiles = require('main-bower-files');
         var path = require('path');
-        var projectConfig = require('../helpers/project_config.js');
+        var runSequence = require('run-sequence');
 
         function filterStylesheets(path) {
             return (
@@ -66,9 +66,9 @@
 
         function stylesheetsWatchTask(cb) {
 
-            var src = configuration.projectRootPath + '/src/stylesheets/main.scss';
-
-            gulp.watch(src, ['tmp-stylesheets:client', 'webserver:reload']);
+            gulp.watch(configuration.projectRootPath + '/src/stylesheets/main.scss', function () {
+                runSequence('tmp-stylesheets:client', 'webserver:reload');
+            });
 
             gulp.watch([configuration.sdkRootPath + '/src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets']);
             gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets']);
@@ -78,7 +78,9 @@
 
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/**/*.scss'],
-                ['tmp-stylesheets:client', 'webserver:reload']
+                function () {
+                    runSequence('tmp-stylesheets:client', 'webserver:reload');
+                }
             );
 
             cb();

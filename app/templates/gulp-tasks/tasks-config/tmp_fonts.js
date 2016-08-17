@@ -9,6 +9,7 @@
         var gulpFlatten = require('gulp-flatten');
         var mainBowerFiles = require('main-bower-files');
         var path = require('path');
+        var runSequence = require('run-sequence');
 
         function fontsTask() {
 
@@ -31,10 +32,12 @@
         }
 
         function fontsWatchTask(cb) {
-            var fontsSrcGlob = configuration.projectRootPath + '/src/fonts/*.*';
 
-            gulp.watch(fontsSrcGlob, ['tmp-fonts']);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/fonts/**/*' ], ['build-sdk:public-booking:fonts', 'webserver:reload']);
+            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', ['tmp-fonts']);
+
+            gulp.watch([configuration.sdkRootPath + '/src/public-booking/fonts/**/*'], function () {
+                runSequence('build-sdk:public-booking:fonts', 'webserver:reload');
+            });
 
             cb();
         }

@@ -13,6 +13,7 @@
         var gulpUglify = require('gulp-uglify');
         var gulpTemplate = require('gulp-template');
         var path = require('path');
+        var runSequence = require('run-sequence');
 
         function templatesTask() {
 
@@ -38,9 +39,9 @@
 
         function templatesWatchTask(cb) {
 
-            var templatesSrcGlob = configuration.projectRootPath + '/src/templates/*.html';
-
-            gulp.watch(templatesSrcGlob, ['tmp-templates', 'webserver:reload']);
+            gulp.watch(configuration.projectRootPath + '/src/templates/*.html', function () {
+                runSequence('tmp-templates', 'webserver:reload')
+            });
 
             gulp.watch([configuration.sdkRootPath + '/src/admin/templates/**/*'], ['build-sdk:admin:templates']);
             gulp.watch([configuration.sdkRootPath + '/src/admin-booking/templates/**/*'], ['build-sdk:admin-booking:templates']);
@@ -54,7 +55,9 @@
 
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*templates.js'],
-                ['tmp-scripts:sdk-only-templates', 'webserver:reload']
+                function () {
+                    runSequence('tmp-scripts:sdk-only-templates', 'webserver:reload');
+                }
             );
             cb();
         }
