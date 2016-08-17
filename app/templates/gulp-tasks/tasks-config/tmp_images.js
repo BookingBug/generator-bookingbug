@@ -23,7 +23,9 @@
 
         function imagesWatchTask(cb) {
 
-            gulp.watch(configuration.projectRootPath + '/src/images/*.*', ['tmp-images']);
+            gulp.watch(configuration.projectRootPath + '/src/images/*.*', function () {
+                runSequence('tmp-images', 'webserver:reload');
+            });
 
             gulp.watch([configuration.sdkRootPath + '/src/admin/images/**/*'], function () {
                 runSequence('build-sdk:admin:images', 'webserver:reload');

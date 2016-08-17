@@ -33,7 +33,9 @@
 
         function fontsWatchTask(cb) {
 
-            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', ['tmp-fonts']);
+            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', function(){
+                runSequence('tmp-fonts', 'webserver:reload');
+            });
 
             gulp.watch([configuration.sdkRootPath + '/src/public-booking/fonts/**/*'], function () {
                 runSequence('build-sdk:public-booking:fonts', 'webserver:reload');
