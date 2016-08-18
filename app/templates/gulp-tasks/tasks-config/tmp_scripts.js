@@ -44,6 +44,81 @@
             return buildProjectScripts('client');
         }
 
+        /*
+         * @param {Function} filter
+         * @param {String} filename
+         * @returns {Object}
+         */
+        function buildVendorScripts(filter, filename) {
+            var dependenciesFiles;
+            dependenciesFiles = mainBowerFiles({
+                paths: {
+                    bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
+                    bowerrc: path.join(configuration.projectRootPath, '.bowerrc'),
+                    bowerJson: path.join(configuration.projectRootPath, 'bower.json')
+                },
+                filter: filter
+            });
+            return buildScriptsStream(dependenciesFiles, filename);
+        }
+
+        /*
+         * @param {String} filename
+         * @returns {Object}
+         */
+        function buildProjectScripts(filename) {
+            return buildScriptsStream(projectFiles, filename);
+        }
+
+        /*
+         * @param {Array.<String>} files
+         * @param {String} filename
+         */
+        function buildScriptsStream(files, filename) {
+            var stream;
+            stream = gulp.src(files)
+                .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
+                .pipe(gulpConcat(filename + '.js'))
+                .pipe(gulp.dest(configuration.projectTmpPath));
+
+            if (args.getEnvironment() !== 'dev') {
+                stream.pipe(gulpUglify({
+                    mangle: false
+                }))
+                    .pipe(gulpConcat(filename + '.min.js'))
+                    .pipe(gulp.dest(configuration.projectTmpPath));
+            }
+            return stream;
+        }
+
+        /*
+         * @param {String} path
+         * @returns {Boolean}
+         */
+        function nonBbDependenciesFilter(path) {
+            return (path.match(new RegExp('.js$'))) && (path.indexOf('bookingbug-angular-') === -1);
+        }
+
+        /*
+         * @param {String} path
+         * @returns {Boolean}
+         */
+        function bbDependenciesNoTemplatesFilter(path) {
+            var isBookingBugDependency;
+            isBookingBugDependency = path.indexOf('bookingbug-angular-') !== -1;
+            return isBookingBugDependency && path.match(new RegExp('.js$')) && !path.match(new RegExp('-templates.js$'));
+        }
+
+        /*
+         * @param {String} path
+         * @returns {Boolean}
+         */
+        function bbDependenciesOnlyTemplatesFilter(path) {
+            var isBookingBugDependency;
+            isBookingBugDependency = path.indexOf('bookingbug-angular-') !== -1;
+            return isBookingBugDependency && path.match(new RegExp('-templates.js$'));
+        }
+
         function scriptsWatch(cb) {
 
             gulp.watch(projectFiles, function () {
@@ -79,81 +154,6 @@
                     runSequence('tmp-scripts:sdk-no-templates', 'webserver:reload');
                 }
             );
-        }
-
-        /*
-         * @param {Array.<String>} files
-         * @param {String} filename
-         */
-        function buildScriptsStream(files, filename) {
-            var stream;
-            stream = gulp.src(files)
-                .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
-                .pipe(gulpConcat(filename + '.js'))
-                .pipe(gulp.dest(configuration.projectTmpPath));
-
-            if (args.getEnvironment() !== 'dev') {
-                stream.pipe(gulpUglify({
-                    mangle: false
-                }))
-                    .pipe(gulpConcat(filename + '.min.js'))
-                    .pipe(gulp.dest(configuration.projectTmpPath));
-            }
-            return stream;
-        }
-
-        /*
-         * @param {Function} filter
-         * @param {String} filename
-         * @returns {Object}
-         */
-        function buildVendorScripts(filter, filename) {
-            var dependenciesFiles;
-            dependenciesFiles = mainBowerFiles({
-                paths: {
-                    bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
-                    bowerrc: path.join(configuration.projectRootPath, '.bowerrc'),
-                    bowerJson: path.join(configuration.projectRootPath, 'bower.json')
-                },
-                filter: filter
-            });
-            return buildScriptsStream(dependenciesFiles, filename);
-        }
-
-        /*
-         * @param {String} filename
-         * @returns {Object}
-         */
-        function buildProjectScripts(filename) {
-            return buildScriptsStream(projectFiles, filename);
-        }
-
-        /*
-         * @param {String} path
-         * @returns {Boolean}
-         */
-        function nonBbDependenciesFilter(path) {
-            return (path.match(new RegExp('.js$'))) && (path.indexOf('bookingbug-angular-') === -1);
-        }
-
-        /*
-         * @param {String} path
-         * @returns {Boolean}
-         */
-        function bbDependenciesNoTemplatesFilter(path) {
-            var isBookingBugDependency;
-            isBookingBugDependency = path.indexOf('bookingbug-angular-') !== -1;
-            return isBookingBugDependency && path.match(new RegExp('.js$')) && !path.match(new RegExp('-templates.js$'));
-        }
-
-        /*
-         * @param {String} path
-         * @returns {Boolean}
-         */
-        function bbDependenciesOnlyTemplatesFilter(path) {
-            var isBookingBugDependency;
-            isBookingBugDependency = path.indexOf('bookingbug-angular-') !== -1;
-            return isBookingBugDependency && path.match(new RegExp('-templates.js$'));
         }
 
     };

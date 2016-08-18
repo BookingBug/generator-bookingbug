@@ -42,7 +42,7 @@
 
         function stylesheetsClientTask() {
 
-            var src = path.join(configuration.projectRootPath, 'src/stylesheets/main.scss');
+            var clientSCSS = path.join(configuration.projectRootPath, 'src/stylesheets/main.scss');
 
             var gulpSassOptions = {
                 errLogToConsole: true,
@@ -53,7 +53,7 @@
                 gulpSassOptions.outputStyle = 'compressed';
             }
 
-            return gulp.src(src)
+            return gulp.src(clientSCSS)
                 .pipe(gulpSourcemaps.init())
                 .pipe(gulpPlumber())
                 .pipe(gulpSass(gulpSassOptions))

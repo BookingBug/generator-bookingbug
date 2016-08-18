@@ -5,11 +5,11 @@
 
         gulp.task('tmp-bower-symlinks', bowerSymlinksTask);
 
-        var del = require('del');
         var fs = require('fs');
         var gulpShell = require('gulp-shell');
         var jsonFile = require('jsonfile');
-        var mkdirp = require('mkdirp');
+        var localSdkDependencies = require('../helpers/local_sdk_dependencies');
+
         var path = require('path');
 
         function bowerSymlinksTask(cb) {
@@ -22,28 +22,21 @@
             cb();
         }
 
-        function createSymlinks(){
-            mkdirp.sync(path.join(configuration.projectRootPath, 'bower_components'));
+        function createSymlinks() {
 
-            var delPathGlob = path.join(configuration.projectRootPath, 'bower_components/bookingbug-angular-*');
-            del.sync([delPathGlob]);
+            var commandsToExecute = [
+                localSdkDependencies.generateSymlinkCommand('admin'),
+                localSdkDependencies.generateSymlinkCommand('admin-booking'),
+                localSdkDependencies.generateSymlinkCommand('admin-dashboard'),
+                localSdkDependencies.generateSymlinkCommand('core'),
+                localSdkDependencies.generateSymlinkCommand('events'),
+                localSdkDependencies.generateSymlinkCommand('member'),
+                localSdkDependencies.generateSymlinkCommand('public-booking'),
+                localSdkDependencies.generateSymlinkCommand('services'),
+                localSdkDependencies.generateSymlinkCommand('settings')
+            ];
 
-            gulp.src('').pipe(gulpShell(
-                [
-                    generateSymlinkCommand('admin'),
-                    generateSymlinkCommand('admin-booking'),
-                    generateSymlinkCommand('admin-dashboard'),
-                    generateSymlinkCommand('core'),
-                    generateSymlinkCommand('events'),
-                    generateSymlinkCommand('member'),
-                    generateSymlinkCommand('public-booking'),
-                    generateSymlinkCommand('services'),
-                    generateSymlinkCommand('settings')
-                ],
-                {
-                    ignoreErrors: true
-                }
-            ));
+            gulp.src('').pipe(gulpShell(commandsToExecute, {ignoreErrors: true}));
         }
 
         function overrideBBDependenciesInSDKBuilds() {
@@ -55,8 +48,8 @@
                 var sdkBowerJson = JSON.parse(fs.readFileSync(sdkBowerPath, 'utf8'));
 
                 for (var dep in sdkBowerJson.dependencies) {
-                    if (isBBDependency(dep)) {
-                        sdkBowerJson.dependencies[dep] = generatePathToSdkBuild(dep);
+                    if (localSdkDependencies.isBBDependency(dep)) {
+                        sdkBowerJson.dependencies[dep] = localSdkDependencies.generatePathToSdkBuild(dep);
                     }
                 }
 
@@ -65,35 +58,9 @@
                         return console.log(err);
                     }
                 });
-
             }
-
         }
 
-        /*
-         * @param {String} dependencyName
-         * @returns {Boolean}
-         */
-        function isBBDependency(dependencyName) {
-            return new RegExp(/^bookingbug-angular.*/).test(dependencyName);
-        }
-
-        /*
-         * @param {String} sdkDependency
-         */
-        function generateSymlinkCommand(sdkDependency) {
-            var sdkPath = path.join(configuration.sdkRootPath, 'build', sdkDependency);
-            var clientPath = path.join(configuration.projectRootPath, '/bower_components/bookingbug-angular-' + sdkDependency);
-
-            return "ln -s '" + sdkPath + "' '" + clientPath + "'";
-        }
-
-        /*
-         *@param {String} dependencyName
-         */
-        function generatePathToSdkBuild(dependencyName) {
-            return path.join(configuration.sdkRootPath, 'build', dependencyName.replace('bookingbug-angular-', ''), '/');
-        }
     };
 
 }).call(this);

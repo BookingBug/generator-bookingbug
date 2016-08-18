@@ -13,10 +13,7 @@
 
         function fontsTask() {
 
-            var src = path.join(configuration.projectRootPath, 'src/fonts/*.*');
-            var dest = path.join(configuration.projectTmpPath, 'fonts');
-
-            var dependenciesFontFiles = mainBowerFiles({
+            var dependenciesFonts = mainBowerFiles({
                 includeDev: true,
                 paths: {
                     bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
@@ -26,7 +23,10 @@
                 filter: '**/*.{eot,svg,ttf,woff,woff2,otf}'
             });
 
-            return gulp.src(dependenciesFontFiles.concat(src))
+            var clientFonts = path.join(configuration.projectRootPath, 'src/fonts/*.*');
+            var dest = path.join(configuration.projectTmpPath, 'fonts');
+
+            return gulp.src(dependenciesFonts.concat(clientFonts))
                 .pipe(gulpFlatten())
                 .pipe(gulp.dest(dest));
         }

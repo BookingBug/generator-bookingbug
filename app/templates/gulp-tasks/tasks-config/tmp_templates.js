@@ -17,9 +17,9 @@
 
         function templatesTask() {
 
-            var templatesSrcGlob = path.join(configuration.projectRootPath, 'src/templates/*.html');
+            var clientTemplates = path.join(configuration.projectRootPath, 'src/templates/*.html');
 
-            var stream = gulp.src(templatesSrcGlob)
+            var stream = gulp.src(clientTemplates)
                 .pipe(gulpAngularTemplateCache('client_templates.js', {module: 'TemplateOverrides', standalone: true}))
                 .pipe(gulpFlatten())
                 .pipe(gulpTemplate(configuration.projectConfig))

@@ -5,8 +5,11 @@
 
         gulp.task('tmp-bower-prepare', bowerPrepareTask);
 
+        var del = require('del');
         var fs = require('fs');
         var jsonFile = require('jsonfile');
+        var localSdkDependencies = require('../helpers/local_sdk_dependencies');
+        var mkdirp = require('mkdirp');
         var path = require('path');
 
         var bowerBBDependencies = [
@@ -23,14 +26,20 @@
 
         function bowerPrepareTask(cb) {
 
+            cleanUpBowerComponents();
+
             if (configuration.projectConfig.local_sdk === true) {
                 prepareBowerFileReferringToLocalSdk();
                 cb();
             } else {
                 return copyBowerFileToTmp();
             }
+        }
 
-
+        function cleanUpBowerComponents() {
+            mkdirp.sync(path.join(configuration.projectRootPath, 'bower_components'));
+            var bbDependenciesToDelete = path.join(configuration.projectRootPath, 'bower_components/bookingbug-angular-*');
+            del.sync([bbDependenciesToDelete]);
         }
 
         function copyBowerFileToTmp() {
@@ -44,8 +53,8 @@
             var bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
 
             for (var depName in bowerJson.dependencies) {
-                if (isBBDependency(depName)) {
-                    bowerJson.dependencies[depName] = generatePathToSdkBuild(depName);
+                if (localSdkDependencies.isBBDependency(depName)) {
+                    bowerJson.dependencies[depName] = localSdkDependencies.generatePathToSdkBuild(depName);
                 }
             }
 
@@ -60,22 +69,6 @@
                 }
             });
         }
-
-        /*
-         * @param {String} dependencyName
-         * @returns {Boolean}
-         */
-        function isBBDependency(dependencyName) {
-            return new RegExp(/^bookingbug-angular.*/).test(dependencyName);
-        }
-
-        /*
-         *@param {String} dependencyName
-         */
-        function generatePathToSdkBuild(dependencyName) {
-            return path.join(configuration.sdkRootPath, 'build', dependencyName.replace('bookingbug-angular-', ''), '/');
-        }
-
 
     };
 
