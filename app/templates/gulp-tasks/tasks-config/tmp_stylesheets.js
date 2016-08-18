@@ -49,7 +49,7 @@
                 includePaths: [path.join(configuration.projectRootPath,'bower_components/bootstrap-sass/assets/stylesheets')]
             };
 
-            if (args.getEnvironment() !== 'dev') {
+            if (configuration.projectConfig.uglify === true) {
                 gulpSassOptions.outputStyle = 'compressed';
             }
 

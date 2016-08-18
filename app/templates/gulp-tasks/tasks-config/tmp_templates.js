@@ -25,7 +25,7 @@
                 .pipe(gulpTemplate(configuration.projectConfig))
                 .pipe(gulp.dest(configuration.projectTmpPath));
 
-            if (args.getEnvironment() !== 'dev') {
+            if (configuration.projectConfig.uglify === true) {
                 stream
                     .pipe(gulpUglify({
                         mangle: false
