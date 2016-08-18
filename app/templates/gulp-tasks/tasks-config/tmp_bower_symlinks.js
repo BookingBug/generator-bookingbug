@@ -24,17 +24,12 @@
 
         function createSymlinks() {
 
-            var commandsToExecute = [
-                localSdkDependencies.generateSymlinkCommand('admin'),
-                localSdkDependencies.generateSymlinkCommand('admin-booking'),
-                localSdkDependencies.generateSymlinkCommand('admin-dashboard'),
-                localSdkDependencies.generateSymlinkCommand('core'),
-                localSdkDependencies.generateSymlinkCommand('events'),
-                localSdkDependencies.generateSymlinkCommand('member'),
-                localSdkDependencies.generateSymlinkCommand('public-booking'),
-                localSdkDependencies.generateSymlinkCommand('services'),
-                localSdkDependencies.generateSymlinkCommand('settings')
-            ];
+            var commandsToExecute = [];
+
+            for (var depKey in configuration.bbDependencies) {
+                var depName = configuration.bbDependencies[depKey];
+                commandsToExecute.push(localSdkDependencies.generateSymlinkCommand(depName));
+            }
 
             gulp.src('').pipe(gulpShell(commandsToExecute, {ignoreErrors: true}));
         }

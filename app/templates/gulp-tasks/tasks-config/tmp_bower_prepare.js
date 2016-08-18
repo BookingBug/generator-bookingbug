@@ -12,18 +12,6 @@
         var mkdirp = require('mkdirp');
         var path = require('path');
 
-        var bowerBBDependencies = [
-            'bookingbug-angular-admin',
-            'bookingbug-angular-admin-booking',
-            'bookingbug-angular-admin-dashboard',
-            'bookingbug-angular-core',
-            'bookingbug-angular-events',
-            'bookingbug-angular-member',
-            'bookingbug-angular-public-booking',
-            'bookingbug-angular-services',
-            'bookingbug-angular-settings'
-        ];
-
         function bowerPrepareTask(cb) {
 
             cleanUpBowerComponents();
@@ -52,22 +40,36 @@
 
             var bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
 
-            for (var depName in bowerJson.dependencies) {
-                if (localSdkDependencies.isBBDependency(depName)) {
-                    bowerJson.dependencies[depName] = localSdkDependencies.generatePathToSdkBuild(depName);
-                }
-            }
+            useLocalPaths(bowerJson);
 
-            for (var i = 0; i < bowerBBDependencies.length; i++) {
-                var depName = bowerBBDependencies[i];
-                bowerJson.resolutions[depName] = "*";
-            }
+            overwriteResolutions(bowerJson);
 
             jsonFile.writeFile(bowerJsonPath, bowerJson, function (err) {
                 if (err !== null) {
                     return console.log(err);
                 }
             });
+        }
+
+        /**
+         * @param {Object} bowerJson
+         */
+        function useLocalPaths(bowerJson) {
+            for (var depName in bowerJson.dependencies) {
+                if (localSdkDependencies.isBBDependency(depName)) {
+                    bowerJson.dependencies[depName] = localSdkDependencies.generatePathToSdkBuild(depName);
+                }
+            }
+        }
+
+        /**
+         * @param {Object} bowerJson
+         */
+        function overwriteResolutions(bowerJson) {
+            for (var depKey in configuration.bbDependencies) {
+                var bowerDependencyName = 'bookingbug-angular-' + configuration.bbDependencies[depKey];
+                bowerJson.resolutions[bowerDependencyName] = "*";
+            }
         }
 
     };
