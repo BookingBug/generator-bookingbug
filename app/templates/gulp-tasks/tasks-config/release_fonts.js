@@ -1,15 +1,15 @@
 (function () {
     'use strict';
 
+    var gulpFlatten = require('gulp-flatten');
+    var mainBowerFiles = require('main-bower-files');
+    var path = require('path');
+    var runSequence = require('run-sequence');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-fonts', fontsTask);
-        gulp.task('tmp-fonts:watch', fontsWatchTask);
-
-        var gulpFlatten = require('gulp-flatten');
-        var mainBowerFiles = require('main-bower-files');
-        var path = require('path');
-        var runSequence = require('run-sequence');
+        gulp.task('release-fonts', fontsTask);
+        gulp.task('release-fonts:watch', fontsWatchTask);
 
         function fontsTask() {
 
@@ -34,7 +34,7 @@
         function fontsWatchTask(cb) {
 
             gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', function () {
-                runSequence('tmp-fonts', 'webserver:reload');
+                runSequence('release-fonts', 'webserver:reload');
             });
 
             sdkFontsWatch();

@@ -1,14 +1,14 @@
 (function () {
     'use strict';
 
+    var gulpConnect = require('gulp-connect');
+    var gulpOpen = require('gulp-open');
+
     module.exports = function (gulp, configuration) {
 
         gulp.task('webserver', webServerTask);
         gulp.task('webserver:open-browser', openBrowserTask);
         gulp.task('webserver:reload', reloadTask);
-
-        var gulpOpen = require('gulp-open');
-        var gulpConnect = require('gulp-connect');
 
         function webServerTask() {
             return gulpConnect.server({

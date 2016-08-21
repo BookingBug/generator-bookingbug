@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
+    var gulpBower = require('gulp-bower');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-bower-install', bowerInstallTask);
-
-        var gulpBower = require('gulp-bower');
+        gulp.task('bower-install', bowerInstallTask);
 
         function bowerInstallTask() {
 

@@ -9,11 +9,11 @@
         var runSequence = require('run-sequence');
 
         function runTask(cb) {
-            runSequence('build-tmp', 'webserver', 'webserver:open-browser', cb);
+            runSequence('build-release', 'webserver', 'webserver:open-browser', cb);
         }
 
         function runWatchtask(cb) {
-            runSequence('build-tmp:watch', 'webserver', 'webserver:open-browser', cb);
+            runSequence('build-release:watch', 'webserver', 'webserver:open-browser', cb);
         }
 
     };

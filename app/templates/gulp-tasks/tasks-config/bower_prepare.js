@@ -1,16 +1,16 @@
 (function () {
     'use strict';
 
+    var del = require('del');
+    var fs = require('fs');
+    var jsonFile = require('jsonfile');
+    var localSdk = require('../helpers/local_sdk');
+    var mkdirp = require('mkdirp');
+    var path = require('path');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-bower-prepare', bowerPrepareTask);
-
-        var del = require('del');
-        var fs = require('fs');
-        var jsonFile = require('jsonfile');
-        var localSdkDependencies = require('../helpers/local_sdk_dependencies');
-        var mkdirp = require('mkdirp');
-        var path = require('path');
+        gulp.task('bower-prepare', bowerPrepareTask);
 
         function bowerPrepareTask(cb) {
 
@@ -20,7 +20,7 @@
                 prepareBowerFileReferringToLocalSdk();
                 cb();
             } else {
-                return copyBowerFileToTmp();
+                return copyBowerFileToReleaseDir();
             }
         }
 
@@ -30,7 +30,7 @@
             del.sync([bbDependenciesToDelete]);
         }
 
-        function copyBowerFileToTmp() {
+        function copyBowerFileToReleaseDir() {
             return gulp.src(path.join(configuration.projectRootPath, 'bower.json')).pipe(gulp.dest(configuration.projectTmpPath));
         }
 
@@ -56,8 +56,8 @@
          */
         function useLocalPaths(bowerJson) {
             for (var depName in bowerJson.dependencies) {
-                if (localSdkDependencies.isBBDependency(depName)) {
-                    bowerJson.dependencies[depName] = localSdkDependencies.generatePathToSdkBuild(depName);
+                if (localSdk.isBBDependency(depName)) {
+                    bowerJson.dependencies[depName] = localSdk.generatePathToSdkBuild(depName);
                 }
             }
         }

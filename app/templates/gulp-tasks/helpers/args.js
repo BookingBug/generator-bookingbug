@@ -1,12 +1,11 @@
 (function () {
-
     'use strict';
+
+    var argv = require('yargs').argv;
 
     module.exports = {
         getEnvironment: getEnvironment
     };
-
-    var argv = require('yargs').argv;
 
     /*
      * @returns {String} ['local'|'dev'|'staging'|'prod']

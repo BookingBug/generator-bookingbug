@@ -1,27 +1,25 @@
 (function () {
     'use strict';
 
+    var argv = require('yargs').argv;
+    var fs = require('fs');
+    var gitUserEmail = require('git-user-email');
+    var gitUserName = require('git-user-name');
+    var gulpAwsPublish = require('gulp-awspublish');
+    var gulpRename = require('gulp-rename');
+    var gulpSlack = require('gulp-slack');
+    var gulpUtil = require('gulp-util');
+    var localSdk = require('../helpers/local_sdk');
+    var path = require('path');
+
     module.exports = function (gulp, configuration) {
 
         gulp.task('deploy-aws', deployToAwsTask);
 
-        var argv = require('yargs').argv;
-        var fs = require('fs');
-        var gitUserName = require('git-user-name');
-        var gitUserEmail = require('git-user-email');
-        var gulpAwsPublish = require('gulp-awspublish');
-        var gulpRename = require('gulp-rename');
-        var gulpSlack = require('gulp-slack');
-        var gulpUtil = require('gulp-util');
-        var localSdkDependencies = require('../helpers/local_sdk_dependencies');
-        var path = require('path');
-
         function deployToAwsTask() {
 
             guardExternalSdkDependencies();
-
             guardEnvironmentalVariables();
-
             consoleNotificationAboutDeployment();
 
             return gulp.src(getReleaseFiles())
@@ -121,7 +119,7 @@
 
             for (var depName in bowerJson.dependencies) {
                 var depVersion = bowerJson.dependencies[depName];
-                if (localSdkDependencies.isBBDependency(depName)) {
+                if (localSdk.isBBDependency(depName)) {
                     return depVersion;
                 }
             }

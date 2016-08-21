@@ -1,19 +1,19 @@
 (function () {
     'use strict';
 
+    var args = require('../helpers/args.js');
+    var gulpAngularTemplateCache = require('gulp-angular-templatecache');
+    var gulpConcat = require('gulp-concat');
+    var gulpFlatten = require('gulp-flatten');
+    var gulpUglify = require('gulp-uglify');
+    var gulpTemplate = require('gulp-template');
+    var path = require('path');
+    var runSequence = require('run-sequence');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-templates', templatesTask);
-        gulp.task('tmp-templates:watch', templatesWatchTask);
-
-        var args = require('../helpers/args.js');
-        var gulpAngularTemplateCache = require('gulp-angular-templatecache');
-        var gulpConcat = require('gulp-concat');
-        var gulpFlatten = require('gulp-flatten');
-        var gulpUglify = require('gulp-uglify');
-        var gulpTemplate = require('gulp-template');
-        var path = require('path');
-        var runSequence = require('run-sequence');
+        gulp.task('release-templates', templatesTask);
+        gulp.task('release-templates:watch', templatesWatchTask);
 
         function templatesTask() {
 
@@ -40,7 +40,7 @@
         function templatesWatchTask(cb) {
 
             gulp.watch(configuration.projectRootPath + '/src/templates/*.html', function () {
-                runSequence('tmp-templates', 'webserver:reload')
+                runSequence('release-templates', 'webserver:reload')
             });
 
             sdkTemplatesWatch();
@@ -66,7 +66,7 @@
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*templates.js'],
                 function () {
-                    runSequence('tmp-scripts:sdk-only-templates', 'webserver:reload');
+                    runSequence('release-scripts:sdk-only-templates', 'webserver:reload');
                 }
             );
         }

@@ -6,12 +6,11 @@
     var gulp = require('gulp');
     var path = require('path');
     var projectConfig = require('./gulp-tasks/helpers/project_config');
-    var localSdkValidator = require('./gulp-tasks/helpers/local_sdk_validator.js');
-
+    var localSdk = require('./gulp-tasks/helpers/local_sdk.js');
     var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
 
     if (projectConfig.getConfig().local_sdk === true) {
-        localSdkValidator.validate();
+        localSdk.validate();
         cs.register();
         require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js.coffee'))(gulp, sdkSrcDir);
     }

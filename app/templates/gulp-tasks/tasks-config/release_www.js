@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
+    var gulpTemplate = require('gulp-template');
+    var path = require('path');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-www', wwwTask);
-
-        var gulpTemplate = require('gulp-template');
-        var path = require('path');
+        gulp.task('release-www', wwwTask);
 
         function wwwTask() {
 

@@ -1,22 +1,22 @@
 (function () {
     'use strict';
 
+    var args = require('../helpers/args.js');
+    var gulpConcat = require('gulp-concat');
+    var gulpCssSelectorLimit = require('gulp-css-selector-limit');
+    var gulpPlumber = require('gulp-plumber');
+    var gulpSass = require('gulp-sass');
+    var gulpSourcemaps = require('gulp-sourcemaps');
+    var gulpTemplate = require('gulp-template');
+    var mainBowerFiles = require('main-bower-files');
+    var path = require('path');
+    var runSequence = require('run-sequence');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-stylesheets:vendors', stylesheetsVendorsTask);
-        gulp.task('tmp-stylesheets:client', stylesheetsClientTask);
-        gulp.task('tmp-stylesheets:watch', stylesheetsWatchTask);
-
-        var args = require('../helpers/args.js');
-        var gulpCssSelectorLimit = require('gulp-css-selector-limit');
-        var gulpConcat = require('gulp-concat');
-        var gulpPlumber = require('gulp-plumber');
-        var gulpSass = require('gulp-sass');
-        var gulpSourcemaps = require('gulp-sourcemaps');
-        var gulpTemplate = require('gulp-template');
-        var mainBowerFiles = require('main-bower-files');
-        var path = require('path');
-        var runSequence = require('run-sequence');
+        gulp.task('release-stylesheets:vendors', stylesheetsVendorsTask);
+        gulp.task('release-stylesheets:client', stylesheetsClientTask);
+        gulp.task('release-stylesheets:watch', stylesheetsWatchTask);
 
         function filterStylesheets(path) {
             return (
@@ -67,7 +67,7 @@
         function stylesheetsWatchTask(cb) {
 
             gulp.watch(configuration.projectRootPath + '/src/stylesheets/main.scss', function () {
-                runSequence('tmp-stylesheets:client', 'webserver:reload');
+                runSequence('release-stylesheets:client', 'webserver:reload');
             });
 
             sdkStylesheetsWatch();
@@ -89,7 +89,7 @@
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/**/*.scss'],
                 function () {
-                    runSequence('tmp-stylesheets:client', 'webserver:reload');
+                    runSequence('release-stylesheets:client', 'webserver:reload');
                 }
             );
         }

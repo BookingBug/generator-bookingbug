@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    module.exports = function (gulp, projectRootPath, sdkRootPath) {
+    var args = require('./helpers/args.js');
+    var includeAll = require("include-all");
+    var path = require("path");
+    var projectConfig = require('./helpers/project_config.js');
 
-        var args = require('./helpers/args.js');
-        var includeAll = require("include-all");
-        var path = require("path");
-        var projectConfig = require('./helpers/project_config.js');
+    module.exports = function (gulp, projectRootPath, sdkRootPath) {
 
         var configuration = null;
 
@@ -35,7 +35,7 @@
                 projectBuildPath: path.join(projectRootPath, 'build'),
                 projectConfig: projectConfig.getConfig(),
                 projectRootPath: projectRootPath,
-                projectTmpPath: path.join(projectRootPath, 'tmp'),
+                projectTmpPath: path.join(projectRootPath, 'release'),
                 sdkRootPath: sdkRootPath
             }
         }

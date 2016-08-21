@@ -1,16 +1,15 @@
 (function () {
     'use strict';
 
+    var fs = require('fs');
+    var gulpShell = require('gulp-shell');
+    var jsonFile = require('jsonfile');
+    var localSdk = require('../helpers/local_sdk');
+    var path = require('path');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-bower-symlinks', bowerSymlinksTask);
-
-        var fs = require('fs');
-        var gulpShell = require('gulp-shell');
-        var jsonFile = require('jsonfile');
-        var localSdkDependencies = require('../helpers/local_sdk_dependencies');
-
-        var path = require('path');
+        gulp.task('bower-symlinks', bowerSymlinksTask);
 
         function bowerSymlinksTask(cb) {
 
@@ -28,7 +27,7 @@
 
             for (var depKey in configuration.bbDependencies) {
                 var depName = configuration.bbDependencies[depKey];
-                commandsToExecute.push(localSdkDependencies.generateSymlinkCommand(depName));
+                commandsToExecute.push(localSdk.generateSymlinkCommand(depName));
             }
 
             gulp.src('').pipe(gulpShell(commandsToExecute, {ignoreErrors: true}));
@@ -43,8 +42,8 @@
                 var sdkBowerJson = JSON.parse(fs.readFileSync(sdkBowerPath, 'utf8'));
 
                 for (var dep in sdkBowerJson.dependencies) {
-                    if (localSdkDependencies.isBBDependency(dep)) {
-                        sdkBowerJson.dependencies[dep] = localSdkDependencies.generatePathToSdkBuild(dep);
+                    if (localSdk.isBBDependency(dep)) {
+                        sdkBowerJson.dependencies[dep] = localSdk.generatePathToSdkBuild(dep);
                     }
                 }
 

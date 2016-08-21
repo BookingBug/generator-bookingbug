@@ -1,12 +1,14 @@
 (function () {
+    'use strict';
+
+    var runSequence = require('run-sequence');
+
     module.exports = function (gulp, configuration) {
 
         gulp.task('deploy', deployTask);
 
-        var runSequence = require('run-sequence');
-
         function deployTask(cb) {
-            runSequence('build-tmp', 'deploy-aws', cb);
+            runSequence('build-release', 'deploy-aws', cb);
         }
     };
 

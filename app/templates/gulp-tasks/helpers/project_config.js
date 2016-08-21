@@ -1,13 +1,12 @@
 (function () {
-
     'use strict';
+
+    var args = require('./args.js');
+    var jsonFile = require('jsonfile');
 
     module.exports = {
         getConfig: getConfig
     };
-
-    var args = require('./args.js');
-    var jsonFile = require('jsonfile');
 
     function getConfig() {
 
@@ -27,6 +26,7 @@
         }
 
         var environmentName = 'development';
+
         if (env.match(/local/)) {
             environmentName = 'local';
         } else if (env.match(/stag/)) {

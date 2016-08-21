@@ -1,23 +1,23 @@
 (function () {
     'use strict';
 
+    var args = require('../helpers/args.js');
+    var gulpCoffee = require('gulp-coffee');
+    var gulpConcat = require('gulp-concat');
+    var gulpIf = require('gulp-if');
+    var gulpUglify = require('gulp-uglify');
+    var gulpUtil = require('gulp-util');
+    var mainBowerFiles = require('main-bower-files');
+    var path = require('path');
+    var runSequence = require('run-sequence');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-scripts:vendors', scriptsVendorsTask);
-        gulp.task('tmp-scripts:sdk-no-templates', scriptsSdkNoTemplates);
-        gulp.task('tmp-scripts:sdk-only-templates', scriptsSdkOnlyTemplates);
-        gulp.task('tmp-scripts:client', scriptsClient);
-        gulp.task('tmp-scripts:watch', scriptsWatch);
-
-        var args = require('../helpers/args.js');
-        var gulpCoffee = require('gulp-coffee');
-        var gulpConcat = require('gulp-concat');
-        var gulpIf = require('gulp-if');
-        var gulpUglify = require('gulp-uglify');
-        var gulpUtil = require('gulp-util');
-        var mainBowerFiles = require('main-bower-files');
-        var path = require('path');
-        var runSequence = require('run-sequence');
+        gulp.task('release-scripts:vendors', scriptsVendorsTask);
+        gulp.task('release-scripts:sdk-no-templates', scriptsSdkNoTemplates);
+        gulp.task('release-scripts:sdk-only-templates', scriptsSdkOnlyTemplates);
+        gulp.task('release-scripts:client', scriptsClient);
+        gulp.task('release-scripts:watch', scriptsWatch);
 
         var projectFiles = [
             configuration.projectRootPath + '/src/javascripts/**/*.js',
@@ -122,7 +122,7 @@
         function scriptsWatch(cb) {
 
             gulp.watch(projectFiles, function () {
-                runSequence('tmp-scripts:client', 'webserver:reload');
+                runSequence('release-scripts:client', 'webserver:reload');
             });
 
             sdkScriptsWatch();
@@ -151,7 +151,7 @@
                     '!' + configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
                 function () {
-                    runSequence('tmp-scripts:sdk-no-templates', 'webserver:reload');
+                    runSequence('release-scripts:sdk-no-templates', 'webserver:reload');
                 }
             );
         }

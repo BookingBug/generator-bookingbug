@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
+    var del = require('del');
+    var mkdirp = require('mkdirp');
+
     module.exports = function (gulp, configuration) {
 
-        gulp.task('tmp-clean', cleanTask);
-
-        var del = require('del');
-        var mkdirp = require('mkdirp');
+        gulp.task('release-clean', cleanTask);
 
         function cleanTask(cb) {
 
