@@ -33,7 +33,7 @@
             });
 
             gulp.src(dependenciesCssFiles)
-                .pipe(gulpConcat('vendors.css'))
+                .pipe(gulpConcat('booking-widget-dependencies.css'))
                 .pipe(gulp.dest(configuration.projectReleasePath));
         }
 
@@ -54,7 +54,7 @@
                 .pipe(gulpSourcemaps.init())
                 .pipe(gulpPlumber())
                 .pipe(gulpSass(gulpSassOptions))
-                .pipe(gulpConcat('client.css'))
+                .pipe(gulpConcat('booking-widget.css'))
                 .pipe(gulpTemplate(configuration.projectConfig))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
                 .pipe(gulpSourcemaps.write('maps', {includeContent: false}))

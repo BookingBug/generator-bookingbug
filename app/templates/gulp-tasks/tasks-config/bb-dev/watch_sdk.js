@@ -59,7 +59,7 @@
                     '!' + configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
                 function () {
-                    runSequence('release-scripts:sdk-no-templates', 'webserver:reload');
+                    runSequence('scripts:client', 'webserver:reload');
                 }
             );
         }
@@ -75,7 +75,7 @@
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/**/*.scss'],
                 function () {
-                    runSequence('release-stylesheets:client', 'webserver:reload');
+                    runSequence('stylesheets:client', 'webserver:reload');
                 }
             );
         }
@@ -95,7 +95,7 @@
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*templates.js'],
                 function () {
-                    runSequence('release-scripts:sdk-only-templates', 'webserver:reload');
+                    runSequence('scripts:client', 'webserver:reload');
                 }
             );
         }

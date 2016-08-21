@@ -14,8 +14,6 @@
                 'clean',
                 'bower-install',
                 'scripts:vendors',
-                'scripts:sdk-no-templates',
-                'scripts:sdk-only-templates',
                 'scripts:client',
                 'templates',
                 'stylesheets:vendors',

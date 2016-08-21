@@ -3,9 +3,7 @@
 
     var gulpAngularTemplateCache = require('gulp-angular-templatecache');
     var gulpConcat = require('gulp-concat');
-    var gulpFlatten = require('gulp-flatten');
     var gulpUglify = require('gulp-uglify');
-    var gulpTemplate = require('gulp-template');
     var path = require('path');
 
     module.exports = function (gulp, configuration) {
@@ -14,12 +12,10 @@
 
         function templatesTask() {
 
-            var clientTemplates = path.join(configuration.projectRootPath, 'src/templates/*.html');
+            var clientTemplates = path.join(configuration.projectRootPath, 'src/templates/**/*.html');
 
             var stream = gulp.src(clientTemplates)
-                .pipe(gulpAngularTemplateCache('client_templates.js', {module: 'TemplateOverrides', standalone: true}))
-                .pipe(gulpFlatten())
-                .pipe(gulpTemplate(configuration.projectConfig))
+                .pipe(gulpAngularTemplateCache('bookingbug-widget-templates.js', {module: 'TemplateOverrides', standalone: true}))
                 .pipe(gulp.dest(configuration.projectReleasePath));
 
             if (configuration.projectConfig.uglify === true) {
