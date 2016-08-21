@@ -6,7 +6,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('release-www', wwwTask);
+        gulp.task('www', wwwTask);
 
         function wwwTask() {
 
@@ -14,7 +14,7 @@
 
             return gulp.src(src)
                 .pipe(gulpTemplate(configuration.projectConfig))
-                .pipe(gulp.dest(configuration.projectTmpPath));
+                .pipe(gulp.dest(configuration.projectReleasePath));
         }
     };
 

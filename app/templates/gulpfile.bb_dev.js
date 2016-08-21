@@ -2,7 +2,6 @@
     'use strict';
 
     var cs = require('coffee-script');
-    var fs = require('fs');
     var gulp = require('gulp');
     var path = require('path');
     var projectConfig = require('./gulp-tasks/helpers/project_config');

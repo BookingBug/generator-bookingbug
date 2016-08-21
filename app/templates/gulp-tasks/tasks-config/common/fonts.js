@@ -4,12 +4,10 @@
     var gulpFlatten = require('gulp-flatten');
     var mainBowerFiles = require('main-bower-files');
     var path = require('path');
-    var runSequence = require('run-sequence');
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('release-fonts', fontsTask);
-        gulp.task('release-fonts:watch', fontsWatchTask);
+        gulp.task('fonts', fontsTask);
 
         function fontsTask() {
 
@@ -24,32 +22,11 @@
             });
 
             var clientFonts = path.join(configuration.projectRootPath, 'src/fonts/*.*');
-            var dest = path.join(configuration.projectTmpPath, 'fonts');
+            var dest = path.join(configuration.projectReleasePath, 'fonts');
 
             return gulp.src(dependenciesFonts.concat(clientFonts))
                 .pipe(gulpFlatten())
                 .pipe(gulp.dest(dest));
-        }
-
-        function fontsWatchTask(cb) {
-
-            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', function () {
-                runSequence('release-fonts', 'webserver:reload');
-            });
-
-            sdkFontsWatch();
-
-            cb();
-        }
-
-        function sdkFontsWatch() {
-            if (configuration.projectConfig.local_sdk !== true) {
-                return;
-            }
-
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/fonts/**/*'], function () {
-                runSequence('build-sdk:public-booking:fonts', 'webserver:reload');
-            });
         }
     };
 

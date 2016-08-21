@@ -1,7 +1,6 @@
 (function () {
     'use strict';
 
-    var args = require('../helpers/args.js');
     var gulpConcat = require('gulp-concat');
     var gulpCssSelectorLimit = require('gulp-css-selector-limit');
     var gulpPlumber = require('gulp-plumber');
@@ -10,13 +9,11 @@
     var gulpTemplate = require('gulp-template');
     var mainBowerFiles = require('main-bower-files');
     var path = require('path');
-    var runSequence = require('run-sequence');
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('release-stylesheets:vendors', stylesheetsVendorsTask);
-        gulp.task('release-stylesheets:client', stylesheetsClientTask);
-        gulp.task('release-stylesheets:watch', stylesheetsWatchTask);
+        gulp.task('stylesheets:vendors', stylesheetsVendorsTask);
+        gulp.task('stylesheets:client', stylesheetsClientTask);
 
         function filterStylesheets(path) {
             return (
@@ -37,7 +34,7 @@
 
             gulp.src(dependenciesCssFiles)
                 .pipe(gulpConcat('vendors.css'))
-                .pipe(gulp.dest(configuration.projectTmpPath));
+                .pipe(gulp.dest(configuration.projectReleasePath));
         }
 
         function stylesheetsClientTask() {
@@ -46,7 +43,7 @@
 
             var gulpSassOptions = {
                 errLogToConsole: true,
-                includePaths: [path.join(configuration.projectRootPath,'bower_components/bootstrap-sass/assets/stylesheets')]
+                includePaths: [path.join(configuration.projectRootPath, 'bower_components/bootstrap-sass/assets/stylesheets')]
             };
 
             if (configuration.projectConfig.uglify === true) {
@@ -61,37 +58,7 @@
                 .pipe(gulpTemplate(configuration.projectConfig))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
                 .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
-                .pipe(gulp.dest(configuration.projectTmpPath));
-        }
-
-        function stylesheetsWatchTask(cb) {
-
-            gulp.watch(configuration.projectRootPath + '/src/stylesheets/main.scss', function () {
-                runSequence('release-stylesheets:client', 'webserver:reload');
-            });
-
-            sdkStylesheetsWatch();
-
-            cb();
-        }
-
-        function sdkStylesheetsWatch() {
-            if (configuration.projectConfig.local_sdk !== true) {
-                return;
-            }
-
-            gulp.watch([configuration.sdkRootPath + '/src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets']);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets']);
-            gulp.watch([configuration.sdkRootPath + '/src/core/stylesheets/**/*'], ['build-sdk:core:stylesheets']);
-            gulp.watch([configuration.sdkRootPath + '/src/member/stylesheets/**/*'], ['build-sdk:member:stylesheets']);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/stylesheets/**/*'], ['build-sdk:public-booking:stylesheets']);
-
-            gulp.watch(
-                [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/**/*.scss'],
-                function () {
-                    runSequence('release-stylesheets:client', 'webserver:reload');
-                }
-            );
+                .pipe(gulp.dest(configuration.projectReleasePath));
         }
     };
 

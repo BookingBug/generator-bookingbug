@@ -8,7 +8,7 @@
         gulp.task('deploy', deployTask);
 
         function deployTask(cb) {
-            runSequence('build-release', 'deploy-aws', cb);
+            runSequence('release', 'deploy-aws', cb);
         }
     };
 

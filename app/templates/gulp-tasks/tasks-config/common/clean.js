@@ -6,12 +6,12 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('release-clean', cleanTask);
+        gulp.task('clean', cleanTask);
 
         function cleanTask(cb) {
 
-            del.sync([configuration.projectTmpPath]);
-            mkdirp.sync(configuration.projectTmpPath);
+            del.sync([configuration.projectReleasePath]);
+            mkdirp.sync(configuration.projectReleasePath);
 
             cb();
         }

@@ -6,7 +6,7 @@
     var path = require("path");
     var projectConfig = require('./helpers/project_config.js');
 
-    module.exports = function (gulp, projectRootPath, sdkRootPath) {
+    module.exports = function (gulp, projectRootPath) {
 
         var configuration = null;
 
@@ -20,23 +20,10 @@
 
         function loadConfiguration() {
             configuration = {
-                bbDependencies: [
-                    'admin',
-                    'admin-booking',
-                    'admin-dashboard',
-                    'core',
-                    'events',
-                    'member',
-                    'public-booking',
-                    'services',
-                    'settings'
-                ],
                 environment: args.getEnvironment(),
-                projectBuildPath: path.join(projectRootPath, 'build'),
                 projectConfig: projectConfig.getConfig(),
                 projectRootPath: projectRootPath,
-                projectTmpPath: path.join(projectRootPath, 'release'),
-                sdkRootPath: sdkRootPath
+                projectReleasePath: path.join(projectRootPath, 'release')
             }
         }
 

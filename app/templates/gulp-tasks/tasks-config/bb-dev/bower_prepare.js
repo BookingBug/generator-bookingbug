@@ -14,6 +14,8 @@
 
         function bowerPrepareTask(cb) {
 
+            mkdirp.sync(path.join(configuration.projectTmpPath));
+
             cleanUpBowerComponents();
 
             if (configuration.projectConfig.local_sdk === true) {

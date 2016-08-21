@@ -12,7 +12,7 @@
 
         function webServerTask() {
             return gulpConnect.server({
-                root: [configuration.projectTmpPath],
+                root: [configuration.projectReleasePath],
                 port: 8000,
                 livereload: true
             });
@@ -29,7 +29,7 @@
         }
 
         function reloadTask() {
-            return gulp.src(configuration.projectTmpPath + '/**/*')
+            return gulp.src(configuration.projectReleasePath + '/**/*')
                 .pipe(gulpConnect.reload());
         }
 
