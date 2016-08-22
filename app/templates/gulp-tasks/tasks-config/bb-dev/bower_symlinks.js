@@ -47,7 +47,7 @@
                     }
                 }
 
-                jsonFile.writeFile(sdkBowerPath, sdkBowerJson, function (err) {
+                jsonFile.writeFile(sdkBowerPath, sdkBowerJson, {spaces: 2}, function (err) {
                     if (err !== null) {
                         return console.log(err);
                     }

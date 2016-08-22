@@ -46,7 +46,7 @@
 
             overwriteResolutions(bowerJson);
 
-            jsonFile.writeFile(bowerJsonPath, bowerJson, function (err) {
+            jsonFile.writeFile(bowerJsonPath, bowerJson, {spaces: 2}, function (err) {
                 if (err !== null) {
                     return console.log(err);
                 }
