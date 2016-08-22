@@ -2,7 +2,6 @@
     'use strict';
 
     var path = require('path');
-    var runSequence = require('run-sequence');
 
     module.exports = function (gulp, configuration) {
 

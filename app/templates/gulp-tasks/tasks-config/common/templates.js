@@ -3,7 +3,7 @@
 
     var gulpAngularTemplateCache = require('gulp-angular-templatecache');
     var gulpConcat = require('gulp-concat');
-    var gulpConnect = require('gulp-connect');
+    var gulpLiveReload = require('gulp-livereload');
     var gulpUglify = require('gulp-uglify');
     var path = require('path');
 
@@ -34,7 +34,7 @@
             }
 
             return stream
-                .pipe(gulpConnect.reload())
+                .pipe(gulpLiveReload())
                 ;
         }
     };

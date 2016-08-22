@@ -3,8 +3,8 @@
 
     var gulpCoffee = require('gulp-coffee');
     var gulpConcat = require('gulp-concat');
-    var gulpConnect = require('gulp-connect');
     var gulpIf = require('gulp-if');
+    var gulpLiveReload = require('gulp-livereload');
     var gulpUglify = require('gulp-uglify');
     var gulpUtil = require('gulp-util');
     var mainBowerFiles = require('main-bower-files');
@@ -54,7 +54,7 @@
             ];
 
             return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget')
-                .pipe(gulpConnect.reload())
+                .pipe(gulpLiveReload())
                 ;
         }
 

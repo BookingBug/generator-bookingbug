@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var gulpConnect = require('gulp-connect');
     var gulpFlatten = require('gulp-flatten');
+    var gulpLiveReload = require('gulp-livereload');
     var mainBowerFiles = require('main-bower-files');
     var path = require('path');
 
@@ -28,7 +28,7 @@
             return gulp.src(dependenciesFonts.concat(clientFonts))
                 .pipe(gulpFlatten())
                 .pipe(gulp.dest(dest))
-                .pipe(gulpConnect.reload())
+                .pipe(gulpLiveReload())
                 ;
         }
     };

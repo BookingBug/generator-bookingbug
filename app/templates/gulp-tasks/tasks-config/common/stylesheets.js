@@ -2,7 +2,6 @@
     'use strict';
 
     var gulpConcat = require('gulp-concat');
-    var gulpConnect = require('gulp-connect');
     var gulpCssSelectorLimit = require('gulp-css-selector-limit');
     var gulpPlumber = require('gulp-plumber');
     var gulpSass = require('gulp-sass');
@@ -61,7 +60,6 @@
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
                 .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
                 .pipe(gulp.dest(configuration.projectReleasePath))
-                .pipe(gulpConnect.reload())
                 ;
         }
     };

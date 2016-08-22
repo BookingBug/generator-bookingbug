@@ -1,13 +1,17 @@
 (function () {
     'use strict';
 
-    var runSequence = require('run-sequence');
+    var gulpLiveReload = require('gulp-livereload');
+    var path = require('path');
 
     module.exports = function (gulp, configuration) {
 
         gulp.task('watch', watchTask);
 
         function watchTask() {
+
+            gulpLiveReload.listen();
+
             fonts();
             images();
             scripts();
@@ -22,7 +26,11 @@
 
         function stylesheets() {
 
-            gulp.watch(configuration.projectRootPath + '/src/stylesheets/main.scss', ['stylesheets:client']);
+            gulp.watch(path.join(configuration.projectRootPath, '/src/stylesheets/main.scss'), ['stylesheets:client']);
+
+            gulp
+                .watch(path.join(configuration.projectReleasePath, 'booking-widget.css'))
+                .on('change', gulpLiveReload.changed);
         }
 
 
