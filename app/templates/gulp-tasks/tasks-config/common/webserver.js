@@ -8,7 +8,6 @@
 
         gulp.task('webserver', webServerTask);
         gulp.task('webserver:open-browser', openBrowserTask);
-        gulp.task('webserver:reload', reloadTask);
 
         function webServerTask() {
             return gulpConnect.server({
@@ -27,12 +26,6 @@
             return gulp.src('')
                 .pipe(gulpOpen(gulpOpenOptions));
         }
-
-        function reloadTask() {
-            return gulp.src(configuration.projectReleasePath + '/**/*')
-                .pipe(gulpConnect.reload());
-        }
-
     };
 
 }).call(this);

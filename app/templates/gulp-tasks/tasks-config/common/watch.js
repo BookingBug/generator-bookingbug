@@ -17,16 +17,12 @@
 
         function templates() {
 
-            gulp.watch(configuration.projectRootPath + '/src/templates/*.html', function () {
-                runSequence('templates', 'webserver:reload')
-            });
+            gulp.watch(configuration.projectRootPath + '/src/templates/*.html', ['templates']);
         }
 
         function stylesheets() {
 
-            gulp.watch(configuration.projectRootPath + '/src/stylesheets/main.scss', function () {
-                runSequence('stylesheets:client', 'webserver:reload');
-            });
+            gulp.watch(configuration.projectRootPath + '/src/stylesheets/main.scss', ['stylesheets:client']);
         }
 
 
@@ -41,23 +37,17 @@
                 '!**/*.js.map'
             ];
 
-            gulp.watch(projectFiles, function () {
-                runSequence('scripts:client', 'webserver:reload');
-            });
+            gulp.watch(projectFiles, ['scripts:client']);
         }
 
         function images() {
 
-            gulp.watch(configuration.projectRootPath + '/src/images/*.*', function () {
-                runSequence('images', 'webserver:reload');
-            });
+            gulp.watch(configuration.projectRootPath + '/src/images/*.*', ['images']);
         }
 
         function fonts() {
 
-            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', function () {
-                runSequence('fonts', 'webserver:reload');
-            });
+            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', ['fonts']);
         }
     };
 

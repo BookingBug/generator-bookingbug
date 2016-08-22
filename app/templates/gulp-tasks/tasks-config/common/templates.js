@@ -3,6 +3,7 @@
 
     var gulpAngularTemplateCache = require('gulp-angular-templatecache');
     var gulpConcat = require('gulp-concat');
+    var gulpConnect = require('gulp-connect');
     var gulpUglify = require('gulp-uglify');
     var path = require('path');
 
@@ -15,8 +16,12 @@
             var clientTemplates = path.join(configuration.projectRootPath, 'src/templates/**/*.html');
 
             var stream = gulp.src(clientTemplates)
-                .pipe(gulpAngularTemplateCache('bookingbug-widget-templates.js', {module: 'TemplateOverrides', standalone: true}))
-                .pipe(gulp.dest(configuration.projectReleasePath));
+                    .pipe(gulpAngularTemplateCache('bookingbug-widget-templates.js', {
+                        module: 'TemplateOverrides',
+                        standalone: true
+                    }))
+                    .pipe(gulp.dest(configuration.projectReleasePath))
+                ;
 
             if (configuration.projectConfig.uglify === true) {
                 stream
@@ -24,10 +29,13 @@
                         mangle: false
                     }))
                     .pipe(gulpConcat('client_templates.min.js'))
-                    .pipe(gulp.dest(configuration.projectReleasePath));
+                    .pipe(gulp.dest(configuration.projectReleasePath))
+                ;
             }
 
-            return stream;
+            return stream
+                .pipe(gulpConnect.reload())
+                ;
         }
     };
 

@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    var gulpConnect = require('gulp-connect');
     var gulpFlatten = require('gulp-flatten');
     var path = require('path');
 
@@ -15,7 +16,9 @@
 
             return gulp.src(clientImages)
                 .pipe(gulpFlatten())
-                .pipe(gulp.dest(dest));
+                .pipe(gulp.dest(dest))
+                .pipe(gulpConnect.reload())
+                ;
         }
     };
 

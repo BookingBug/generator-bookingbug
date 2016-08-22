@@ -3,6 +3,7 @@
 
     var gulpCoffee = require('gulp-coffee');
     var gulpConcat = require('gulp-concat');
+    var gulpConnect = require('gulp-connect');
     var gulpIf = require('gulp-if');
     var gulpUglify = require('gulp-uglify');
     var gulpUtil = require('gulp-util');
@@ -52,7 +53,9 @@
                 '!**/*.js.map'
             ];
 
-            return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget');
+            return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget')
+                .pipe(gulpConnect.reload())
+                ;
         }
 
         /*
@@ -61,15 +64,17 @@
          */
         function buildScriptsStream(files, filename) {
             var stream = gulp.src(files)
-                .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
-                .pipe(gulpConcat(filename + '.js'))
-                .pipe(gulp.dest(configuration.projectReleasePath));
+                    .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
+                    .pipe(gulpConcat(filename + '.js'))
+                    .pipe(gulp.dest(configuration.projectReleasePath))
+                ;
 
             if (configuration.projectConfig.uglify === true) {
                 stream
                     .pipe(gulpUglify({mangle: false}))
                     .pipe(gulpConcat(filename + '.min.js'))
-                    .pipe(gulp.dest(configuration.projectReleasePath));
+                    .pipe(gulp.dest(configuration.projectReleasePath))
+                ;
             }
             return stream;
         }
