@@ -32,7 +32,6 @@
                     'settings'
                 ],
                 environment: args.getEnvironment(),
-                projectBuildPath: path.join(projectRootPath, 'build'),
                 projectConfig: projectConfig.getConfig(),
                 projectRootPath: projectRootPath,
                 projectReleasePath: path.join(projectRootPath, 'release'),
