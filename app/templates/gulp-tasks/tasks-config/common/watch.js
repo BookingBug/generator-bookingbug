@@ -17,6 +17,11 @@
             scripts();
             stylesheets();
             templates();
+            www();
+        }
+
+        function www() {
+            gulp.watch(configuration.projectRootPath + '/src/www/*.html', ['www']);
         }
 
         function templates() {

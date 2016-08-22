@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    var gulpLiveReload = require('gulp-livereload');
     var gulpTemplate = require('gulp-template');
     var path = require('path');
 
@@ -14,7 +15,9 @@
 
             return gulp.src(src)
                 .pipe(gulpTemplate(configuration.projectConfig))
-                .pipe(gulp.dest(configuration.projectReleasePath));
+                .pipe(gulp.dest(configuration.projectReleasePath))
+                .pipe(gulpLiveReload())
+                ;
         }
     };
 
