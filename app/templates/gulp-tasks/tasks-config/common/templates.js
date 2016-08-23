@@ -16,7 +16,7 @@
             var clientTemplates = path.join(configuration.projectRootPath, 'src/templates/**/*.html');
 
             var stream = gulp.src(clientTemplates)
-                    .pipe(gulpAngularTemplateCache('bookingbug-widget-templates.js', {
+                    .pipe(gulpAngularTemplateCache('booking-widget-templates.js', {
                         module: 'TemplateOverrides',
                         standalone: true
                     }))
