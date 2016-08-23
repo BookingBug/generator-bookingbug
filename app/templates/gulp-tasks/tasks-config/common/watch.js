@@ -31,7 +31,7 @@
 
         function stylesheets() {
 
-            gulp.watch(path.join(configuration.projectRootPath, '/src/stylesheets/main.scss'), ['stylesheets:client']);
+            gulp.watch(path.join(configuration.projectRootPath, '/src/stylesheets/**/*.scss'), ['stylesheets:client']);
 
             gulp
                 .watch(path.join(configuration.projectReleasePath, 'booking-widget.css'))
