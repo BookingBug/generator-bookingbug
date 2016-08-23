@@ -1,7 +1,6 @@
 (function () {
     'use strict';
 
-    var cs = require('coffee-script');
     var gulp = require('gulp');
     var path = require('path');
     var projectConfig = require('./gulp-tasks/helpers/project_config');
@@ -10,8 +9,7 @@
 
     if (projectConfig.getConfig().local_sdk === true) {
         localSdk.validate();
-        cs.register();
-        require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js.coffee'))(gulp, sdkSrcDir);
+        require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js'))(gulp, sdkSrcDir);
     }
 
     require('./gulp-tasks/gulpfile.js')(gulp, __dirname, sdkSrcDir);
