@@ -38,7 +38,7 @@
         }
 
         function guardEnvironmentalVariables() {
-            if (!process.env.AWS_ACCESS_KEY_SID) {
+            if (!process.env.AWS_ACCESS_KEY_ID) {
                 throw new Error('Missing environment variable AWS_ACCESS_KEY_ID');
             }
             if (!process.env.AWS_SECRET_ACCESS_KEY) {
