@@ -1,3 +1,5 @@
 node_modules
 bower_components
-release
+/build/
+/bower.json
+/release/
