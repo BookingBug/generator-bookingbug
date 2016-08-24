@@ -16,7 +16,7 @@
         environmentOptions = ['local', 'dev', 'staging', 'prod'];
         if (typeof argv.env !== 'undefined') {
             if (environmentOptions.indexOf(argv.env) === -1) {
-                console.log('env can has one of following values: ' + environmentOptions);
+                console.log('env can have one of the following values: ' + environmentOptions);
                 process.exit(1);
             }
             environment = argv.env;
