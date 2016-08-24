@@ -38,7 +38,7 @@
         }
 
         function guardEnvironmentalVariables() {
-            if (!process.env.AWS_ACCESS_KEY_SID) {
+            if (!process.env.AWS_ACCESS_KEY_ID) {
                 throw new Error('Missing environment variable AWS_ACCESS_KEY_ID');
             }
             if (!process.env.AWS_SECRET_ACCESS_KEY) {
@@ -58,9 +58,9 @@
          * @returns {String|Array.<String>}
          */
         function getReleaseFiles() {
-            var releaseFiles = './tmp/**';
+            var releaseFiles = './release/**';
             if (argv.media) {
-                releaseFiles = ['./tmp/images/**', './tmp/fonts/**'];
+                releaseFiles = ['./release/images/**', './release/fonts/**'];
             }
 
             return releaseFiles;
@@ -71,7 +71,7 @@
          */
         function renameReleaseFiles() {
             return gulpRename(function (path) {
-                path.dirname = configuration.projectConfig.deploy_path + path.dirname; //TODO is it correct ???
+                path.dirname = configuration.projectConfig.deploy_path + path.dirname;
             })
         }
 
