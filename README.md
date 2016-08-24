@@ -47,7 +47,7 @@ Templates can be edited by overriding templates by their name in your project te
 
 When building a booking widget, projects use "step templates" which are loaded within a single "main" template. Step templates represent the different steps in a booking jounrey whereas the "main" template acts a wrapper for the step templates defining components such as headers, breadcrumbs, alerts and footers.
 
-You determine the current step template when running a project bu using [Batarang](https://chrome.google.com/webstore/detail/angularjs-batarang-stable/niopocochgahfkiccpjmmpchncjoapek) in the Chrome console to access the scoped variable that stores the currently loaded step:
+You can determine the current step template when running a project by using [Batarang](https://chrome.google.com/webstore/detail/angularjs-batarang-stable/niopocochgahfkiccpjmmpchncjoapek) in the Chrome console to access the scoped variable that stores the currently loaded step:
 
 * `$scope.bb.current_page`
 
