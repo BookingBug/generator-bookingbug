@@ -31,8 +31,8 @@
         }
 
         function guardExternalSdkDependencies() {
-            if (configuration.projectConfig.local_sdk === true) {
-                console.log(gulpUtil.colors.white.bgRed.bold('Cannot deploy using local sdk.'));
+            if ( (configuration.projectConfig.local_sdk === true) && ['staging', 'prod'].indexOf(configuration.environment) === -1) {
+                console.log(gulpUtil.colors.white.bgRed.bold('Cannot deploy to staging|prod using local sdk.'));
                 process.exit(1);
             }
         }
