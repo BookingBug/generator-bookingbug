@@ -54,7 +54,7 @@
             return gulp.src(clientSCSS)
                 .pipe(gulpSourcemaps.init())
                 .pipe(gulpPlumber())
-                .pipe(gulpSass(gulpSassOptions))
+                .pipe(gulpSass(gulpSassOptions).on('error', gulpSass.logError))
                 .pipe(gulpConcat('booking-widget.css'))
                 .pipe(gulpTemplate(configuration.projectConfig))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
