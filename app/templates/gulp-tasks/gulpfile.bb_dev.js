@@ -37,7 +37,7 @@
                 projectReleasePath: path.join(projectRootPath, 'release'),
                 projectTmpPath: path.join(projectRootPath, 'tmp'),
                 sdkRootPath: sdkRootPath
-            }
+            };
         }
 
         function loadTasks(directory) {

@@ -72,7 +72,7 @@
         function renameReleaseFiles() {
             return gulpRename(function (path) {
                 path.dirname = configuration.projectConfig.deploy_path + path.dirname;
-            })
+            });
         }
 
         /**
@@ -132,7 +132,7 @@
          */
         function slackNotificationAboutDeployment() {
             var message = getUserDetails() + " deployed `" + configuration.projectConfig.app_name + "` to " + configuration.environment + " with SDK version " + getSdkVersion();
-            return getSlackPostman()(message)
+            return getSlackPostman()(message);
         }
 
         /**
