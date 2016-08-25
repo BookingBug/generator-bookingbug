@@ -58,9 +58,9 @@
          * @returns {String|Array.<String>}
          */
         function getReleaseFiles() {
-            var releaseFiles = './tmp/**';
+            var releaseFiles = './release/**';
             if (argv.media) {
-                releaseFiles = ['./tmp/images/**', './tmp/fonts/**'];
+                releaseFiles = ['./release/images/**', './release/fonts/**'];
             }
 
             return releaseFiles;
