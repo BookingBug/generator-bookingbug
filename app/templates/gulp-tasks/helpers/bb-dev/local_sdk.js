@@ -7,8 +7,8 @@
     var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
 
     module.exports = {
+        createSymlink: createSymlink,
         generatePathToSdkBuild: generatePathToSdkBuild,
-        generateSymlinkCommand: generateSymlinkCommand,
         isBBDependency: isBBDependency,
         validate: validate
     };
@@ -28,16 +28,6 @@
         return path.join(sdkSrcDir, 'build', dependencyName.replace('bookingbug-angular-', ''), '/');
     }
 
-    /*
-     * @param {String} sdkDependency
-     */
-    function generateSymlinkCommand(sdkDependency) {
-        var sdkPath = path.join(sdkSrcDir, 'build', sdkDependency);
-        var clientPath = path.join(__dirname, '../../bower_components/bookingbug-angular-' + sdkDependency);
-
-        return "ln -s '" + sdkPath + "' '" + clientPath + "'";
-    }
-
     function validate() {
 
         try {
@@ -50,5 +40,30 @@
             process.exit(1);
         }
     }
+
+    function createSymlink(sdkDependency) {
+
+        var isWin = process.platform === 'win32';
+        var src = path.join(sdkSrcDir, 'build', sdkDependency);
+        var dest = path.join(__dirname, '../../bower_components/bookingbug-angular-' + sdkDependency);
+
+        try {
+            fs.symlinkSync(src, dest, 'dir');
+        } catch (error) {
+
+            if (!isWin) {
+                console.log('Could not create symlink. ', error);
+                process.exit(1);
+            }
+
+            try {
+                fs.symlinkSync(src, dest, 'junction')
+            } catch (error) {
+                console.log('Could not create symlink. ', error);
+                process.exit(1);
+            }
+        }
+    }
+
 
 }).call(this);

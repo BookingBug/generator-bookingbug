@@ -11,7 +11,11 @@
 
             return gulpBower({
                 cwd: configuration.projectRootPath,
-                directory: 'bower_components'
+                directory: 'bower_components',
+                interactive: false
+            }).on('error', function () {
+                console.log('Please run "bower install" and fix resolutions by prefixing your choices with "!".');
+                process.exit(1);
             });
         }
     };

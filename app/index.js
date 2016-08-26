@@ -384,7 +384,6 @@
                 'gulp-rename',
                 'gulp-replace',
                 'gulp-sass',
-                'gulp-shell',
                 'gulp-sourcemaps',
                 'gulp-template',
                 'gulp-uglify',
