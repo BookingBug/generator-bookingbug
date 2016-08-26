@@ -269,7 +269,6 @@
             this.fs.copy(src, dest);
 
             this.copy("_editorconfig", ".editorconfig");
-            this.copy("_bowerrc", ".bowerrc");
             this.copy("_gitignore", ".gitignore");
 
             this.fs.copy(
@@ -287,6 +286,9 @@
             );
 
             if (this.options['bb-dev'] === true) {
+
+                this.copy("_bowerrc", ".bowerrc");
+
                 this.copy('gulpfile.bb_dev.js', 'gulpfile.js');
                 this.copy(path.join('gulp-tasks', 'gulpfile.bb_dev.js'), path.join('gulp-tasks', 'gulpfile.js'));
 
