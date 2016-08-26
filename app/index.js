@@ -371,7 +371,7 @@
                 'del',
                 'gulp',
                 'gulp-angular-templatecache',
-                'gulp-bower',
+                'git://github.com/BookingBug/gulp-bower',
                 'gulp-css-selector-limit',
                 'gulp-coffee',
                 'gulp-concat',
