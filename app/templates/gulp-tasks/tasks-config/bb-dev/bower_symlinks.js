@@ -2,7 +2,6 @@
     'use strict';
 
     var fs = require('fs');
-    var gulpShell = require('gulp-shell');
     var jsonFile = require('jsonfile');
     var localSdk = require('../helpers/local_sdk');
     var path = require('path');
@@ -23,14 +22,10 @@
 
         function createSymlinks() {
 
-            var commandsToExecute = [];
-
             for (var depKey in configuration.bbDependencies) {
                 var depName = configuration.bbDependencies[depKey];
-                commandsToExecute.push(localSdk.generateSymlinkCommand(depName));
+                localSdk.createSymlink(depName);
             }
-
-            gulp.src('').pipe(gulpShell(commandsToExecute, {ignoreErrors: true}));
         }
 
         function overrideBBDependenciesInSDKBuilds() {
