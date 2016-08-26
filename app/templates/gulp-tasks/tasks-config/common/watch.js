@@ -8,6 +8,15 @@
 
         gulp.task('watch', watchTask);
 
+
+        /**
+         * @throws Error
+         *      If the error code thrown is: 'ENOSPC', increase fs.inotify.max_user_watches appropriately.
+         *      On Linux machines you can do it with following command:
+         *      <pre>
+         *          echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+         *      </pre>
+         */
         function watchTask() {
 
             gulpLiveReload.listen();

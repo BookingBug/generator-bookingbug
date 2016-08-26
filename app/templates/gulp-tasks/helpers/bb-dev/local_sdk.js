@@ -51,7 +51,7 @@
             fs.symlinkSync(src, dest, 'dir');
         } catch (error) {
 
-            if (!isWin) {
+            if (!isWin || error.code !== 'EPERM') {
                 console.log('Could not create symlink. ', error);
                 process.exit(1);
             }
