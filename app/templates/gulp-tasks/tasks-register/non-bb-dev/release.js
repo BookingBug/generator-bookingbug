@@ -17,6 +17,7 @@
                 'scripts:client',
                 'templates',
                 'stylesheets:vendors',
+                'scripts:lazy',
                 'stylesheets:client',
                 'fonts',
                 'images',

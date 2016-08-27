@@ -16,6 +16,7 @@
                 'bower-symlinks',
                 'bower-install',
                 'scripts:vendors',
+                'scripts:lazy',
                 'scripts:client',
                 'templates',
                 'stylesheets:vendors',

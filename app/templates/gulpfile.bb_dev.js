@@ -9,7 +9,7 @@
 
     if (projectConfig.getConfig().local_sdk === true) {
         localSdk.validate();
-        require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js'))(gulp, sdkSrcDir);
+        require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js'))(gulp, sdkSrcDir, projectConfig.getConfig().uglify);
     }
 
     require('./gulp-tasks/gulpfile.js')(gulp, __dirname, sdkSrcDir);

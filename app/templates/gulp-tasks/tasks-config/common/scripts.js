@@ -14,7 +14,7 @@
 
         gulp.task('scripts:vendors', scriptsVendorsTask);
         gulp.task('scripts:client', scriptsClient);
-
+        gulp.task('scripts:lazy', scriptsLazy);
 
         function scriptsVendorsTask() {
             var dependenciesFiles = mainBowerFiles({
@@ -24,7 +24,10 @@
                     bowerJson: path.join(configuration.projectRootPath, 'bower.json')
                 },
                 filter: function (path) {
-                    return (path.match(new RegExp('.js$'))) && (path.indexOf('bookingbug-angular-') === -1);
+                    var isJs = path.match(new RegExp('.js$'));
+                    var isNotBB = path.indexOf('bookingbug-angular-') === -1;
+
+                    return isJs && isNotBB;
                 }
             });
             return buildScriptsStream(dependenciesFiles, 'booking-widget-dependencies');
@@ -39,8 +42,11 @@
                     bowerJson: path.join(configuration.projectRootPath, 'bower.json')
                 },
                 filter: function (path) {
-                    var isBookingBugDependency = path.indexOf('bookingbug-angular-') !== -1;
-                    return isBookingBugDependency && path.match(new RegExp('.js$'));
+                    var isJs = path.match(new RegExp('.js$'));
+                    var isBB = path.indexOf('bookingbug-angular-') !== -1;
+                    var isNotLazy = !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.lazy\.)'));
+
+                    return isJs && isBB && isNotLazy;
                 }
             });
 
@@ -79,6 +85,26 @@
             return stream;
         }
 
+        function scriptsLazy() {
+            var dependenciesFiles = mainBowerFiles({
+                paths: {
+                    bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
+                    bowerrc: path.join(configuration.projectRootPath, '.bowerrc'),
+                    bowerJson: path.join(configuration.projectRootPath, 'bower.json')
+                },
+                filter: function (path) {
+                    var regex = new RegExp('(bower_components\/bookingbug-angular-).+(\.lazy\.min\.js)');
+                    if (configuration.projectConfig.uglify === false) {
+                        regex = new RegExp('(bower_components\/bookingbug-angular-).+(\.lazy\.js)');
+                    }
+
+                    return path.match(regex);
+                }
+            });
+
+            return gulp.src(dependenciesFiles)
+                .pipe(gulp.dest(configuration.projectTmpPath));
+        }
     };
 
 }).call(this);
