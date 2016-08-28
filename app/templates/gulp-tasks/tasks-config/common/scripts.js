@@ -103,7 +103,7 @@
             });
 
             return gulp.src(dependenciesFiles)
-                .pipe(gulp.dest(configuration.projectTmpPath));
+                .pipe(gulp.dest(configuration.projectReleasePath));
         }
     };
 
