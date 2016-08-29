@@ -366,6 +366,7 @@
         installNpmDependencies: function () {
 
             var dependencies = [
+                'bower',
                 'del',
                 'gulp',
                 'gulp-angular-templatecache',
