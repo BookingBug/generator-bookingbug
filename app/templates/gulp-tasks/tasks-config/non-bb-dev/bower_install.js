@@ -1,22 +1,36 @@
 (function () {
     'use strict';
 
-    var gulpBower = require('gulp-bower');
+    var bower = require('bower');
+    var bowerCli = require('../../node_modules/bower/lib/util/cli');
 
     module.exports = function (gulp, configuration) {
 
         gulp.task('bower-install', bowerInstallTask);
 
-        function bowerInstallTask() {
+        function bowerInstallTask(cb) {
 
-            return gulpBower({
-                cwd: configuration.projectRootPath,
-                directory: 'bower_components',
-                interactive: false
-            }).on('error', function () {
-                console.log('Please run "bower install" and fix resolutions by prefixing your choices with "!".');
-                process.exit(1);
-            });
+            var renderer = bowerCli.getRenderer('install', null, bower.config);
+
+            bower.commands
+                .install([], {save: true}, {interactive: true})
+                .on('end', function (data) {
+                    renderer.end(data);
+                    cb();
+                })
+                .on('error', function (err) {
+                    renderer.error(err);
+                    process.exit(1);
+                })
+                .on('log', function (log) {
+                    renderer.log(log);
+                })
+                .on('prompt', function (prompt, callback) {
+                    renderer.prompt(prompt)
+                        .then(function (answer) {
+                            callback(answer);
+                        });
+                });
         }
     };
 
