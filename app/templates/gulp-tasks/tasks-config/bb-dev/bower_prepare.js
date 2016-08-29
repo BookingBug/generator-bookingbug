@@ -46,11 +46,7 @@
 
             useLocalPaths(bowerJson);
 
-            jsonFile.writeFile(bowerJsonPath, bowerJson, {spaces: 2}, function (err) {
-                if (err !== null) {
-                    return console.log(err);
-                }
-            });
+            jsonFile.writeFileSync(bowerJsonPath, bowerJson, {spaces: 2});
         }
 
         /**
@@ -86,11 +82,7 @@
                     }
                 }
 
-                jsonFile.writeFile(sdkBowerPath, sdkBowerJson, {spaces: 2}, function (err) {
-                    if (err !== null) {
-                        return console.log(err);
-                    }
-                });
+                jsonFile.writeFileSync(sdkBowerPath, sdkBowerJson, {spaces: 2});
             }
         }
 
