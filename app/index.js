@@ -210,7 +210,7 @@
 
         createBower: function () {
             this.fs.copyTpl(
-                this.templatePath('_bower.json'),
+                this.templatePath('bower.json'),
                 this.destinationPath('bower.json'),
                 {name: this.appName, version: this.version.slice(1), type: this.type}
             );
@@ -218,7 +218,7 @@
 
         createNpm: function () {
             this.fs.copyTpl(
-                this.templatePath('_package.json'),
+                this.templatePath('package.json'),
                 this.destinationPath('package.json'),
                 {name: this.appName}
             );
@@ -268,8 +268,8 @@
 
             this.fs.copy(src, dest);
 
-            this.copy("_editorconfig", ".editorconfig");
-            this.copy("_gitignore", ".gitignore");
+            this.copy("editorconfig", ".editorconfig");
+            this.copy("gitignore", ".gitignore");
 
             this.fs.copy(
                 path.join(this.sourceRoot(), 'gulp-tasks', 'helpers', 'common'),
@@ -287,8 +287,8 @@
 
             if (this.options['bb-dev'] === true) {
 
-                this.copy("_bowerrc", ".bowerrc");
-
+                this.copy("bowerrc", ".bowerrc");
+                this.copy('gulp-tasks/README.bb_dev.md', 'gulp-tasks/README.md');
                 this.copy('gulpfile.bb_dev.js', 'gulpfile.js');
                 this.copy(path.join('gulp-tasks', 'gulpfile.bb_dev.js'), path.join('gulp-tasks', 'gulpfile.js'));
 
@@ -305,6 +305,7 @@
                     path.join('gulp-tasks', 'tasks-config')
                 );
             } else {
+                this.copy('gulp-tasks/README.non_bb_dev.md', 'gulp-tasks/README.md');
                 this.copy('gulpfile.non_bb_dev.js', 'gulpfile.js');
                 this.copy(path.join('gulp-tasks', 'gulpfile.non_bb_dev.js'), path.join('gulp-tasks', 'gulpfile.js'));
 
@@ -331,7 +332,7 @@
             );
 
             this.copy(
-                "_theme.scss",
+                "theme.scss",
                 path.join('src', 'stylesheets', this.appName + '_theme.scss')
             );
 
@@ -365,13 +366,10 @@
         installNpmDependencies: function () {
 
             var dependencies = [
-                'coffee-script',
-                'connect-modrewrite',
-                'coveralls',
+                'bower',
                 'del',
                 'gulp',
                 'gulp-angular-templatecache',
-                'git://github.com/BookingBug/gulp-bower',
                 'gulp-css-selector-limit',
                 'gulp-coffee',
                 'gulp-concat',
@@ -384,7 +382,6 @@
                 'gulp-plumber',
                 'gulp-protractor',
                 'gulp-rename',
-                'gulp-replace',
                 'gulp-sass',
                 'gulp-sourcemaps',
                 'gulp-template',
@@ -398,7 +395,6 @@
                 'mkdirp',
                 'path',
                 'phantomjs-prebuilt',
-                'promptly',
                 'run-sequence',
                 'sauce-connect-launcher',
                 'selenium-server-standalone-jar',
@@ -407,7 +403,6 @@
 
             var devDependencies = dependencies.concat([
                 'gulp-awspublish',
-                'gulp-bower-link',
                 'gulp-environments',
                 'git-user-email',
                 'git-user-name',
