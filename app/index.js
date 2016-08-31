@@ -75,6 +75,9 @@
         },
 
         getProjectType: function () {
+
+            var _this = this;
+
             var done = this.async();
             this.prompt({
                 type: 'list',
@@ -83,7 +86,30 @@
                 choices: ['admin', 'public-booking']
             }, function (response) {
                 this.type = response.type;
-                done();
+
+                if (response.type === 'public-booking') {
+
+                    var templatesDirPath = path.join(_this.sourceRoot(), 'public-booking/templates');
+                    var templatesFilenames = fs.readdirSync(templatesDirPath);
+
+                    var choices = templatesFilenames.map(function (filename) {
+                        return {name: filename, checked: true}
+                    });
+
+                    _this.prompt({
+                        type: 'checkbox',
+                        name: 'type',
+                        message: 'Please choose templates',
+                        choices: choices
+                    }, function (response) {
+
+                        _this.publicBookingTemplates = response.type;
+
+                        done();
+                    });
+                } else {
+                    done();
+                }
             }.bind(this));
         },
 
@@ -358,6 +384,14 @@
                     path.join('src', 'www', 'view_booking.html'),
                     {module_name: camelCase(this.appName)}
                 );
+
+                for (var filenameKey in this.publicBookingTemplates) {
+                    var filename = this.publicBookingTemplates[filenameKey];
+                    var from = path.join('public-booking/templates', filename);
+                    var to = path.join('src/templates', filename);
+                    this.copy(from, to);
+                }
+
             }
 
 
