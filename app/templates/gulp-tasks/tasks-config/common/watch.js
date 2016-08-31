@@ -35,7 +35,7 @@
 
         function templates() {
 
-            gulp.watch(configuration.projectRootPath + '/src/templates/*.html', ['templates']);
+            gulp.watch(configuration.projectRootPath + '/src/templates/**/*.html', ['templates']);
         }
 
         function stylesheets() {
