@@ -20,6 +20,8 @@
 
             if (configuration.projectConfig.local_sdk === true) {
                 prepareBowerFileReferringToLocalSdk();
+                createSymlinks();
+                overrideBBDependenciesInSDKBuilds();
                 cb();
             } else {
                 return copyBowerFileToReleaseDir();
@@ -44,13 +46,7 @@
 
             useLocalPaths(bowerJson);
 
-            overwriteResolutions(bowerJson);
-
-            jsonFile.writeFile(bowerJsonPath, bowerJson, {spaces: 2}, function (err) {
-                if (err !== null) {
-                    return console.log(err);
-                }
-            });
+            jsonFile.writeFileSync(bowerJsonPath, bowerJson, {spaces: 2});
         }
 
         /**
@@ -64,13 +60,29 @@
             }
         }
 
-        /**
-         * @param {Object} bowerJson
-         */
-        function overwriteResolutions(bowerJson) {
+        function createSymlinks() {
+
             for (var depKey in configuration.bbDependencies) {
-                var bowerDependencyName = 'bookingbug-angular-' + configuration.bbDependencies[depKey];
-                bowerJson.resolutions[bowerDependencyName] = "*";
+                var depName = configuration.bbDependencies[depKey];
+                localSdk.createSymlink(depName);
+            }
+        }
+
+        function overrideBBDependenciesInSDKBuilds() {
+
+            for (var depIndex in configuration.bbDependencies) {
+                var depName = configuration.bbDependencies[depIndex];
+
+                var sdkBowerPath = path.join(configuration.sdkRootPath, 'build', depName, 'bower.json');
+                var sdkBowerJson = JSON.parse(fs.readFileSync(sdkBowerPath, 'utf8'));
+
+                for (var dep in sdkBowerJson.dependencies) {
+                    if (localSdk.isBBDependency(dep)) {
+                        sdkBowerJson.dependencies[dep] = localSdk.generatePathToSdkBuild(dep);
+                    }
+                }
+
+                jsonFile.writeFileSync(sdkBowerPath, sdkBowerJson, {spaces: 2});
             }
         }
 

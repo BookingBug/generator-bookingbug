@@ -13,7 +13,6 @@
             var tasks = [
                 'clean',
                 'bower-prepare',
-                'bower-symlinks',
                 'bower-install',
                 'scripts:vendors',
                 'scripts:lazy',
