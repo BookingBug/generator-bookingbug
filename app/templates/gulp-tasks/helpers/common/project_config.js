@@ -8,23 +8,69 @@
         getConfig: getConfig
     };
 
+    /**
+     * @returns {Object}
+     */
     function getConfig() {
 
-        var env = args.getEnvironment();
         var config = {};
 
-        var configOriginal = null;
+        var configData = getConfigData();
+
+        applyGeneralSettings(config, configData);
+
+        applyEnvironmentSpecificSettings(config, configData);
+
+        applyEnforcedValues(config);
+
+        return config;
+    }
+
+    /**
+     * @returns {Object}
+     */
+    function getConfigData() {
+        var configData = null;
         try {
-            configOriginal = jsonFile.readFileSync('config.json');
+            configData = jsonFile.readFileSync('config.json');
         } catch (error1) {
             console.log('No config file specified for project');
             return {};
         }
 
-        if (typeof configOriginal['general'] === 'undefined') {
-            return configOriginal;
+        return configData;
+    }
+
+    /**
+     * @param {Object} config
+     * @param {Object} configData
+     */
+    function applyGeneralSettings(config, configData) {
+        if (typeof configData['general'] === 'undefined') {
+            return configData;
         }
 
+        for (var prop in configData['general']) {
+            config[prop] = configData['general'][prop];
+        }
+    }
+
+    /**
+     * @param {Object} config
+     * @param {Object} configData
+     */
+    function applyEnvironmentSpecificSettings(config, configData) {
+        var environmentName = getEnvironmentName();
+        for (var prop in configData[environmentName]) {
+            config[prop] = configData[environmentName][prop];
+        }
+    }
+
+    /**
+     * @returns {String}
+     */
+    function getEnvironmentName() {
+        var env = args.getEnvironment();
         var environmentName = 'development';
 
         if (env.match(/local/)) {
@@ -35,15 +81,29 @@
             environmentName = 'production';
         }
 
-        for (var prop in configOriginal['general']) {
-            config[prop] = configOriginal['general'][prop];
-        }
-
-        for (var prop in configOriginal[environmentName]) {
-            config[prop] = configOriginal[environmentName][prop];
-        }
-
-        return config;
+        return environmentName;
     }
+
+    /**
+     * @param {Object} config
+     */
+    function applyEnforcedValues(config) {
+        if (args.forceLocalSdk() === true) {
+            config['local_sdk'] = true;
+        }
+
+        if (args.forceLocalSdk() === false) {
+            config['local_sdk'] = false;
+        }
+
+        if (args.forceUglify() === true) {
+            config.uglify = true;
+        }
+
+        if (args.forceUglify() === false) {
+            config.uglify = false;
+        }
+    }
+
 
 }).call(this);
