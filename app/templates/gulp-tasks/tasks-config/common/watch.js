@@ -53,10 +53,10 @@
             var projectFiles = [
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
-                '!**/*.spec.js',
-                '!**/*.spec.js.coffee',
-                '!**/*.js.js',
-                '!**/*.js.map'
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js',
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js.coffee',
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.js',
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.map'
             ];
 
             gulp.watch(projectFiles, ['scripts:client']);
