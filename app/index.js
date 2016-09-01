@@ -322,6 +322,7 @@
                 config = {
                     general: _.extend({
                         cache_control_max_age: '10',
+                        googlemaps_api_key: 'AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8',
                         local_sdk: false,
                         uglify: true
                     }, config),
