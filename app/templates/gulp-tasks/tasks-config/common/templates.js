@@ -20,7 +20,6 @@
                         module: 'TemplateOverrides',
                         standalone: true
                     }))
-                    .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
 
             if (configuration.projectConfig.uglify === true) {
@@ -28,10 +27,10 @@
                     .pipe(gulpUglify({
                         mangle: false
                     }))
-                    .pipe(gulpConcat('client_templates.min.js'))
-                    .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
             }
+
+            stream.pipe(gulp.dest(configuration.projectReleasePath));
 
             return stream
                 .pipe(gulpLiveReload())
