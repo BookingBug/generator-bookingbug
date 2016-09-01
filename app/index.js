@@ -8,6 +8,7 @@
     var generators = require('yeoman-generator');
     var glob = require('glob');
     var github = require('octonode');
+    var gulpUtil = require('gulp-util');
     var mkdirp = require('mkdirp');
     var os = require('os');
     var path = require('path');
@@ -49,9 +50,10 @@
     ];
 
     /**
-     * @param done
+     * @param {Function} done
      */
     function promptBookingBugOptions(done) {
+        var _this = this;
         this.prompt({
             type: 'checkbox',
             name: 'type',
@@ -59,14 +61,21 @@
             choices: publicBookingOptions
         }, function (response) {
 
-            this.publicBookingOptions = response.type;
+            if (response.type.length === 0) {
 
-            if (this.type.length === 0) {
-                this.log('Please select at least one type of journey');
-                promptBookingBugOptions(done);
+                publicBookingOptions.map(function (option) {
+                    option.checked = false;
+                });
+
+                _this.log(gulpUtil.colors.red.bold('Please select at least one type of journey'));
+
+                promptBookingBugOptions.bind(_this)(done);
+            } else {
+
+                _this.publicBookingOptionsSelected = response.type;
+
+                done();
             }
-
-            done();
         });
     }
 
@@ -143,17 +152,8 @@
 
                 if (response.type === 'public-booking') {
 
-                    _this.prompt({
-                        type: 'checkbox',
-                        name: 'type',
-                        message: 'Please choose types of user journeys you want to create',
-                        choices: publicBookingOptions
-                    }, function (response) {
+                    promptBookingBugOptions.bind(_this)(done);
 
-                        _this.publicBookingOptions = response.type;
-
-                        done();
-                    });
                 } else {
                     done();
                 }
@@ -298,7 +298,16 @@
         },
 
         createConfig: function () {
-            var default_html = (this.type == 'public-booking') ? '/new_booking.html' : '/index.html';
+
+            var _this = this;
+            var default_html = '/index.html';
+
+            if (this.type == 'public-booking') {
+                default_html = '/' + publicBookingOptions.filter(function (option) {
+                    return option.name === _this.publicBookingOptionsSelected[0];
+                })[0].www;
+            }
+
             var config = {
                 app_name: this.appName,
                 api_url: this.apiUrl,
@@ -314,7 +323,7 @@
                     general: _.extend({
                         cache_control_max_age: '10',
                         local_sdk: false,
-                        uglify: true,
+                        uglify: true
                     }, config),
                     local: {},
                     development: {},
@@ -403,7 +412,7 @@
             this.template(
                 path.join(this.type, 'src', 'stylesheets', 'main.scss'),
                 path.join('src', 'stylesheets', 'main.scss'),
-                templateOptions
+                {project_name: this.appName}
             );
 
             this.copy(
@@ -419,9 +428,9 @@
                 );
             } else if (this.type == 'public-booking') {
 
-                for (var optionKey in this.publicBookingOptions) {
+                for (var optionKey in this.publicBookingOptionsSelected) {
 
-                    var optionName = this.publicBookingOptions[optionKey];
+                    var optionName = this.publicBookingOptionsSelected[optionKey];
                     var option = publicBookingOptions.filter(function (option) {
                         return option.name === optionName;
                     })[0];

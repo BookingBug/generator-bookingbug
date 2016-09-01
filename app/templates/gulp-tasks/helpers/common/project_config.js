@@ -17,9 +17,12 @@
 
         var configData = getConfigData();
 
-        applyGeneralSettings(config, configData);
-
-        applyEnvironmentSpecificSettings(config, configData);
+        if (typeof configData.general === 'undefined') {
+            config = configData;
+        } else {
+            applyGeneralSettings(config, configData);
+            applyEnvironmentSpecificSettings(config, configData);
+        }
 
         applyEnforcedValues(config);
 
