@@ -9,6 +9,7 @@
   <link href="./booking-widget.css" type="text/css" media="all" rel="stylesheet" />
 
   <script src="./booking-widget-dependencies.js" type="text/javascript"></script>
+  <script src="./booking-widget-templates.js" type="text/javascript"></script>
   <script src="./booking-widget.js" type="text/javascript"></script>
 
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places"></script>
@@ -24,9 +25,8 @@
 
   <div bb-widget="{
     company_id: qs('companyId') || '<%%= company_id %%>',
-    clear_member: true,
-    item_defaults: {merge_resources: true, merge_people: true},
-    route_format: '/{page}'
+    first_page: 'purchase',
+    template: 'main_view_booking'
     }" bb-scroll-to="page:loaded" class="container"></div>
 
 </body>

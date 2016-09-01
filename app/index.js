@@ -15,6 +15,61 @@
 
     var BookingBugGenerator = generators.Base.extend();
 
+    var publicBookingOptions = [
+        {
+            name: 'Appointment Booking',
+            template: 'main_appointment.html',
+            www: 'new_booking.html',
+            checked: true
+        },
+        {
+            name: 'Member Account (Authenticated)',
+            template: 'main_account.html',
+            www: 'account.html',
+            checked: true
+        },
+        {
+            name: 'Event Booking',
+            template: 'main_event.html',
+            www: 'new_booking_event.html',
+            checked: true
+        },
+        {
+            name: 'Purchase Certificate Journey',
+            template: 'main_gift_certifcate.html',
+            www: 'gift_certificate.html',
+            checked: true
+        },
+        {
+            name: 'View Booking (Not Authenticated)',
+            template: 'main_view_booking.html',
+            www: 'view_booking.html',
+            checked: true
+        }
+    ];
+
+    /**
+     * @param done
+     */
+    function promptBookingBugOptions(done) {
+        this.prompt({
+            type: 'checkbox',
+            name: 'type',
+            message: 'Please choose types of user journeys you want to create',
+            choices: publicBookingOptions
+        }, function (response) {
+
+            this.publicBookingOptions = response.type;
+
+            if (this.type.length === 0) {
+                this.log('Please select at least one type of journey');
+                promptBookingBugOptions(done);
+            }
+
+            done();
+        });
+    }
+
     module.exports = BookingBugGenerator.extend({
 
         constructor: function () {
@@ -75,7 +130,6 @@
         },
 
         getProjectType: function () {
-
             var _this = this;
 
             var done = this.async();
@@ -89,21 +143,14 @@
 
                 if (response.type === 'public-booking') {
 
-                    var templatesDirPath = path.join(_this.sourceRoot(), 'public-booking/templates');
-                    var templatesFilenames = fs.readdirSync(templatesDirPath);
-
-                    var choices = templatesFilenames.map(function (filename) {
-                        return {name: filename, checked: true}
-                    });
-
                     _this.prompt({
                         type: 'checkbox',
                         name: 'type',
-                        message: 'Please choose templates',
-                        choices: choices
+                        message: 'Please choose types of user journeys you want to create',
+                        choices: publicBookingOptions
                     }, function (response) {
 
-                        _this.publicBookingTemplates = response.type;
+                        _this.publicBookingOptions = response.type;
 
                         done();
                     });
@@ -345,16 +392,18 @@
                 );
             }
 
+            var templateOptions = {module_name: camelCase(this.appName)};
+
             this.template(
                 path.join(this.type, 'src', 'javascripts', 'main.js.coffee'),
                 path.join('src', 'javascripts', 'main.js.coffee'),
-                {module_name: camelCase(this.appName)}
+                templateOptions
             );
 
             this.template(
                 path.join(this.type, 'src', 'stylesheets', 'main.scss'),
                 path.join('src', 'stylesheets', 'main.scss'),
-                {project_name: this.appName}
+                templateOptions
             );
 
             this.copy(
@@ -366,35 +415,30 @@
                 this.template(
                     path.join(this.type, 'src', 'www', 'index.html'),
                     path.join('src', 'www', 'index.html'),
-                    {module_name: camelCase(this.appName)}
+                    templateOptions
                 );
             } else if (this.type == 'public-booking') {
-                this.template(
-                    path.join(this.type, 'src', 'www', 'new_booking.html'),
-                    path.join('src', 'www', 'new_booking.html'),
-                    {module_name: camelCase(this.appName)}
-                );
-                this.template(
-                    path.join(this.type, 'src', 'www', 'new_booking_event.html'),
-                    path.join('src', 'www', 'new_booking_event.html'),
-                    {module_name: camelCase(this.appName)}
-                );
-                this.template(
-                    path.join(this.type, 'src', 'www', 'view_booking.html'),
-                    path.join('src', 'www', 'view_booking.html'),
-                    {module_name: camelCase(this.appName)}
-                );
 
-                for (var filenameKey in this.publicBookingTemplates) {
-                    var filename = this.publicBookingTemplates[filenameKey];
-                    var from = path.join('public-booking/templates', filename);
-                    var to = path.join('src/templates', filename);
-                    this.copy(from, to);
+                for (var optionKey in this.publicBookingOptions) {
+
+                    var optionName = this.publicBookingOptions[optionKey];
+                    var option = publicBookingOptions.filter(function (option) {
+                        return option.name === optionName;
+                    })[0];
+
+                    var templateFrom = path.join('public-booking/templates', option.template);
+                    var templateTo = path.join('src/templates', option.template);
+
+                    this.log('templateFrom', templateFrom, 'templateTo', templateTo);
+                    this.template(templateFrom, templateTo, templateOptions);
+
+                    var wwwFrom = path.join('public-booking/www', option.www);
+                    var wwwTo = path.join('src/www', option.www);
+
+                    this.log('wwwFrom', wwwFrom, 'wwwTo', wwwTo);
+                    this.template(wwwFrom, wwwTo, templateOptions);
                 }
-
             }
-
-
         },
 
         installNpmDependencies: function () {
