@@ -311,8 +311,9 @@
             var config = {
                 app_name: this.appName,
                 api_url: this.apiUrl,
-                server_port: 8000,
-                default_html: default_html
+                default_html: default_html,
+                googlemaps_api_key: 'AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8',
+                server_port: 8000
             };
             if (this.type == 'public-booking') {
                 config.company_id = this.companyId;
@@ -322,7 +323,6 @@
                 config = {
                     general: _.extend({
                         cache_control_max_age: '10',
-                        googlemaps_api_key: 'AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8',
                         local_sdk: false,
                         uglify: true
                     }, config),
