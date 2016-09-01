@@ -65,17 +65,19 @@
         function buildScriptsStream(files, filename) {
             var stream = gulp.src(files)
                     .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
-                    .pipe(gulpConcat(filename + '.js'))
-                    .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
 
             if (configuration.projectConfig.uglify === true) {
                 stream
                     .pipe(gulpUglify({mangle: false}))
-                    .pipe(gulpConcat(filename + '.min.js'))
+                    .pipe(gulpConcat(filename + '.js'))
                     .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
+            } else {
+                stream.pipe(gulpConcat(filename + '.js'))
+                    .pipe(gulp.dest(configuration.projectReleasePath))
             }
+
             return stream;
         }
 

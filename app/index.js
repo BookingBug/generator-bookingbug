@@ -8,12 +8,76 @@
     var generators = require('yeoman-generator');
     var glob = require('glob');
     var github = require('octonode');
+    var gulpUtil = require('gulp-util');
     var mkdirp = require('mkdirp');
     var os = require('os');
     var path = require('path');
     var request = require('request');
 
     var BookingBugGenerator = generators.Base.extend();
+
+    var publicBookingOptions = [
+        {
+            name: 'Appointment Booking',
+            template: 'main_appointment.html',
+            www: 'new_booking.html',
+            checked: true
+        },
+        {
+            name: 'Member Account (Authenticated)',
+            template: 'main_account.html',
+            www: 'account.html',
+            checked: true
+        },
+        {
+            name: 'Event Booking',
+            template: 'main_event.html',
+            www: 'new_booking_event.html',
+            checked: true
+        },
+        {
+            name: 'Purchase Certificate Journey',
+            template: 'main_gift_certifcate.html',
+            www: 'gift_certificate.html',
+            checked: true
+        },
+        {
+            name: 'View Booking (Not Authenticated)',
+            template: 'main_view_booking.html',
+            www: 'view_booking.html',
+            checked: true
+        }
+    ];
+
+    /**
+     * @param {Function} done
+     */
+    function promptBookingBugOptions(done) {
+        var _this = this;
+        this.prompt({
+            type: 'checkbox',
+            name: 'type',
+            message: 'Please choose types of user journeys you want to create',
+            choices: publicBookingOptions
+        }, function (response) {
+
+            if (response.type.length === 0) {
+
+                publicBookingOptions.map(function (option) {
+                    option.checked = false;
+                });
+
+                _this.log(gulpUtil.colors.red.bold('Please select at least one type of journey'));
+
+                promptBookingBugOptions.bind(_this)(done);
+            } else {
+
+                _this.publicBookingOptionsSelected = response.type;
+
+                done();
+            }
+        });
+    }
 
     module.exports = BookingBugGenerator.extend({
 
@@ -75,6 +139,8 @@
         },
 
         getProjectType: function () {
+            var _this = this;
+
             var done = this.async();
             this.prompt({
                 type: 'list',
@@ -83,7 +149,14 @@
                 choices: ['admin', 'public-booking']
             }, function (response) {
                 this.type = response.type;
-                done();
+
+                if (response.type === 'public-booking') {
+
+                    promptBookingBugOptions.bind(_this)(done);
+
+                } else {
+                    done();
+                }
             }.bind(this));
         },
 
@@ -225,12 +298,22 @@
         },
 
         createConfig: function () {
-            var default_html = (this.type == 'public-booking') ? '/new_booking.html' : '/index.html';
+
+            var _this = this;
+            var default_html = '/index.html';
+
+            if (this.type == 'public-booking') {
+                default_html = '/' + publicBookingOptions.filter(function (option) {
+                    return option.name === _this.publicBookingOptionsSelected[0];
+                })[0].www;
+            }
+
             var config = {
                 app_name: this.appName,
                 api_url: this.apiUrl,
-                server_port: 8000,
-                default_html: default_html
+                default_html: default_html,
+                googlemaps_api_key: 'AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8',
+                server_port: 8000
             };
             if (this.type == 'public-booking') {
                 config.company_id = this.companyId;
@@ -241,7 +324,7 @@
                     general: _.extend({
                         cache_control_max_age: '10',
                         local_sdk: false,
-                        uglify: true,
+                        uglify: true
                     }, config),
                     local: {},
                     development: {},
@@ -319,10 +402,12 @@
                 );
             }
 
+            var templateOptions = {module_name: camelCase(this.appName)};
+
             this.template(
                 path.join(this.type, 'src', 'javascripts', 'main.js.coffee'),
                 path.join('src', 'javascripts', 'main.js.coffee'),
-                {module_name: camelCase(this.appName)}
+                templateOptions
             );
 
             this.template(
@@ -340,27 +425,30 @@
                 this.template(
                     path.join(this.type, 'src', 'www', 'index.html'),
                     path.join('src', 'www', 'index.html'),
-                    {module_name: camelCase(this.appName)}
+                    templateOptions
                 );
             } else if (this.type == 'public-booking') {
-                this.template(
-                    path.join(this.type, 'src', 'www', 'new_booking.html'),
-                    path.join('src', 'www', 'new_booking.html'),
-                    {module_name: camelCase(this.appName)}
-                );
-                this.template(
-                    path.join(this.type, 'src', 'www', 'new_booking_event.html'),
-                    path.join('src', 'www', 'new_booking_event.html'),
-                    {module_name: camelCase(this.appName)}
-                );
-                this.template(
-                    path.join(this.type, 'src', 'www', 'view_booking.html'),
-                    path.join('src', 'www', 'view_booking.html'),
-                    {module_name: camelCase(this.appName)}
-                );
+
+                for (var optionKey in this.publicBookingOptionsSelected) {
+
+                    var optionName = this.publicBookingOptionsSelected[optionKey];
+                    var option = publicBookingOptions.filter(function (option) {
+                        return option.name === optionName;
+                    })[0];
+
+                    var templateFrom = path.join('public-booking/templates', option.template);
+                    var templateTo = path.join('src/templates', option.template);
+
+                    this.log('templateFrom', templateFrom, 'templateTo', templateTo);
+                    this.template(templateFrom, templateTo, templateOptions);
+
+                    var wwwFrom = path.join('public-booking/www', option.www);
+                    var wwwTo = path.join('src/www', option.www);
+
+                    this.log('wwwFrom', wwwFrom, 'wwwTo', wwwTo);
+                    this.template(wwwFrom, wwwTo, templateOptions);
+                }
             }
-
-
         },
 
         installNpmDependencies: function () {

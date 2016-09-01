@@ -4,6 +4,7 @@
     var gulpAngularTemplateCache = require('gulp-angular-templatecache');
     var gulpConcat = require('gulp-concat');
     var gulpLiveReload = require('gulp-livereload');
+    var gulpTemplate = require('gulp-template');
     var gulpUglify = require('gulp-uglify');
     var path = require('path');
 
@@ -20,7 +21,7 @@
                         module: 'TemplateOverrides',
                         standalone: true
                     }))
-                    .pipe(gulp.dest(configuration.projectReleasePath))
+                    .pipe(gulpTemplate(configuration.projectConfig))
                 ;
 
             if (configuration.projectConfig.uglify === true) {
@@ -28,10 +29,10 @@
                     .pipe(gulpUglify({
                         mangle: false
                     }))
-                    .pipe(gulpConcat('client_templates.min.js'))
-                    .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
             }
+
+            stream.pipe(gulp.dest(configuration.projectReleasePath));
 
             return stream
                 .pipe(gulpLiveReload())
