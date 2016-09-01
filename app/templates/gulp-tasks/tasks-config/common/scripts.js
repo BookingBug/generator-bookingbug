@@ -53,10 +53,10 @@
             var projectFiles = [
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
-                '!**/*.spec.js',
-                '!**/*.spec.js.coffee',
-                '!**/*.js.js',
-                '!**/*.js.map'
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js',
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js.coffee',
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.js',
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.map'
             ];
 
             return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget')
@@ -71,17 +71,19 @@
         function buildScriptsStream(files, filename) {
             var stream = gulp.src(files)
                     .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
-                    .pipe(gulpConcat(filename + '.js'))
-                    .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
 
             if (configuration.projectConfig.uglify === true) {
                 stream
                     .pipe(gulpUglify({mangle: false}))
-                    .pipe(gulpConcat(filename + '.min.js'))
+                    .pipe(gulpConcat(filename + '.js'))
                     .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
+            } else {
+                stream.pipe(gulpConcat(filename + '.js'))
+                    .pipe(gulp.dest(configuration.projectReleasePath))
             }
+
             return stream;
         }
 
