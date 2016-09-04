@@ -45,6 +45,8 @@
             });
 
             var projectFiles = [
+                configuration.projectRootPath + '/src/javascripts/**/*.module.js',
+                configuration.projectRootPath + '/src/javascripts/**/*.module.js.coffee',
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
                 '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js',
