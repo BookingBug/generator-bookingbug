@@ -270,10 +270,6 @@
 
                     releases.sort(sortBookingBugReleases);
 
-                    /*console.log('releases', releases.map(function (a) {
-                        return a.tag_name;
-                    }));*/
-
                     that.version = releases[0].tag_name;
                     that.log('Latest version is ' + that.version);
                     done();
