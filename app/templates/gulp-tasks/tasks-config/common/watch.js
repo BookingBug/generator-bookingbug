@@ -4,6 +4,11 @@
     var gulpLiveReload = require('gulp-livereload');
     var path = require('path');
 
+    var watchOptions = {
+        read: false,
+        readDelay: 500
+    };
+
     module.exports = function (gulp, configuration) {
 
         gulp.task('watch', watchTask);
@@ -27,23 +32,25 @@
             stylesheets();
             templates();
             www();
+
+            release();
         }
 
         function www() {
-            gulp.watch(configuration.projectRootPath + '/src/www/*.html', ['www']);
+            gulp.watch(configuration.projectRootPath + '/src/www/*.html', ['www'], watchOptions);
         }
 
         function templates() {
 
-            gulp.watch(configuration.projectRootPath + '/src/templates/**/*.html', ['templates']);
+            gulp.watch(configuration.projectRootPath + '/src/templates/**/*.html', ['templates'], watchOptions);
         }
 
         function stylesheets() {
 
-            gulp.watch(path.join(configuration.projectRootPath, '/src/stylesheets/**/*.scss'), ['stylesheets:client']);
+            gulp.watch(path.join(configuration.projectRootPath, '/src/stylesheets/**/*.scss'), ['stylesheets:client'], watchOptions);
 
             gulp
-                .watch(path.join(configuration.projectReleasePath, 'booking-widget.css'))
+                .watch(path.join(configuration.projectReleasePath, 'booking-widget.css'), watchOptions)
                 .on('change', gulpLiveReload.changed);
         }
 
@@ -59,17 +66,22 @@
                 '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.map'
             ];
 
-            gulp.watch(projectFiles, ['scripts:client']);
+            gulp.watch(projectFiles, ['scripts:client'], watchOptions);
         }
 
         function images() {
 
-            gulp.watch(configuration.projectRootPath + '/src/images/*.*', ['images']);
+            gulp.watch(configuration.projectRootPath + '/src/images/*.*', ['images'], watchOptions);
         }
 
         function fonts() {
 
-            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', ['fonts']);
+            gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', ['fonts'], watchOptions);
+        }
+
+        function release() {
+            gulp.watch(configuration.projectReleasePath + '/**/*.js', watchOptions)
+                .on('change', gulpLiveReload.changed)
         }
     };
 

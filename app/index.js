@@ -265,7 +265,11 @@
                 var ghclient = github.client();
                 var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
                 ghrepo.releases(function (err, releases, headers) {
+
                     if (err) that.log(err);
+
+                    releases.sort(sortBookingBugReleases);
+
                     that.version = releases[0].tag_name;
                     that.log('Latest version is ' + that.version);
                     done();
@@ -304,8 +308,8 @@
 
             if (this.type == 'public-booking') {
                 default_html = '/' + publicBookingOptions.filter(function (option) {
-                    return option.name === _this.publicBookingOptionsSelected[0];
-                })[0].www;
+                        return option.name === _this.publicBookingOptionsSelected[0];
+                    })[0].www;
             }
 
             var config = {
@@ -522,4 +526,41 @@
         }
 
     });
+
+    /**
+     * @param {Object} a
+     * @param {Object} b
+     * @returns {Number} [-1, 0, 1]
+     */
+    function sortBookingBugReleases(a, b) {
+        var aTagName = a.tag_name.replace('v', '').split('.');
+        var bTagName = b.tag_name.replace('v', '').split('.');
+
+        var aMajor = parseInt(aTagName[0]),
+            aMinor = parseInt(aTagName[1]),
+            bMinor = parseInt(bTagName[1]),
+            aPatch = parseInt(aTagName[2]),
+            bMajor = parseInt(bTagName[0]),
+            bPatch = parseInt(bTagName[2]);
+
+        if (aMajor < bMajor) {
+            return 1;
+        } else if (aMajor > bMajor) {
+            return -1;
+        } else {
+            if (aMinor < bMinor) {
+                return 1;
+            } else if (aMinor > bMinor) {
+                return -1
+            } else {
+                if (aPatch < bPatch) {
+                    return 1;
+                } else if (aPatch > bPatch) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
 })(this);
