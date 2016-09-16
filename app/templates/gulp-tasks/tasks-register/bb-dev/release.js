@@ -14,6 +14,7 @@
                 'clean',
                 'bower-prepare',
                 'bower-install',
+                'i18n',
                 'scripts:vendors',
                 'scripts:client',
                 'templates',
