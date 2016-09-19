@@ -13,7 +13,7 @@
             var tasks = [
                 'clean',
                 'bower-install',
-                'i18n',
+                'copy',
                 'scripts:vendors',
                 'scripts:client',
                 'templates',
