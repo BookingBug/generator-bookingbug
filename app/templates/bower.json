@@ -8,6 +8,17 @@
     "test",
     "tests"
   ],
+  "release": {
+    "copy": [
+      {
+        "from": [
+          "bower_components/angular-i18n/angular-locale_en.js",
+          "bower_components/angular-i18n/angular-locale_fr.js"
+        ],
+        "to": "release/angular-i18n"
+      }
+    ]
+  },
   "dependencies": {
 <% if (type == 'admin') { -%>
     "bookingbug-angular-admin-dashboard": "<%= version %>",

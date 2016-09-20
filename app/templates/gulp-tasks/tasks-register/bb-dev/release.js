@@ -14,6 +14,7 @@
                 'clean',
                 'bower-prepare',
                 'bower-install',
+                'copy',
                 'scripts:vendors',
                 'scripts:lazy',
                 'scripts:client',

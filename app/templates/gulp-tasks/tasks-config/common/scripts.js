@@ -4,7 +4,6 @@
     var gulpCoffee = require('gulp-coffee');
     var gulpConcat = require('gulp-concat');
     var gulpIf = require('gulp-if');
-    var gulpLiveReload = require('gulp-livereload');
     var gulpUglify = require('gulp-uglify');
     var gulpUtil = require('gulp-util');
     var mainBowerFiles = require('main-bower-files');
@@ -51,6 +50,8 @@
             });
 
             var projectFiles = [
+                configuration.projectRootPath + '/src/javascripts/**/*.module.js',
+                configuration.projectRootPath + '/src/javascripts/**/*.module.js.coffee',
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
                 '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js',
@@ -59,9 +60,7 @@
                 '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.map'
             ];
 
-            return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget')
-                .pipe(gulpLiveReload())
-                ;
+            return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget');
         }
 
         /*

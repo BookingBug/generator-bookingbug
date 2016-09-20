@@ -114,13 +114,17 @@
          */
         function getSdkVersion() {
 
+            if (configuration.projectConfig.local_sdk === true) {
+                return "unreleased version";
+            }
+
             var bowerJsonPath = path.join(configuration.projectRootPath, 'bower.json');
             var bowerJson = JSON.parse(fs.readFileSync(bowerJsonPath, 'utf8'));
 
             for (var depName in bowerJson.dependencies) {
                 var depVersion = bowerJson.dependencies[depName];
                 if (localSdk.isBBDependency(depName)) {
-                    return depVersion;
+                    return "version " + depVersion;
                 }
             }
 
@@ -131,7 +135,7 @@
          * @returns {Object}
          */
         function slackNotificationAboutDeployment() {
-            var message = getUserDetails() + " deployed `" + configuration.projectConfig.app_name + "` to " + configuration.environment + " with SDK version " + getSdkVersion();
+            var message = getUserDetails() + " deployed `" + configuration.projectConfig.app_name + "` to " + configuration.environment + " with SDK " + getSdkVersion();
             return getSlackPostman()(message);
         }
 

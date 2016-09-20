@@ -17,7 +17,7 @@
 
         function filterStylesheets(path) {
             return (
-                path.match(/\.css$/) && path.indexOf('bootstrap.') == -1
+                path.match(/\.css$/) && (path.indexOf('bootstrap.') === -1) && (path.indexOf('bookingbug-angular-') === -1)
             );
         }
 
