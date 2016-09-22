@@ -6,6 +6,7 @@
     var projectConfig = require('./gulp-tasks/helpers/project_config');
     var localSdk = require('./gulp-tasks/helpers/local_sdk.js');
     var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
+    var deploy = false;
 
     if (projectConfig.getConfig().local_sdk === true) {
         localSdk.validate();
