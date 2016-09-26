@@ -328,12 +328,20 @@
                     general: _.extend({
                         cache_control_max_age: '10',
                         local_sdk: false,
-                        uglify: true
+                        uglify: true,
+                        show_version: true,
+                        deploy_version: false
                     }, config),
                     local: {},
-                    development: {},
-                    staging: {},
-                    production: {}
+                    development: {
+                      deploy_version: 'v0.0.0'
+                    },
+                    staging: {
+                      deploy_version: 'v0.0.0'
+                    },
+                    production: {
+                      deploy_version: 'v0.0.0'
+                    }
                 };
                 config.local.uglify = false;
                 config.local.local_sdk = true;
@@ -498,7 +506,11 @@
                 'gulp-environments',
                 'git-user-email',
                 'git-user-name',
-                'gulp-slack'
+                'gulp-slack',
+                'gulp-git',
+                'gulp-bump',
+                'gulp-filter',
+                'gulp-tag-version'
             ]);
 
             if (!this.options['skip-npm']) {

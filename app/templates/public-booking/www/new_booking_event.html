@@ -30,6 +30,12 @@
     template: 'main_event'
     }" bb-scroll-to="page:loaded" class="container"></div>
 
+  <%% if (show_version) { %%>
+  <div id="project_version">
+    <p>Project: {{projectVersion.project}}</p>
+    <p>BookingBug SDK: {{projectVersion.sdk}}</p>
+  </div>
+  <%% } %%>
 </body>
 
 </html>

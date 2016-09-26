@@ -29,6 +29,12 @@
   </head>
   <body>
     <div class="skin-default" id="bb" bb-admin-dashboard minified="<%%= uglify %%>" bb="bb" body-resize></div>
+    <%% if (show_version) { %%>
+    <div id="project_version">
+      <p>Project: {{projectVersion.project}}</p>
+      <p>BookingBug SDK: {{projectVersion.sdk}}</p>
+    </div>
+    <%% } %%>
   </body>
 </html>
 

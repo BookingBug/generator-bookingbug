@@ -1,6 +1,6 @@
 {
   "name": "generator-bookingbug",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "A Yeoman generator for creating BookingBug widgets",
   "files": [
     "app"
