@@ -334,13 +334,13 @@
                     }, config),
                     local: {},
                     development: {
-                      deploy_version: 'v0.0.0'
+                        deploy_version: 'v0.0.0'
                     },
                     staging: {
-                      deploy_version: 'v0.0.0'
+                        deploy_version: 'v0.0.0'
                     },
                     production: {
-                      deploy_version: 'v0.0.0'
+                        deploy_version: 'v0.0.0'
                     }
                 };
                 config.local.uglify = false;
@@ -550,10 +550,20 @@
 
         var aMajor = parseInt(aTagName[0]),
             aMinor = parseInt(aTagName[1]),
-            bMinor = parseInt(bTagName[1]),
-            aPatch = parseInt(aTagName[2]),
+            aPatch = isNaN(aTagName[2]) ? aTagName[2] : parseInt(aTagName[2]),
             bMajor = parseInt(bTagName[0]),
-            bPatch = parseInt(bTagName[2]);
+            bMinor = parseInt(bTagName[1]),
+            bPatch = isNaN(bTagName[2]) ? bTagName[2] : parseInt(bTagName[2]);
+
+        if (isNaN(aPatch) && isNaN(bPatch)) {// alpha, beta, ...
+            return 0;
+        }
+        if (isNaN(aPatch)) {// alpha, beta, ...
+            return 1;
+        }
+        if (isNaN(bPatch)) { // alpha, beta, ...
+            return -1;
+        }
 
         if (aMajor < bMajor) {
             return 1;
