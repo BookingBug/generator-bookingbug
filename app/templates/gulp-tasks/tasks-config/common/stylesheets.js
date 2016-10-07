@@ -1,11 +1,13 @@
 (function () {
     'use strict';
 
+    var autoprefixer = require('autoprefixer');
     var gulpConcat = require('gulp-concat');
     var gulpCssSelectorLimit = require('gulp-css-selector-limit');
     var gulpPlumber = require('gulp-plumber');
+    var gulpPostCss = require('gulp-postcss');
     var gulpSass = require('gulp-sass');
-    var gulpSourcemaps = require('gulp-sourcemaps');
+    var gulpSourceMaps = require('gulp-sourcemaps');
     var gulpTemplate = require('gulp-template');
     var mainBowerFiles = require('main-bower-files');
     var path = require('path');
@@ -51,14 +53,33 @@
                 gulpSassOptions.outputStyle = 'compressed';
             }
 
+            //https://github.com/postcss/autoprefixer
+            //https://github.com/postcss/gulp-postcss
+            //https://github.com/ai/browserslist#queries
+            //https://github.com/floridoo/gulp-sourcemaps
+            //http://caniuse.com/#comparison
+
+            var postCssProcessors = [
+                autoprefixer({
+                    browsers: [
+                        'last 3 versions',
+                        'last 10 Chrome versions',
+                        'last 10 Opera versions',
+                        'last 10 Firefox versions',
+                        'not Explorer <= 8'
+                    ]
+                })
+            ];
+
             return gulp.src(clientSCSS)
-                .pipe(gulpSourcemaps.init())
+                .pipe(gulpSourceMaps.init())
                 .pipe(gulpPlumber())
                 .pipe(gulpSass(gulpSassOptions).on('error', gulpSass.logError))
+                .pipe(gulpPostCss(postCssProcessors))
                 .pipe(gulpConcat('booking-widget.css'))
                 .pipe(gulpTemplate(configuration.projectConfig))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
-                .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
+                .pipe(gulpSourceMaps.write('maps', {includeContent: false}))
                 .pipe(gulp.dest(configuration.projectReleasePath))
                 ;
         }
