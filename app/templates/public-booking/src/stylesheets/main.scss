@@ -21,7 +21,7 @@ $fa-font-path: "fonts";
   background-color: $body-bg;
 
   // All custom styles and overrides should be stored in the following .scss file:
-  @import "<%= project_name %>_theme";
+  @import "client_theme";
 }
 
 #project_version {

@@ -429,8 +429,8 @@
             );
 
             this.copy(
-                "theme.scss",
-                path.join('src', 'stylesheets', this.appName + '_theme.scss')
+                "_client_theme.scss",
+                path.join('src', 'stylesheets', '_client_theme.scss')
             );
 
             if (this.type === 'admin') {
