@@ -466,6 +466,7 @@
         installNpmDependencies: function () {
 
             var dependencies = [
+                'autoprefixer',
                 'bower',
                 'del',
                 'gulp',
@@ -480,6 +481,7 @@
                 'gulp-ng-annotate',
                 'gulp-open',
                 'gulp-plumber',
+                'gulp-postcss',
                 'gulp-protractor',
                 'gulp-rename',
                 'gulp-sass',
