@@ -2,6 +2,8 @@
     'use strict';
 
     var args = require('./args.js');
+    var deepMerge = require('deepmerge');
+    var fs = require('fs');
     var jsonFile = require('jsonfile');
 
     module.exports = {
@@ -21,27 +23,49 @@
             config = configData;
         } else {
             applyGeneralSettings(config, configData);
-            applyEnvironmentSpecificSettings(config, configData);
+            config = applyEnvironmentSpecificSettings(config, configData);
         }
 
         applyEnforcedValues(config);
 
+        setSdkVersion(config);
+
         return config;
+    }
+
+    /**
+     * @param {Object}
+     * @throws {Error}
+     */
+    function setSdkVersion(config) {
+
+        if (config.build.local_sdk === true) {
+            config.build.sdk_version = "?";
+        }
+
+        var bowerJson = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
+
+        for (var depName in bowerJson.dependencies) {
+            var depVersion = bowerJson.dependencies[depName];
+            if (new RegExp(/^bookingbug-angular.*/).test(depName)) {
+                config.build.sdk_version = depVersion;
+                return;
+            }
+        }
+
+        throw new Error('No BB dependency found.');
     }
 
     /**
      * @returns {Object}
      */
     function getConfigData() {
-        var configData = null;
         try {
-            configData = jsonFile.readFileSync('config.json');
+            return jsonFile.readFileSync('config.json');
         } catch (error1) {
             console.log('No config file specified for project');
             return {};
         }
-
-        return configData;
     }
 
     /**
@@ -61,12 +85,11 @@
     /**
      * @param {Object} config
      * @param {Object} configData
+     * @returns {Object}
      */
     function applyEnvironmentSpecificSettings(config, configData) {
         var environmentName = getEnvironmentName();
-        for (var prop in configData[environmentName]) {
-            config[prop] = configData[environmentName][prop];
-        }
+        return deepMerge(config, configData[environmentName]);
     }
 
     /**
@@ -92,19 +115,19 @@
      */
     function applyEnforcedValues(config) {
         if (args.forceLocalSdk() === true) {
-            config['local_sdk'] = true;
+            config.build.local_sdk = true;
         }
 
         if (args.forceLocalSdk() === false) {
-            config['local_sdk'] = false;
+            config.build.local_sdk = false;
         }
 
         if (args.forceUglify() === true) {
-            config.uglify = true;
+            config.build.uglify = true;
         }
 
         if (args.forceUglify() === false) {
-            config.uglify = false;
+            config.build.uglify = false;
         }
     }
 
