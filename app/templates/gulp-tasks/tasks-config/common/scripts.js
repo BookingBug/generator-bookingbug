@@ -89,7 +89,6 @@
          */
         function buildScriptsStream(files, filename) {
             var stream = gulp.src(files)
-                    .pipe(gulpIf(/.*main.version.js.coffee$/, template(getVersion())))
                     .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
                 ;
 
