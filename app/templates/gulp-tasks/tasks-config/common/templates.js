@@ -24,7 +24,7 @@
                     .pipe(gulpTemplate(configuration.projectConfig))
                 ;
 
-            if (configuration.projectConfig.uglify === true) {
+            if (configuration.projectConfig.build.uglify === true) {
                 stream
                     .pipe(gulpUglify({
                         mangle: false

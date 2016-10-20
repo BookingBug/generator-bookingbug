@@ -47,7 +47,7 @@
                 includePaths: [path.join(configuration.projectRootPath, 'bower_components/bootstrap-sass/assets/stylesheets')]
             };
 
-            if (configuration.projectConfig.uglify === true) {
+            if (configuration.projectConfig.build.uglify === true) {
                 gulpSassOptions.outputStyle = 'compressed';
             }
 
@@ -56,7 +56,6 @@
                 .pipe(gulpPlumber())
                 .pipe(gulpSass(gulpSassOptions).on('error', gulpSass.logError))
                 .pipe(gulpConcat('booking-widget.css'))
-                .pipe(gulpTemplate(configuration.projectConfig))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
                 .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
                 .pipe(gulp.dest(configuration.projectReleasePath))
