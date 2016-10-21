@@ -8,12 +8,15 @@
     var jsonFile = require('jsonfile');
     var mainBowerFiles = require('main-bower-files');
     var path = require('path');
+    var projectConfig = require('../helpers/project_config');
 
     module.exports = function (gulp, configuration) {
 
         gulp.task('config', configTask);
 
         function configTask() {
+
+            reloadProjectConfig();
 
             var configProject = JSON.parse(JSON.stringify(configuration.projectConfig));
 
@@ -42,6 +45,10 @@
             return gulpNgConstant(options)
                 .pipe(gulpRename('config.constants.js'))
                 .pipe(gulp.dest(configuration.projectTmpPath));
+        }
+
+        function reloadProjectConfig(){
+            configuration.projectConfig = projectConfig.getConfig();
         }
 
         /**

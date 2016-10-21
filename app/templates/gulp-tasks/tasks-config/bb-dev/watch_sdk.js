@@ -2,11 +2,14 @@
     'use strict';
 
     var path = require('path');
+    var runSequence = require('run-sequence');
 
     var watchOptions = {
         read: false,
         readDelay: 500
     };
+
+    var dmz = Object.create(null);
 
     module.exports = function (gulp, configuration) {
 
@@ -23,31 +26,25 @@
             scripts();
             stylesheets();
             templates();
+            configs();
         }
 
         function fonts() {
-
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/fonts/**/*'], ['build-sdk:public-booking:fonts'], watchOptions);
+            configuration.bbDependencies.forEach(function (dirName) {
+                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/fonts/**/*'], ['build-sdk:' + dirName + ':fonts'], watchOptions);
+            });
         }
 
         function images() {
-
-            gulp.watch([configuration.sdkRootPath + '/src/admin/images/**/*'], ['build-sdk:admin:images'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/images/**/*'], ['build-sdk:public-booking:images'], watchOptions);
+            configuration.bbDependencies.forEach(function (dirName) {
+                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/images/**/*'], ['build-sdk:' + dirName + ':images'], watchOptions);
+            });
         }
 
         function scripts() {
-
-            gulp.watch([configuration.sdkRootPath + '/src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/core/javascripts/**/*'], ['build-sdk:core:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/events/javascripts/**/*'], ['build-sdk:events:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/member/javascripts/**/*'], ['build-sdk:member:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/javascripts/**/*'], ['build-sdk:public-booking:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/services/javascripts/**/*'], ['build-sdk:services:javascripts'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/settings/javascripts/**/*'], ['build-sdk:settings:javascripts'], watchOptions);
+            configuration.bbDependencies.forEach(function (dirName) {
+                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/javascripts/**/*'], ['build-sdk:' + dirName + ':javascripts'], watchOptions);
+            });
 
             gulp.watch(
                 [
@@ -60,12 +57,9 @@
         }
 
         function stylesheets() {
-
-            gulp.watch([configuration.sdkRootPath + '/src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/core/stylesheets/**/*'], ['build-sdk:core:stylesheets'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/member/stylesheets/**/*'], ['build-sdk:member:stylesheets'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/stylesheets/**/*'], ['build-sdk:public-booking:stylesheets'], watchOptions);
+            configuration.bbDependencies.forEach(function (dirName) {
+                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/stylesheets/**/*'], ['build-sdk:' + dirName + ':stylesheets'], watchOptions);
+            });
 
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/**/*.scss'],
@@ -75,22 +69,28 @@
         }
 
         function templates() {
-
-            gulp.watch([configuration.sdkRootPath + '/src/admin/templates/**/*'], ['build-sdk:admin:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-booking/templates/**/*'], ['build-sdk:admin-booking:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/admin-dashboard/templates/**/*'], ['build-sdk:admin-dashboard:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/core/templates/**/*'], ['build-sdk:core:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/events/templates/**/*'], ['build-sdk:events:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/member/templates/**/*'], ['build-sdk:member:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/public-booking/templates/**/*'], ['build-sdk:public-booking:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/services/templates/**/*'], ['build-sdk:services:templates'], watchOptions);
-            gulp.watch([configuration.sdkRootPath + '/src/settings/templates/**/*'], ['build-sdk:settings:templates'], watchOptions);
+            configuration.bbDependencies.forEach(function (dirName) {
+                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/templates/**/*'], ['build-sdk:' + dirName + ':templates'], watchOptions);
+            });
 
             gulp.watch(
                 [configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*templates.js'],
                 ['scripts:client'],
                 watchOptions
             );
+        }
+
+        function configs() {
+            configuration.bbDependencies.forEach(function (dirName) {
+                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/config/**/*'], configSequence.bind(dmz, 'build-sdk:' + dirName + ':config'), watchOptions);
+            });
+        }
+
+        /**
+         * @param {String} taskName
+         */
+        function configSequence(taskName) {
+            runSequence(taskName, 'config', 'scripts:client', 'templates');
         }
     };
 
