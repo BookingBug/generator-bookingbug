@@ -51,7 +51,7 @@
 
         function consoleNotificationAboutDeployment() {
             var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            var msg = "Deploying to " + configuration.environment + "with SDK " + sdkVersion + ", project version " + configuration.projectConfig.build.deploy_version ;
+            var msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", project version " + configuration.projectConfig.build.deploy_version ;
             gulpUtil.log(gulpUtil.colors.green(msg));
         }
 
