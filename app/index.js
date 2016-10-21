@@ -341,7 +341,7 @@
                 config.general.build.cache_control_max_age = '10';
                 config.general.build.deploy_version = false;
                 config.general.build.local_sdk = false;
-                config.general.build.show_version = true;
+                config.general.build.show_version = false;
                 config.general.build.uglify = true;
 
                 config.local = {
@@ -363,7 +363,8 @@
                 };
                 config.staging = {
                     build: {
-                        deploy_path: "/" + this.appName + "/staging/"
+                        deploy_path: "/" + this.appName + "/staging/",
+                        show_version: true
                     },
                     core: {
                         api_url: this.stagingApiUrl
