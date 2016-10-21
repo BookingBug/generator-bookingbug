@@ -51,7 +51,8 @@
 
         function consoleNotificationAboutDeployment() {
             var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            var msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", project version " + configuration.projectConfig.build.deploy_version ;
+            var projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
+            var msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " +  projectVersion;
             gulpUtil.log(gulpUtil.colors.green(msg));
         }
 
@@ -72,7 +73,7 @@
          */
         function renameReleaseFiles() {
             return gulpRename(function (path) {
-                path.dirname = configuration.projectConfig.deploy_path + path.dirname;
+                path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
             });
         }
 
@@ -114,7 +115,8 @@
          */
         function slackNotificationAboutDeployment() {
             var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            var message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , project version ' + configuration.projectConfig.build.deploy_version;
+            var projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
+            var message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , PROJECT ' + projectVersion;
             return getSlackPostman()(message);
         }
 
