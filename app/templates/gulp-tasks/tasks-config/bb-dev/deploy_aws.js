@@ -50,8 +50,8 @@
         }
 
         function consoleNotificationAboutDeployment() {
-            var sdkVersion = configuration.projectConfig.build.sdk_version === '?' ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            var msg = "Deploying to " + configuration.environment + "using SDK " + sdkVersion + ", project version " + configuration.projectConfig.build.deploy_version ;
+            var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            var msg = "Deploying to " + configuration.environment + "with SDK " + sdkVersion + ", project version " + configuration.projectConfig.build.deploy_version ;
             gulpUtil.log(gulpUtil.colors.green(msg));
         }
 
@@ -113,7 +113,7 @@
          * @returns {Object}
          */
         function slackNotificationAboutDeployment() {
-            var sdkVersion = configuration.projectConfig.build.sdk_version === '?' ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
             var message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , project version ' + configuration.projectConfig.build.deploy_version;
             return getSlackPostman()(message);
         }

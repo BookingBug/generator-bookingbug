@@ -40,7 +40,8 @@
     function setSdkVersion(config) {
 
         if (config.build.local_sdk === true) {
-            config.build.sdk_version = "?";
+            config.build.sdk_version = null;
+            return
         }
 
         var bowerJson = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
