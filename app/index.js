@@ -306,54 +306,80 @@
             var _this = this;
             var default_html = '/index.html';
 
+            var config = {
+                build: {
+                    app_name: this.appName,
+                    default_html: default_html,
+                    server_port: 8000
+                },
+                core: {
+                    api_url: this.apiUrl,
+                    credentials: {
+                        googlemaps: {
+                            key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
+                        }
+                    }
+                }
+
+            };
+
             if (this.type == 'public-booking') {
-                default_html = '/' + publicBookingOptions.filter(function (option) {
+
+                config.public_booking = {company_id: this.companyId};
+
+                config.build.default_html = '/' + publicBookingOptions.filter(function (option) {
                         return option.name === _this.publicBookingOptionsSelected[0];
                     })[0].www;
             }
 
-            var config = {
-                app_name: this.appName,
-                api_url: this.apiUrl,
-                default_html: default_html,
-                googlemaps_api_key: 'AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8',
-                server_port: 8000
-            };
-            if (this.type == 'public-booking') {
-                config.company_id = this.companyId;
-            }
             if (this.options['bb-dev']) {
-                delete config.api_url;
+
                 config = {
-                    general: _.extend({
-                        cache_control_max_age: '10',
-                        local_sdk: false,
-                        uglify: true,
-                        show_version: true,
-                        deploy_version: false
-                    }, config),
-                    local: {},
-                    development: {
-                        deploy_version: 'v0.0.0'
+                    general: config
+                };
+
+                config.general.build.cache_control_max_age = '10';
+                config.general.build.deploy_version = false;
+                config.general.build.local_sdk = false;
+                config.general.build.show_version = true;
+                config.general.build.uglify = true;
+
+                config.local = {
+                    build: {
+                        uglify: false,
+                        local_sdk: true
                     },
-                    staging: {
-                        deploy_version: 'v0.0.0'
-                    },
-                    production: {
-                        deploy_version: 'v0.0.0'
+                    core: {
+                        api_url: "http://localhost:3000"
                     }
                 };
-                config.local.uglify = false;
-                config.local.local_sdk = true;
-                config.production.cache_control_max_age = '300';
-                config.production.deploy_path = "/" + this.appName + "/";
-                config.staging.deploy_path = "/" + this.appName + "/staging/";
-                config.development.deploy_path = "/" + this.appName + "/development/";
-                config.local.api_url = "http://localhost:3000";
-                config.development.api_url = this.developmentApiUrl;
-                config.staging.api_url = this.stagingApiUrl;
-                config.production.api_url = this.productionApiUrl;
+                config.development = {
+                    build: {
+                        deploy_path: "/" + this.appName + "/development/"
+                    },
+                    core: {
+                        api_url: this.developmentApiUrl
+                    }
+                };
+                config.staging = {
+                    build: {
+                        deploy_path: "/" + this.appName + "/staging/"
+                    },
+                    core: {
+                        api_url: this.stagingApiUrl
+                    }
+                };
+                config.production = {
+                    build: {
+                        cache_control_max_age: '300',
+                        deploy_path: "/" + this.appName + "/"
+                    },
+                    core: {
+                        api_url: this.productionApiUrl
+                    }
+                };
             }
+
             this.fs.writeJSON("config.json", config);
         },
 
@@ -465,9 +491,15 @@
 
         installNpmDependencies: function () {
 
+            if (this.options['skip-npm']) {
+                return;
+            }
+
             var dependencies = [
                 'bower',
                 'del',
+                'deep-rename-keys',
+                'deepmerge',
                 'gulp',
                 'gulp-angular-templatecache',
                 'gulp-css-selector-limit',
@@ -478,9 +510,9 @@
                 'gulp-if',
                 'gulp-livereload',
                 'gulp-ng-annotate',
+                'gulp-ng-constant',
                 'gulp-open',
                 'gulp-plumber',
-                'gulp-protractor',
                 'gulp-rename',
                 'gulp-sass',
                 'gulp-sourcemaps',
@@ -496,45 +528,28 @@
                 'path',
                 'phantomjs-prebuilt',
                 'run-sequence',
-                'sauce-connect-launcher',
-                'selenium-server-standalone-jar',
                 'yargs'
             ];
 
-            var devDependencies = dependencies.concat([
-                'gulp-awspublish',
-                'gulp-environments',
-                'git-user-email',
-                'git-user-name',
-                'gulp-slack',
-                'gulp-git',
-                'gulp-bump',
-                'gulp-filter',
-                'gulp-tag-version'
-            ]);
+            if (this.options['bb-dev'] === true) {
 
-            if (!this.options['skip-npm']) {
-
-                this.npmInstall(dependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
-
-                if (this.options['bb-dev']) {
-                    this.npmInstall(devDependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
-                }
+                dependencies = dependencies.concat([
+                    'gulp-awspublish',
+                    'git-user-email',
+                    'git-user-name',
+                    'gulp-slack',
+                    'gulp-git',
+                    'gulp-bump',
+                    'gulp-filter',
+                    'gulp-tag-version'
+                ]);
             }
+
+            this.npmInstall(dependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
         },
 
         installBowerDependencies: function () {
-            if (!this.options['skip-bower']) {
-                //this.bowerInstall();
-                if (this.type === 'member') {
-                    this.bowerInstall([
-                        'angular-slick',
-                        'angular-recaptcha'
-                    ], {
-                        "save": true
-                    });
-                }
-            }
+            //this.bowerInstall();
         }
 
     });
