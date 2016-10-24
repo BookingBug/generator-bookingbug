@@ -2,7 +2,6 @@
     'use strict';
 
     var _ = require('lodash');
-    var AdmZip = require('adm-zip');
     var camelCase = require('camelcase');
     var fs = require('fs');
     var generators = require('yeoman-generator');
@@ -301,42 +300,28 @@
             );
         },
 
-        createConfig: function () {
+        createBuildConfig: function () {
 
             var _this = this;
             var default_html = '/index.html';
 
             var config = {
-                build: {
-                    app_name: this.appName,
-                    default_html: default_html,
-                    server_port: 8000
-                },
-                core: {
-                    api_url: this.apiUrl,
-                    credentials: {
-                        googlemaps: {
-                            key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
-                        }
+                general: {
+                    build: {
+                        app_name: this.appName,
+                        default_html: default_html,
+                        server_port: 8000
                     }
                 }
-
             };
 
             if (this.type == 'public-booking') {
-
-                config.public_booking = {company_id: this.companyId};
-
-                config.build.default_html = '/' + publicBookingOptions.filter(function (option) {
+                config.general.build.default_html = '/' + publicBookingOptions.filter(function (option) {
                         return option.name === _this.publicBookingOptionsSelected[0];
                     })[0].www;
             }
 
             if (this.options['bb-dev']) {
-
-                config = {
-                    general: config
-                };
 
                 config.general.build.cache_control_max_age = '10';
                 config.general.build.deploy_version = false;
@@ -348,40 +333,77 @@
                     build: {
                         uglify: false,
                         local_sdk: true
-                    },
-                    core: {
-                        api_url: "http://localhost:3000"
                     }
                 };
                 config.development = {
                     build: {
                         deploy_path: "/" + this.appName + "/development/"
-                    },
-                    core: {
-                        api_url: this.developmentApiUrl
                     }
                 };
                 config.staging = {
                     build: {
                         deploy_path: "/" + this.appName + "/staging/",
                         show_version: true
-                    },
-                    core: {
-                        api_url: this.stagingApiUrl
                     }
                 };
                 config.production = {
                     build: {
                         cache_control_max_age: '300',
                         deploy_path: "/" + this.appName + "/"
-                    },
-                    core: {
-                        api_url: this.productionApiUrl
                     }
                 };
             }
 
-            this.fs.writeJSON("config.json", config);
+            this.fs.writeJSON("src/config/build.json", config);
+        },
+
+        createCoreConfig: function () {
+            var config = {
+                general: {
+                    core: {
+                        api_url: this.apiUrl
+                    }
+                },
+                local: {
+                    core: {
+                        api_url: "http://localhost:3000"
+                    }
+                },
+                development: {
+                    core: {
+                        api_url: this.developmentApiUrl
+                    }
+                },
+                staging: {
+                    core: {
+                        api_url: this.stagingApiUrl
+                    }
+                },
+                production: {
+                    core: {
+                        api_url: this.productionApiUrl
+                    }
+                }
+            };
+
+            if (this.type == 'public-booking') {
+                config.general.core.company_id = this.companyId;
+            }
+
+            this.fs.writeJSON("src/config/core.json", config);
+        },
+
+        createCredentialsConfig: function () {
+            var config = {
+                general: {
+                    credentials: {
+                        googlemaps: {
+                            key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
+                        }
+                    }
+                }
+            };
+            this.fs.writeJSON("src/config/credentials.json", config);
         },
 
         copySrc: function () {
@@ -444,15 +466,15 @@
             var templateOptions = {module_name: camelCase(this.appName)};
 
             this.template(
-                path.join(this.type, 'src', 'javascripts', 'main.js.coffee'),
-                path.join('src', 'javascripts', 'main.js.coffee'),
+                path.join(this.type, 'src', 'javascripts'),
+                path.join('src', 'javascripts'),
                 templateOptions
             );
 
             this.template(
-                path.join(this.type, 'src', 'stylesheets', 'main.scss'),
-                path.join('src', 'stylesheets', 'main.scss'),
-                {project_name: this.appName}
+                path.join('version'),
+                path.join('src', 'javascripts', 'version'),
+                templateOptions
             );
 
             this.copy(
@@ -501,6 +523,7 @@
                 'del',
                 'deep-rename-keys',
                 'deepmerge',
+                'fs-finder',
                 'gulp',
                 'gulp-angular-templatecache',
                 'gulp-css-selector-limit',

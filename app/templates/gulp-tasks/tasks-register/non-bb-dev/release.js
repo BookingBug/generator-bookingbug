@@ -14,6 +14,7 @@
                 'clean',
                 'bower-install',
                 'copy',
+                'config',
                 'scripts:vendors',
                 'scripts:client',
                 'templates',

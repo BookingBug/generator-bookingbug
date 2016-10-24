@@ -4,7 +4,9 @@
     var args = require('./args.js');
     var deepMerge = require('deepmerge');
     var fs = require('fs');
+    var fsFinder = require('fs-finder');
     var jsonFile = require('jsonfile');
+    var path = require('path');
 
     module.exports = {
         getConfig: getConfig
@@ -17,14 +19,22 @@
 
         var config = {};
 
-        var configData = getConfigData();
+        var environment = getEnvironmentName();
 
-        if (typeof configData.general === 'undefined') {
-            config = configData;
-        } else {
-            applyGeneralSettings(config, configData);
-            config = applyEnvironmentSpecificSettings(config, configData);
-        }
+        getConfigFileNames().forEach(function (configFileName, key) {
+
+            var loadedData = getConfigData(configFileName);
+
+            if(typeof loadedData.general === 'undeinfed'){
+                throw new Error('general section of conifg file is required, filename = ' + configFileName);
+            }
+
+            config = deepMerge(config, loadedData.general);
+
+            if(typeof loadedData[environment] !== 'undefined'){
+                config = deepMerge(config, loadedData[environment])
+            }
+        });
 
         applyEnforcedValues(config);
 
@@ -34,63 +44,23 @@
     }
 
     /**
-     * @param {Object}
-     * @throws {Error}
+     * @returns {Array.<String>}
      */
-    function setSdkVersion(config) {
-
-        if (config.build.local_sdk === true) {
-            config.build.sdk_version = null;
-            return
-        }
-
-        var bowerJson = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
-
-        for (var depName in bowerJson.dependencies) {
-            var depVersion = bowerJson.dependencies[depName];
-            if (new RegExp(/^bookingbug-angular.*/).test(depName)) {
-                config.build.sdk_version = depVersion;
-                return;
-            }
-        }
-
-        throw new Error('No BB dependency found.');
+    function getConfigFileNames() {
+        return fsFinder.from('src/config').findFiles('*.json');
     }
 
     /**
+     * @param {String} filename
      * @returns {Object}
      */
-    function getConfigData() {
+    function getConfigData(filename) {
         try {
-            return jsonFile.readFileSync('config.json');
+            return jsonFile.readFileSync(filename);
         } catch (error1) {
             console.log('No config file specified for project');
             return {};
         }
-    }
-
-    /**
-     * @param {Object} config
-     * @param {Object} configData
-     */
-    function applyGeneralSettings(config, configData) {
-        if (typeof configData['general'] === 'undefined') {
-            return configData;
-        }
-
-        for (var prop in configData['general']) {
-            config[prop] = configData['general'][prop];
-        }
-    }
-
-    /**
-     * @param {Object} config
-     * @param {Object} configData
-     * @returns {Object}
-     */
-    function applyEnvironmentSpecificSettings(config, configData) {
-        var environmentName = getEnvironmentName();
-        return deepMerge(config, configData[environmentName]);
     }
 
     /**
@@ -130,6 +100,30 @@
         if (args.forceUglify() === false) {
             config.build.uglify = false;
         }
+    }
+
+    /**
+     * @param {Object}
+     * @throws {Error}
+     */
+    function setSdkVersion(config) {
+
+        if (config.build.local_sdk === true) {
+            config.build.sdk_version = null;
+            return
+        }
+
+        var bowerJson = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
+
+        for (var depName in bowerJson.dependencies) {
+            var depVersion = bowerJson.dependencies[depName];
+            if (new RegExp(/^bookingbug-angular.*/).test(depName)) {
+                config.build.sdk_version = depVersion;
+                return;
+            }
+        }
+
+        throw new Error('No BB dependency found.');
     }
 
 

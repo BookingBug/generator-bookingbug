@@ -9,8 +9,6 @@
         readDelay: 500
     };
 
-    var dmz = Object.create(null);
-
     module.exports = function (gulp, configuration) {
 
         gulp.task('watch-sdk', watchSdkTask);
@@ -26,7 +24,6 @@
             scripts();
             stylesheets();
             templates();
-            configs();
         }
 
         function fonts() {
@@ -78,19 +75,6 @@
                 ['scripts:client'],
                 watchOptions
             );
-        }
-
-        function configs() {
-            configuration.bbDependencies.forEach(function (dirName) {
-                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/config/**/*'], configSequence.bind(dmz, 'build-sdk:' + dirName + ':config'), watchOptions);
-            });
-        }
-
-        /**
-         * @param {String} taskName
-         */
-        function configSequence(taskName) {
-            runSequence(taskName, 'config', 'scripts:client', 'templates');
         }
     };
 
