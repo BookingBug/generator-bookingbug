@@ -312,10 +312,8 @@
                         default_html: defaultHtml,
                         server_port: 8000
                     },
-                    credentials: {
-                        googlemaps: {
-                            key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
-                        }
+                    core: {
+                        google_maps_key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
                     }
                 }
             };
@@ -364,9 +362,6 @@
                     }
                 };
             } else {
-                if (typeof config.general.core === 'undefined') {
-                    config.general.core = {};
-                }
                 config.general.core.api_url = this.apiUrl
             }
 
@@ -375,10 +370,6 @@
                 config.general.build.default_html = '/' + publicBookingOptions.filter(function (option) {
                         return option.name === _this.publicBookingOptionsSelected[0];
                     })[0].www;
-
-                if (typeof config.general.core === 'undefined') {
-                    config.general.core = {};
-                }
 
                 config.general.core.company_id = this.companyId;
             }
@@ -532,7 +523,6 @@
                 'main-bower-files',
                 'mkdirp',
                 'path',
-                'phantomjs-prebuilt',
                 'run-sequence',
                 'yargs'
             ];
@@ -552,12 +542,7 @@
             }
 
             this.npmInstall(dependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
-        },
-
-        installBowerDependencies: function () {
-            //this.bowerInstall();
         }
-
     });
 
     /**
