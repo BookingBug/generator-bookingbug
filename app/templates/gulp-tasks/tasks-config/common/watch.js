@@ -2,6 +2,7 @@
     'use strict';
 
     var gulpLiveReload = require('gulp-livereload');
+    var gulpUtil = require('gulp-util');
     var path = require('path');
     var runSequence = require('run-sequence');
 
@@ -82,6 +83,7 @@
         }
 
         function configSequence() {
+            console.log(gulpUtil.colors.white.bgRed.bold('configuration changed, please restart task manually if any \'build\' properties got modified'));
             runSequence('config', 'scripts:client', 'templates', gulpLiveReload.changed);
         }
 
