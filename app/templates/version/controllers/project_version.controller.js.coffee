@@ -5,8 +5,13 @@ angular.module('<%= module_name %>.version').controller 'BbProjectVersionControl
 
   ### jshint validthis: true ###
   vm = @
-  vm.sdk_version = bbConfig.BUILD.SDK_VERSION is null ? 'unreleased version' : bbConfig.BUILD.SDK_VERSION
+  vm.sdk_version = bbConfig.BUILD.SDK_VERSION
+  if vm.sdk_version is null
+    vm.sdk_version = 'unreleased version'
+
   vm.project_deploy_version = bbConfig.BUILD.DEPLOY_VERSION
+  if vm.project_deploy_version is false
+    vm.project_deploy_version = 'unreleased version'
   vm.show_version = bbConfig.BUILD.SHOW_VERSION
 
   return
