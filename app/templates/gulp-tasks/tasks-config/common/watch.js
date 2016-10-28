@@ -75,8 +75,10 @@
         }
 
         function config() {
-            gulp.watch(configuration.projectRootPath + '/src/config/**/*.json', configSequence, watchOptions);
-
+            gulp.watch([
+                configuration.projectRootPath + '/config.json',
+                configuration.projectRootPath + '/src/config/**/*.json'
+            ], configSequence, watchOptions);
         }
 
         function configSequence() {

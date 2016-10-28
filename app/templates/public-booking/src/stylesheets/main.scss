@@ -23,3 +23,12 @@ $fa-font-path: "fonts";
   // All custom styles and overrides should be stored in the following .scss file:
   @import "client_theme";
 }
+
+.bb-project-version {
+  bottom: 20px;
+  left: 20px;
+  position: absolute;
+  z-index: 10000;
+  color: red;
+  pointer-events: none;
+}

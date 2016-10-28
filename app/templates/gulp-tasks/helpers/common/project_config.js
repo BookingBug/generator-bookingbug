@@ -21,7 +21,7 @@
 
         var environment = getEnvironmentName();
 
-        getConfigFileNames().forEach(function (configFileName, key) {
+        getConfigFileNames().forEach(function (configFileName) {
 
             var loadedData = getConfigData(configFileName);
 
@@ -47,7 +47,7 @@
      * @returns {Array.<String>}
      */
     function getConfigFileNames() {
-        return fsFinder.from('src/config').findFiles('*.json');
+        return fsFinder.in('./').findFiles('config.json').concat(fsFinder.from('./src/config').findFiles('*.json'));
     }
 
     /**
@@ -58,7 +58,7 @@
         try {
             return jsonFile.readFileSync(filename);
         } catch (error1) {
-            console.log('No config file specified for project');
+            console.log('could not load config file: ' + filename);
             return {};
         }
     }

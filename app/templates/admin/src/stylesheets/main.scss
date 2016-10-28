@@ -33,3 +33,12 @@ $fa-font-path: "fonts";
 @import "../../bower_components/fontawesome/scss/font-awesome";
 // BB admin styles
 @import "../../bower_components/bookingbug-angular-admin-dashboard/src/stylesheets/main";
+
+.bb-project-version {
+  bottom: 20px;
+  left: 20px;
+  position: absolute;
+  z-index: 10000;
+  color: red;
+  pointer-events: none;
+}

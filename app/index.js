@@ -303,23 +303,22 @@
         createBuildConfig: function () {
 
             var _this = this;
-            var default_html = '/index.html';
+            var defaultHtml = '/index.html';
 
             var config = {
                 general: {
                     build: {
                         app_name: this.appName,
-                        default_html: default_html,
+                        default_html: defaultHtml,
                         server_port: 8000
+                    },
+                    credentials: {
+                        googlemaps: {
+                            key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
+                        }
                     }
                 }
             };
-
-            if (this.type == 'public-booking') {
-                config.general.build.default_html = '/' + publicBookingOptions.filter(function (option) {
-                        return option.name === _this.publicBookingOptionsSelected[0];
-                    })[0].www;
-            }
 
             if (this.options['bb-dev']) {
 
@@ -333,77 +332,58 @@
                     build: {
                         uglify: false,
                         local_sdk: true
+                    },
+                    core: {
+                        api_url: "http://localhost:3000"
                     }
                 };
                 config.development = {
                     build: {
                         deploy_path: "/" + this.appName + "/development/"
+                    },
+                    core: {
+                        api_url: this.developmentApiUrl
                     }
                 };
                 config.staging = {
                     build: {
                         deploy_path: "/" + this.appName + "/staging/",
                         show_version: true
+                    },
+                    core: {
+                        api_url: this.stagingApiUrl
                     }
                 };
                 config.production = {
                     build: {
                         cache_control_max_age: '300',
                         deploy_path: "/" + this.appName + "/"
-                    }
-                };
-            }
-
-            this.fs.writeJSON("src/config/build.json", config);
-        },
-
-        createCoreConfig: function () {
-            var config = {
-                general: {
-                    core: {
-                        api_url: this.apiUrl
-                    }
-                },
-                local: {
-                    core: {
-                        api_url: "http://localhost:3000"
-                    }
-                },
-                development: {
-                    core: {
-                        api_url: this.developmentApiUrl
-                    }
-                },
-                staging: {
-                    core: {
-                        api_url: this.stagingApiUrl
-                    }
-                },
-                production: {
+                    },
                     core: {
                         api_url: this.productionApiUrl
                     }
+                };
+            } else {
+                if (typeof config.general.core === 'undefined') {
+                    config.general.core = {};
                 }
-            };
+                config.general.core.api_url = this.apiUrl
+            }
 
             if (this.type == 'public-booking') {
+
+                config.general.build.default_html = '/' + publicBookingOptions.filter(function (option) {
+                        return option.name === _this.publicBookingOptionsSelected[0];
+                    })[0].www;
+
+                if (typeof config.general.core === 'undefined') {
+                    config.general.core = {};
+                }
+
                 config.general.core.company_id = this.companyId;
             }
 
-            this.fs.writeJSON("src/config/core.json", config);
-        },
-
-        createCredentialsConfig: function () {
-            var config = {
-                general: {
-                    credentials: {
-                        googlemaps: {
-                            key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
-                        }
-                    }
-                }
-            };
-            this.fs.writeJSON("src/config/credentials.json", config);
+            this.fs.writeJSON("config.json", config);
         },
 
         copySrc: function () {
@@ -481,6 +461,8 @@
                 "_client_theme.scss",
                 path.join('src', 'stylesheets', '_client_theme.scss')
             );
+
+            this.copy("config_readme.md", path.join('src', 'config', 'config_readme.md'));
 
             if (this.type === 'admin') {
                 this.template(
