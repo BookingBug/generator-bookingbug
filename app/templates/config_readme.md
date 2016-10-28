@@ -7,7 +7,7 @@
 
 ### bbConfig constant facts:
  
-- is generated on fly with build process
+- is generated on the fly with build process
 - is made of /config.json and /src/config/**/*.json files (deep merge)
 - all properties are upper cased 
 - is meant to be used only with bespoke code (do not use it in SDK)
