@@ -12,7 +12,7 @@
         function webServerTask() {
             return gulpConnect.server({
                 root: [configuration.projectReleasePath],
-                port: 8000,
+                port: configuration.projectConfig.build.server_port,
                 livereload: true
             });
         }
