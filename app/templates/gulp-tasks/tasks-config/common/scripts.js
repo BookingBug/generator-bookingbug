@@ -8,7 +8,6 @@
     var gulpUtil = require('gulp-util');
     var mainBowerFiles = require('main-bower-files');
     var path = require('path');
-    var template = require('gulp-template');
 
     module.exports = function (gulp, configuration) {
 
@@ -45,6 +44,7 @@
             });
 
             var projectFiles = [
+                configuration.projectTmpPath + '/config.constants.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.module.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.module.js.coffee',
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
@@ -58,42 +58,16 @@
             return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget');
         }
 
-        function getVersion() {
-            var sdk_version;
-            var project_version;
-            if (configuration.projectConfig.local_sdk) {
-              sdk_version = '?';
-            } else {
-              var dependencies = require('../../bower.json').dependencies;
-              for (var key in dependencies) {
-                if (key.match(/bookingbug-angular/)) {
-                  sdk_version = 'v' + dependencies[key];
-                }
-              }
-            }
-            if (configuration.deploy && configuration.projectConfig.deploy_version) {
-              project_version = configuration.projectConfig.deploy_version;
-            } else {
-              project_version = '?';
-            }
-            return {
-                project: '"' + project_version + '"',
-                sdk: '"' + sdk_version + '"',
-                name: configuration.projectConfig.app_name
-            };
-        }
-
         /*
          * @param {Array.<String>} files
          * @param {String} filename
          */
         function buildScriptsStream(files, filename) {
             var stream = gulp.src(files)
-                    .pipe(gulpIf(/.*main.version.js.coffee$/, template(getVersion())))
                     .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
                 ;
 
-            if (configuration.projectConfig.uglify === true) {
+            if (configuration.projectConfig.build.uglify === true) {
                 stream
                     .pipe(gulpUglify({mangle: false}))
                     .pipe(gulpConcat(filename + '.js'))

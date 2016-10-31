@@ -23,7 +23,8 @@
                 environment: args.getEnvironment(),
                 projectConfig: projectConfig.getConfig(),
                 projectRootPath: projectRootPath,
-                projectReleasePath: path.join(projectRootPath, 'release')
+                projectReleasePath: path.join(projectRootPath, 'release'),
+                projectTmpPath: path.join(projectRootPath, 'tmp')
             };
         }
 

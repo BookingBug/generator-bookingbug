@@ -12,7 +12,7 @@
         function webServerTask() {
             return gulpConnect.server({
                 root: [configuration.projectReleasePath],
-                port: 8000,
+                port: configuration.projectConfig.build.server_port,
                 livereload: true
             });
         }
@@ -20,7 +20,7 @@
         function openBrowserTask() {
 
             var gulpOpenOptions = {
-                uri: 'http://localhost:' + configuration.projectConfig.server_port + configuration.projectConfig.default_html
+                uri: 'http://localhost:' + configuration.projectConfig.build.server_port + configuration.projectConfig.build.default_html
             };
 
             return gulp.src('')

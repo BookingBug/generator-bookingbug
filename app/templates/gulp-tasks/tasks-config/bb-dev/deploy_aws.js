@@ -31,7 +31,7 @@
         }
 
         function guardExternalSdkDependencies() {
-            if ((configuration.projectConfig.local_sdk === true) && (['staging', 'prod'].indexOf(configuration.environment) !== -1)) {
+            if ((configuration.projectConfig.build.local_sdk === true) && (['prod'].indexOf(configuration.environment) !== -1)) {
                 console.log(gulpUtil.colors.white.bgRed.bold('Cannot deploy to staging|prod using local sdk.'));
                 process.exit(1);
             }
@@ -50,7 +50,9 @@
         }
 
         function consoleNotificationAboutDeployment() {
-            var msg = "Deploying to " + configuration.environment + " using SDK version " + getSdkVersion();
+            var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            var projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
+            var msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " +  projectVersion;
             gulpUtil.log(gulpUtil.colors.green(msg));
         }
 
@@ -71,7 +73,7 @@
          */
         function renameReleaseFiles() {
             return gulpRename(function (path) {
-                path.dirname = configuration.projectConfig.deploy_path + path.dirname;
+                path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
             });
         }
 
@@ -83,7 +85,7 @@
             var publisher = createAwsPublisher();
 
             var publishHeaders = {
-                'Cache-Control': 'max-age=' + configuration.projectConfig.cache_control_max_age
+                'Cache-Control': 'max-age=' + configuration.projectConfig.build.cache_control_max_age
             };
             var publishOptions = {
                 force: true
@@ -109,33 +111,12 @@
         }
 
         /**
-         * @returns {String}
-         * @throws {Error}
-         */
-        function getSdkVersion() {
-
-            if (configuration.projectConfig.local_sdk === true) {
-                return "unreleased version";
-            }
-
-            var bowerJsonPath = path.join(configuration.projectRootPath, 'bower.json');
-            var bowerJson = JSON.parse(fs.readFileSync(bowerJsonPath, 'utf8'));
-
-            for (var depName in bowerJson.dependencies) {
-                var depVersion = bowerJson.dependencies[depName];
-                if (localSdk.isBBDependency(depName)) {
-                    return "version " + depVersion;
-                }
-            }
-
-            throw new Error('No BB dependency found.');
-        }
-
-        /**
          * @returns {Object}
          */
         function slackNotificationAboutDeployment() {
-            var message = getUserDetails() + " deployed `" + configuration.projectConfig.app_name + "` to " + configuration.environment + " with SDK " + getSdkVersion();
+            var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            var projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
+            var message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , PROJECT ' + projectVersion;
             return getSlackPostman()(message);
         }
 

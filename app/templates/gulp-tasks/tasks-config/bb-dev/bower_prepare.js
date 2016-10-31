@@ -18,7 +18,7 @@
 
             cleanUpBowerComponents();
 
-            if (configuration.projectConfig.local_sdk === true) {
+            if (configuration.projectConfig.build.local_sdk === true) {
                 prepareBowerFileReferringToLocalSdk();
                 createSymlinks();
                 overrideBBDependenciesInSDKBuilds();

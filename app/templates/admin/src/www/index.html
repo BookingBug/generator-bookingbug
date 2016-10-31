@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="<%= module_name %>" bb-api-url="<%%= api_url %%>">
+<html ng-app="<%= module_name %>" bb-api-url="<%%= core.api_url %%>">
   <head>
     <meta charset="UTF-8">
     <title>BookingBug Dashboard</title>
@@ -12,6 +12,7 @@
       <link href="./booking-widget.css" type="text/css" media="all" rel="stylesheet" />
 
       <script src="./booking-widget-dependencies.js" type="text/javascript"></script>
+      <script src="./booking-widget-templates.js" type="text/javascript"></script>
       <script src="./booking-widget.js" type="text/javascript"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -29,12 +30,7 @@
   </head>
   <body>
     <div class="skin-default" id="bb" bb-admin-dashboard bb="bb" body-resize></div>
-    <%% if (show_version) { %%>
-    <div id="project_version">
-      <p>Project: {{projectVersion.project}}</p>
-      <p>BookingBug SDK: {{projectVersion.sdk}}</p>
-    </div>
-    <%% } %%>
+    <div bb-project-version></div>
   </body>
 </html>
 

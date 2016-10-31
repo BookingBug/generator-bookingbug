@@ -8,7 +8,7 @@
     var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
     var deploy = false;
 
-    if (projectConfig.getConfig().local_sdk === true) {
+    if (projectConfig.getConfig().build.local_sdk === true) {
         localSdk.validate();
         require(path.join(sdkSrcDir, 'gulp-tasks/gulpfile.js'))(gulp, sdkSrcDir);
     }

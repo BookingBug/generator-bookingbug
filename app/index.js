@@ -2,7 +2,6 @@
     'use strict';
 
     var _ = require('lodash');
-    var AdmZip = require('adm-zip');
     var camelCase = require('camelcase');
     var fs = require('fs');
     var generators = require('yeoman-generator');
@@ -301,59 +300,82 @@
             );
         },
 
-        createConfig: function () {
+        createBuildConfig: function () {
 
             var _this = this;
-            var default_html = '/index.html';
-
-            if (this.type == 'public-booking') {
-                default_html = '/' + publicBookingOptions.filter(function (option) {
-                        return option.name === _this.publicBookingOptionsSelected[0];
-                    })[0].www;
-            }
+            var defaultHtml = '/index.html';
 
             var config = {
-                app_name: this.appName,
-                api_url: this.apiUrl,
-                default_html: default_html,
-                googlemaps_api_key: 'AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8',
-                server_port: 8000
+                general: {
+                    build: {
+                        app_name: this.appName,
+                        default_html: defaultHtml,
+                        server_port: 8000
+                    },
+                    core: {
+                        google_maps_key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
+                    }
+                }
             };
-            if (this.type == 'public-booking') {
-                config.company_id = this.companyId;
-            }
+
             if (this.options['bb-dev']) {
-                delete config.api_url;
-                config = {
-                    general: _.extend({
-                        cache_control_max_age: '10',
-                        local_sdk: false,
-                        uglify: true,
-                        show_version: true,
-                        deploy_version: false
-                    }, config),
-                    local: {},
-                    development: {
-                        deploy_version: 'v0.0.0'
+
+                config.general.build.cache_control_max_age = '10';
+                config.general.build.deploy_version = false;
+                config.general.build.local_sdk = false;
+                config.general.build.show_version = false;
+                config.general.build.uglify = true;
+
+                config.local = {
+                    build: {
+                        uglify: false,
+                        local_sdk: true
                     },
-                    staging: {
-                        deploy_version: 'v0.0.0'
-                    },
-                    production: {
-                        deploy_version: 'v0.0.0'
+                    core: {
+                        api_url: "http://localhost:3000"
                     }
                 };
-                config.local.uglify = false;
-                config.local.local_sdk = true;
-                config.production.cache_control_max_age = '300';
-                config.production.deploy_path = "/" + this.appName + "/";
-                config.staging.deploy_path = "/" + this.appName + "/staging/";
-                config.development.deploy_path = "/" + this.appName + "/development/";
-                config.local.api_url = "http://localhost:3000";
-                config.development.api_url = this.developmentApiUrl;
-                config.staging.api_url = this.stagingApiUrl;
-                config.production.api_url = this.productionApiUrl;
+                config.development = {
+                    build: {
+                        deploy_path: "/" + this.appName + "/development/"
+                    },
+                    core: {
+                        api_url: this.developmentApiUrl
+                    }
+                };
+                config.staging = {
+                    build: {
+                        deploy_path: "/" + this.appName + "/staging/",
+                        deploy_version: "v0.0.1",
+                        show_version: true
+                    },
+                    core: {
+                        api_url: this.stagingApiUrl
+                    }
+                };
+                config.production = {
+                    build: {
+                        cache_control_max_age: '300',
+                        deploy_path: "/" + this.appName + "/",
+                        deploy_version: "v0.0.1"
+                    },
+                    core: {
+                        api_url: this.productionApiUrl
+                    }
+                };
+            } else {
+                config.general.core.api_url = this.apiUrl
             }
+
+            if (this.type == 'public-booking') {
+
+                config.general.build.default_html = '/' + publicBookingOptions.filter(function (option) {
+                        return option.name === _this.publicBookingOptionsSelected[0];
+                    })[0].www;
+
+                config.general.core.company_id = this.companyId;
+            }
+
             this.fs.writeJSON("config.json", config);
         },
 
@@ -417,21 +439,23 @@
             var templateOptions = {module_name: camelCase(this.appName)};
 
             this.template(
-                path.join(this.type, 'src', 'javascripts', 'main.js.coffee'),
-                path.join('src', 'javascripts', 'main.js.coffee'),
+                path.join(this.type, 'src', 'javascripts'),
+                path.join('src', 'javascripts'),
                 templateOptions
             );
 
             this.template(
-                path.join(this.type, 'src', 'stylesheets', 'main.scss'),
-                path.join('src', 'stylesheets', 'main.scss'),
-                {project_name: this.appName}
+                path.join('version'),
+                path.join('src', 'javascripts', 'version'),
+                templateOptions
             );
 
             this.copy(
                 "_client_theme.scss",
                 path.join('src', 'stylesheets', '_client_theme.scss')
             );
+
+            this.copy("config_readme.md", path.join('src', 'config', 'config_readme.md'));
 
             if (this.type === 'admin') {
                 this.template(
@@ -465,9 +489,16 @@
 
         installNpmDependencies: function () {
 
+            if (this.options['skip-npm']) {
+                return;
+            }
+
             var dependencies = [
                 'bower',
                 'del',
+                'deep-rename-keys',
+                'deepmerge',
+                'fs-finder',
                 'gulp',
                 'gulp-angular-templatecache',
                 'gulp-css-selector-limit',
@@ -478,9 +509,9 @@
                 'gulp-if',
                 'gulp-livereload',
                 'gulp-ng-annotate',
+                'gulp-ng-constant',
                 'gulp-open',
                 'gulp-plumber',
-                'gulp-protractor',
                 'gulp-rename',
                 'gulp-sass',
                 'gulp-sourcemaps',
@@ -494,49 +525,26 @@
                 'main-bower-files',
                 'mkdirp',
                 'path',
-                'phantomjs-prebuilt',
                 'run-sequence',
-                'sauce-connect-launcher',
-                'selenium-server-standalone-jar',
                 'yargs'
             ];
 
-            var devDependencies = dependencies.concat([
-                'gulp-awspublish',
-                'gulp-environments',
-                'git-user-email',
-                'git-user-name',
-                'gulp-slack',
-                'gulp-git',
-                'gulp-bump',
-                'gulp-filter',
-                'gulp-tag-version'
-            ]);
+            if (this.options['bb-dev'] === true) {
 
-            if (!this.options['skip-npm']) {
-
-                this.npmInstall(dependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
-
-                if (this.options['bb-dev']) {
-                    this.npmInstall(devDependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
-                }
+                dependencies = dependencies.concat([
+                    'gulp-awspublish',
+                    'git-user-email',
+                    'git-user-name',
+                    'gulp-slack',
+                    'gulp-git',
+                    'gulp-bump',
+                    'gulp-filter',
+                    'gulp-tag-version'
+                ]);
             }
-        },
 
-        installBowerDependencies: function () {
-            if (!this.options['skip-bower']) {
-                //this.bowerInstall();
-                if (this.type === 'member') {
-                    this.bowerInstall([
-                        'angular-slick',
-                        'angular-recaptcha'
-                    ], {
-                        "save": true
-                    });
-                }
-            }
+            this.npmInstall(dependencies, {'save': true, 'cache-min': 3600, 'loglevel': 'info'});
         }
-
     });
 
     /**

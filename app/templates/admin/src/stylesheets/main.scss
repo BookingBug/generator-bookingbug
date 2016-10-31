@@ -34,7 +34,7 @@ $fa-font-path: "fonts";
 // BB admin styles
 @import "../../bower_components/bookingbug-angular-admin-dashboard/src/stylesheets/main";
 
-#project_version {
+.bb-project-version {
   bottom: 20px;
   left: 20px;
   position: absolute;

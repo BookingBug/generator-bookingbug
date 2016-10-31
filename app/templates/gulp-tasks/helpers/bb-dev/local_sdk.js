@@ -31,7 +31,7 @@
     function validate() {
 
         try {
-            if (projectConfig.getConfig().local_sdk === true) {
+            if (projectConfig.getConfig().build.local_sdk === true) {
                 fs.accessSync(sdkSrcDir, fs.F_OK);
             }
         } catch (e) {

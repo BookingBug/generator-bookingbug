@@ -15,6 +15,7 @@
                 'bower-prepare',
                 'bower-install',
                 'copy',
+                'config',
                 'scripts:vendors',
                 'scripts:client',
                 'templates',
@@ -25,7 +26,7 @@
                 'www',
                 cb
             ];
-            if (configuration.projectConfig.local_sdk === true) {
+            if (configuration.projectConfig.build.local_sdk === true) {
                 tasks = ['build-sdk'].concat(tasks);
             }
             runSequence.apply(null, tasks);

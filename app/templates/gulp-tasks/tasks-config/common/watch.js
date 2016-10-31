@@ -2,7 +2,9 @@
     'use strict';
 
     var gulpLiveReload = require('gulp-livereload');
+    var gulpUtil = require('gulp-util');
     var path = require('path');
+    var runSequence = require('run-sequence');
 
     var watchOptions = {
         read: false,
@@ -32,6 +34,7 @@
             stylesheets();
             templates();
             www();
+            config();
 
             release();
         }
@@ -41,22 +44,17 @@
         }
 
         function templates() {
-
             gulp.watch(configuration.projectRootPath + '/src/templates/**/*.html', ['templates'], watchOptions);
         }
 
         function stylesheets() {
-
             gulp.watch(path.join(configuration.projectRootPath, '/src/stylesheets/**/*.scss'), ['stylesheets:client'], watchOptions);
-
             gulp
                 .watch(path.join(configuration.projectReleasePath, 'booking-widget.css'), watchOptions)
                 .on('change', gulpLiveReload.changed);
         }
 
-
         function scripts() {
-
             var projectFiles = [
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
@@ -70,18 +68,28 @@
         }
 
         function images() {
-
             gulp.watch(configuration.projectRootPath + '/src/images/*.*', ['images'], watchOptions);
         }
 
         function fonts() {
-
             gulp.watch(configuration.projectRootPath + '/src/fonts/*.*', ['fonts'], watchOptions);
+        }
+
+        function config() {
+            gulp.watch([
+                configuration.projectRootPath + '/config.json',
+                configuration.projectRootPath + '/src/config/**/*.json'
+            ], configSequence, watchOptions);
+        }
+
+        function configSequence() {
+            console.log(gulpUtil.colors.white.bgBlue.bold('configuration changed, please restart task manually if any \'build\' properties got modified'));
+            runSequence('config', 'scripts:client', 'templates', gulpLiveReload.changed);
         }
 
         function release() {
             gulp.watch(configuration.projectReleasePath + '/**/*.js', watchOptions)
-                .on('change', gulpLiveReload.changed)
+                .on('change', gulpLiveReload.changed);
         }
     };
 

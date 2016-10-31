@@ -11,11 +11,10 @@
 
         function imagesTask() {
 
-            var clientImages = path.join(configuration.projectRootPath, 'src/images/*.*');
+            var clientImages = path.join(configuration.projectRootPath, 'src/images/**/*.*');
             var dest = path.join(configuration.projectReleasePath, 'images');
 
             return gulp.src(clientImages)
-                .pipe(gulpFlatten())
                 .pipe(gulp.dest(dest))
                 .pipe(gulpLiveReload())
                 ;
