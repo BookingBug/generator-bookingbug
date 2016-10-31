@@ -346,6 +346,7 @@
                 config.staging = {
                     build: {
                         deploy_path: "/" + this.appName + "/staging/",
+                        deploy_version: "v0.0.1",
                         show_version: true
                     },
                     core: {
@@ -355,7 +356,8 @@
                 config.production = {
                     build: {
                         cache_control_max_age: '300',
-                        deploy_path: "/" + this.appName + "/"
+                        deploy_path: "/" + this.appName + "/",
+                        deploy_version: "v0.0.1"
                     },
                     core: {
                         api_url: this.productionApiUrl
