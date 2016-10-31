@@ -83,8 +83,8 @@
         }
 
         function configSequence() {
-            console.log(gulpUtil.colors.white.bgBlue.bold('configuration changed, please restart task manually if any \'build\' properties got modified'));
-            runSequence('config', 'scripts:client', 'templates', gulpLiveReload.changed);
+            console.log(gulpUtil.colors.white.bgBlue.bold('configuration changed, please restart task manually if any \'build\' properties got modified otherwise you may experience unexpected behaviour'));
+            runSequence('config', 'scripts:client', 'templates', 'www', gulpLiveReload.changed);
         }
 
         function release() {

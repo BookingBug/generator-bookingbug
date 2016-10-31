@@ -13,7 +13,9 @@
 
         function configTask() {
 
-            reloadProjectConfig();
+            if(configuration.deploy !== true){
+                reloadProjectConfig();
+            }
 
             var projectConfig = JSON.parse(JSON.stringify(configuration.projectConfig));
             projectConfig = deepRenameKeys(projectConfig, upperCaseKey);
