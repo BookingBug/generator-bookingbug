@@ -59,9 +59,9 @@
     /**
      * @returns {String|null}
      */
-    function forceDeployVersion() { //TODO
+    function forceDeployVersion() {
 
-        if (typeof argv['deployVersion'] !== 'undefined') {
+        if (typeof argv['deployVersion'] !== 'undefined' && argv['deployVersion'].length > 0) {
             return argv['deployVersion'];
         }
 
