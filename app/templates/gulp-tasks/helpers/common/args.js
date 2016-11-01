@@ -3,11 +3,12 @@
 
     var argv = require('yargs').argv;
 
-    var allowedOptions = ['env', 'localSdk', 'uglify'];
+    var allowedOptions = ['env', 'localSdk', 'uglify', 'deployVersion'];
 
     validateAllowedOptions();
 
     module.exports = {
+        forceDeployVersion: forceDeployVersion,
         forceLocalSdk: forceLocalSdk,
         forceUglify: forceUglify,
         getEnvironment: getEnvironment
@@ -50,6 +51,18 @@
         if (typeof argv['uglify'] !== 'undefined') {
             console.log('uglify possible values: true, false');
             process.exit(1);
+        }
+
+        return null;
+    }
+
+    /**
+     * @returns {String|null}
+     */
+    function forceDeployVersion() { //TODO
+
+        if (typeof argv['deployVersion'] !== 'undefined') {
+            return argv['deployVersion'];
         }
 
         return null;

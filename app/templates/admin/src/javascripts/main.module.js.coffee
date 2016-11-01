@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('<%= module_name %>', [
   'BBAdminDashboard'
   'TemplateOverrides'
