@@ -34,12 +34,18 @@
 
         function releaseWatchTask(cb) {
 
-            runSequence(
+            var tasks = [
                 'release',
-                'watch',
-                'watch-sdk',
-                cb
-            );
+                'watch'
+            ];
+
+            if (configuration.projectConfig.build.local_sdk === true) {
+                tasks.push('watch-sdk');
+            }
+
+            tasks.push(cb);
+
+            runSequence.apply(null, tasks);
         }
     };
 
