@@ -85,20 +85,16 @@
      * @param {Object} config
      */
     function applyEnforcedValues(config) {
-        if (args.forceLocalSdk() === true) {
-            config.build.local_sdk = true;
+        if (args.forceLocalSdk() !== null) {
+            config.build.local_sdk = args.forceLocalSdk();
         }
 
-        if (args.forceLocalSdk() === false) {
-            config.build.local_sdk = false;
+        if (args.forceUglify() !== null) {
+            config.build.uglify = args.forceUglify();
         }
 
-        if (args.forceUglify() === true) {
-            config.build.uglify = true;
-        }
-
-        if (args.forceUglify() === false) {
-            config.build.uglify = false;
+        if (args.forceDeployVersion() !== null) {
+            config.build.deploy_version = args.forceDeployVersion();
         }
     }
 

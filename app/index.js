@@ -48,6 +48,10 @@
         }
     ];
 
+    function errorLogFormat(msg){
+        return gulpUtil.colors.white.bgRed.bold(msg);
+    }
+
     /**
      * @param {Function} done
      */
@@ -109,12 +113,20 @@
         },
 
         _validateNameForBespoke: function (appName, defer) {
+            var _this = this;
             var s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
             s3Client.s3.listObjects({
                 Bucket: 'bespoke.bookingbug.com',
                 Prefix: appName + '/'
             }, function (err, data) {
-                if (err) defer.resolve(err);
+
+                if (err !== null){
+                    _this.log(errorLogFormat('\nmake sure you have working internet connection'));
+                    _this.log(errorLogFormat(err));
+                    process.exit(1);
+                    defer.resolve(err);
+                }
+
                 if (data.Contents.length > 0) {
                     defer.resolve("Already taken on bespoke");
                 } else {
@@ -259,18 +271,22 @@
                 this.version = this.options['sdk-version'];
                 this.log('Latest version is ' + this.version);
             } else {
-                var that = this;
+                var _this = this;
                 var done = this.async();
                 var ghclient = github.client();
                 var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
                 ghrepo.releases(function (err, releases, headers) {
 
-                    if (err) that.log(err);
+                    if (err !== null){
+                        _this.log(errorLogFormat('make sure you have working internet connection'));
+                        _this.log(errorLogFormat(err));
+                        process.exit(1);
+                    }
 
                     releases.sort(sortBookingBugReleases);
 
-                    that.version = releases[0].tag_name;
-                    that.log('Latest version is ' + that.version);
+                    _this.version = releases[0].tag_name;
+                    _this.log('Latest version is ' + _this.version);
                     done();
                 });
             }
@@ -321,7 +337,7 @@
             if (this.options['bb-dev']) {
 
                 config.general.build.cache_control_max_age = '10';
-                config.general.build.deploy_version = false;
+                config.general.build.deploy_version = "v0.0.1";
                 config.general.build.local_sdk = false;
                 config.general.build.show_version = false;
                 config.general.build.uglify = true;
@@ -337,7 +353,8 @@
                 };
                 config.development = {
                     build: {
-                        deploy_path: "/" + this.appName + "/development/"
+                        deploy_path: "/" + this.appName + "/development/",
+                        deploy_version: false
                     },
                     core: {
                         api_url: this.developmentApiUrl
@@ -346,7 +363,6 @@
                 config.staging = {
                     build: {
                         deploy_path: "/" + this.appName + "/staging/",
-                        deploy_version: "v0.0.1",
                         show_version: true
                     },
                     core: {
@@ -356,8 +372,7 @@
                 config.production = {
                     build: {
                         cache_control_max_age: '300',
-                        deploy_path: "/" + this.appName + "/",
-                        deploy_version: "v0.0.1"
+                        deploy_path: "/" + this.appName + "/"
                     },
                     core: {
                         api_url: this.productionApiUrl
@@ -499,7 +514,7 @@
                 'deep-rename-keys',
                 'deepmerge',
                 'fs-finder',
-                'gulp',
+                'gulp@^3.9.1',
                 'gulp-angular-templatecache',
                 'gulp-css-selector-limit',
                 'gulp-coffee',
@@ -533,7 +548,7 @@
 
                 dependencies = dependencies.concat([
                     'gulp-awspublish',
-                    'git-user-email',
+                    'git-user-email@0.2.1',
                     'git-user-name',
                     'gulp-slack',
                     'gulp-git',

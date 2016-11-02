@@ -1,4 +1,8 @@
+'use strict'
+
 angular.module('<%= module_name %>.version').run (bbConfig, $window) ->
+  'ngInject'
+
   init = () ->
     exposeVersions()
     return
