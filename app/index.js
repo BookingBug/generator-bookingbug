@@ -36,7 +36,7 @@
         },
         {
             name: 'Purchase Certificate Journey',
-            template: 'main_gift_certifcate.html',
+            template: 'main_gift_certificate.html',
             www: 'gift_certificate.html',
             checked: true
         },
