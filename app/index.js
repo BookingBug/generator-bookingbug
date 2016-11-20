@@ -402,7 +402,7 @@
 
             this.copy("editorconfig", ".editorconfig");
             this.copy("gitignore", ".gitignore");
-            this.copy('gulp-tasks/karma.conf', 'gulp-tasks/karma.conf');
+            this.copy('gulp-tasks/karma.conf.js', 'gulp-tasks/karma.conf.js');
 
             this.fs.copy(
                 path.join(this.sourceRoot(), 'gulp-tasks', 'helpers', 'common'),
