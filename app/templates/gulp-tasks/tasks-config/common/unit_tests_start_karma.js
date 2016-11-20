@@ -18,6 +18,8 @@
                 }
             });
             projectFiles = [
+                'tmp/config.constants.js',
+                'release/booking-widget-templates.js',
                 'src/javascripts/**/*.module.js.coffee',
                 'src/templates/**/*.html',
                 'src/javascripts/**/*.coffee',
