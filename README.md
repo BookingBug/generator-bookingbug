@@ -34,7 +34,17 @@ yo bookingbug
 ### Use Gulp tasks
 
 * `gulp` to watch files for changes and serve at http://localhost:8000
+* `gulp unit-tests:watch` starts both web server at http://localhost:8000 and karma server for unit testing in watch mode
+                          
+##### Karma server for unit tests
 
+* Loads bower dependencies and JavaScript|CoffeeScript files located in your src/javascripts directory.
+* Loads "Jasmine" framework.
+* Uses "PhantomJS" browser by default.
+* Generates lcov report in two formats: .info & .html.
+* Spec files should live next to the files they're testing.
+* Spec files names should follow pattern *.spec.js.coffee                                                     
+* Please follow [Jasmine documentation](https://jasmine.github.io/2.5/introduction) and  [AngualrJS unit testing documentation](https://docs.angularjs.org/guide/unit-testing) to learn more about writing AngularJS tests with Jasmine framework.
 
 ### Editing Style
 
@@ -45,7 +55,7 @@ Templates can be edited by overriding templates by their name in your project te
 
 #### Booking Projects
 
-When building a booking widget, projects use "step templates" which are loaded within a single "main" template. Step templates represent the different steps in a booking jounrey whereas the "main" template acts a wrapper for the step templates defining components such as headers, breadcrumbs, alerts and footers.
+When building a booking widget, projects use "step templates" which are loaded within a single "main" template. Step templates represent the different steps in a booking journey whereas the "main" template acts a wrapper for the step templates defining components such as headers, breadcrumbs, alerts and footers.
 
 You can determine the current step template when running a project by using [Batarang](https://chrome.google.com/webstore/detail/angularjs-batarang-stable/niopocochgahfkiccpjmmpchncjoapek) in the Chrome console to access the scoped variable that stores the currently loaded step:
 
