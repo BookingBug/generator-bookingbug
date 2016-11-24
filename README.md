@@ -62,11 +62,7 @@ Templates are loaded via a projects dependancy to the SDK.  In order to edit the
 
 When building a booking widget, projects use "step templates" which are loaded within a single "main" template. Step templates represent the different steps in a booking journey whereas the "main" template acts a wrapper for the step templates defining components such as headers, breadcrumbs, alerts and footers.
 
-> To determine the current step template when running a project, use [Batarang](https://chrome.google.com/webstore/detail/angularjs-batarang-stable/niopocochgahfkiccpjmmpchncjoapek) in the Chrome console to access the scoped variable that stores the currently loaded step:
-
-```
-$scope.bb.current_page
-```
+> To determine the current step template when running a project, use [Batarang](https://chrome.google.com/webstore/detail/angularjs-batarang-stable/niopocochgahfkiccpjmmpchncjoapek) in the Chrome console to access the scoped variable that stores the currently loaded step, e.g. `$scope.bb.current_page`
 
 ## Further Documentation
 1. [SDK Usage Guide](http://docs.bookingbug.com/docs/javascript-sdk)
