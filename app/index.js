@@ -402,6 +402,7 @@
 
             this.copy("editorconfig", ".editorconfig");
             this.copy("gitignore", ".gitignore");
+            this.copy('gulp-tasks/karma.conf.js', 'gulp-tasks/karma.conf.js');
 
             this.fs.copy(
                 path.join(this.sourceRoot(), 'gulp-tasks', 'helpers', 'common'),
@@ -534,12 +535,25 @@
                 'gulp-uglify',
                 'gulp-util',
                 'gulp-watch',
+                'karma',
+                'karma-bower',
+                'karma-chrome-launcher',
+                'karma-coffee-coverage',
+                'karma-coffee-preprocessor',
+                'karma-coverage',
+                'karma-firefox-launcher',
+                'karma-html2js-preprocessor',
+                'karma-jasmine',
+                'karma-junit-reporter',
+                'karma-ng-html2js-preprocessor',
+                'karma-phantomjs-launcher',
                 'include-all',
                 'jasmine-core',
                 'jsonfile',
                 'main-bower-files',
                 'mkdirp',
                 'path',
+                'phantomjs-prebuilt',
                 'run-sequence',
                 'yargs'
             ];
