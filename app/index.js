@@ -327,9 +327,6 @@
                         app_name: this.appName,
                         default_html: defaultHtml,
                         server_port: 8000
-                    },
-                    core: {
-                        google_maps_key: "AIzaSyDFAIV9IW8riXGAzlupPb9_6X14dxmUMt8"
                     }
                 }
             };
