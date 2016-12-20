@@ -15,6 +15,5 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "gulp-awspublish-router": "^0.1.1"
   }
 }
