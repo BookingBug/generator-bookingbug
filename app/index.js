@@ -9,14 +9,13 @@
     var github = require('octonode');
     var gulpUtil = require('gulp-util');
     var mkdirp = require('mkdirp');
-    var nodeCmd = require('node-cmd');
     var os = require('os');
-    var packageJson = require('../package.json');
     var path = require('path');
     var request = require('request');
+    var updater = require('./updater.js');
 
     var BookingBugGenerator = generators.Base.extend();
-    
+
     var publicBookingOptions = [
         {
             name: 'Appointment Booking',
@@ -114,51 +113,8 @@
             });
         },
 
-        checkGeneratorNewestVersion: function() {
-          var _this = this;
-          var done = this.async();
-
-          nodeCmd.get(
-            'npm view generator-bookingbug version',
-            function(version){
-              _this.generatorNewestVersion = version;
-              done()
-            }
-          )
-        },
-
-        checkGeneratorInstalledVersion: function () {
-            var _this = this;
-            var done = this.async();
-            var newestVersion = this.generatorNewestVersion.trim();
-            var localVersion = packageJson.version.trim();
-
-            if(localVersion === newestVersion){
-              return;
-              }
-
-            this.prompt({
-                type: 'confirm',
-                name: 'shouldUpdateGenerator',
-                message: 'You are currently using version (' + localVersion + ') of generator-bookingbug. Would you like to update to the newest version? (' + newestVersion + ')'
-            }, function (response) {
-
-                if(!response.shouldUpdateGenerator ){
-                  done();
-                  return
-                }
-                _this.log('Installing generator-bookingbug', newestVersion);
-                _this.log('...Please Wait...');
-                nodeCmd.get(
-                  'npm install generator-bookingbug -g',
-                  function(data){
-                    _this.log('Installed generator-bookingbug', newestVersion);
-                    process.exit(0);
-                    done();
-                  });
-
-            }.bind(this));
-
+        checkGeneratorVersion: function() {
+          updater.checkGeneratorVersion.call(this);
         },
 
         _validateNameForBespoke: function (appName, defer) {
