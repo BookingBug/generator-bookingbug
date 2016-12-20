@@ -327,7 +327,8 @@
                         app_name: this.appName,
                         default_html: defaultHtml,
                         server_port: 8000
-                    }
+                    },
+                    core: {}
                 }
             };
 
