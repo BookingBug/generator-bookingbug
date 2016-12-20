@@ -49,7 +49,7 @@
         }
     ];
 
-    function errorLogFormat(msg){
+    function errorLogFormat(msg) {
         return gulpUtil.colors.white.bgRed.bold(msg);
     }
 
@@ -113,8 +113,8 @@
             });
         },
 
-        checkGeneratorVersion: function() {
-          updater.checkGeneratorVersion.call(this);
+        checkGeneratorVersion: function () {
+            updater.checkGeneratorVersion.call(this);
         },
 
         _validateNameForBespoke: function (appName, defer) {
@@ -125,7 +125,7 @@
                 Prefix: appName + '/'
             }, function (err, data) {
 
-                if (err !== null){
+                if (err !== null) {
                     _this.log(errorLogFormat('\nmake sure you have working internet connection'));
                     _this.log(errorLogFormat(err));
                     process.exit(1);
@@ -282,7 +282,7 @@
                 var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
                 ghrepo.releases(function (err, releases, headers) {
 
-                    if (err !== null){
+                    if (err !== null) {
                         _this.log(errorLogFormat('make sure you have working internet connection'));
                         _this.log(errorLogFormat(err));
                         process.exit(1);

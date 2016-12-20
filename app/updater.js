@@ -1,4 +1,3 @@
-
 var nodeCmd = require('node-cmd');
 var packageJson = require('../package.json');
 
@@ -13,11 +12,11 @@ function checkGeneratorVersion() {
     );
 }
 
-function checkNewVersion (done, version) {
-  this.generatorNewestVersion = version;
+function checkNewVersion(done, version) {
+    this.generatorNewestVersion = version;
 
-    if(this.generatorNewestVersion === this.generatorLocalVersion){
-        done()
+    if (this.generatorNewestVersion === this.generatorLocalVersion) {
+        done();
         return;
     }
 
@@ -29,9 +28,9 @@ function checkNewVersion (done, version) {
 
 }
 
-function shouldInstallLatestVersion(done,  response) {
+function shouldInstallLatestVersion(done, response) {
 
-    if(!response.shouldUpdateGenerator ){
+    if (!response.shouldUpdateGenerator) {
         done();
         return
     }
@@ -39,14 +38,14 @@ function shouldInstallLatestVersion(done,  response) {
     this.log('Installing generator-bookingbug', this.generatorNewestVersion);
     this.log('...Please Wait...');
 
-    nodeCmd.get( 'npm remove generator-bookingbug -g', postRemoveGenerator.bind(this,done) );
+    nodeCmd.get('npm remove generator-bookingbug -g', postRemoveGenerator.bind(this, done));
 }
 
-function postRemoveGenerator(done, data){
-    nodeCmd.get( 'npm install generator-bookingbug -g', postInstallGenerator.bind(this,done) );
+function postRemoveGenerator(done, data) {
+    nodeCmd.get('npm install generator-bookingbug -g', postInstallGenerator.bind(this, done));
 }
 
-function postInstallGenerator(done, data){
+function postInstallGenerator(done, data) {
     this.log('Installed generator-bookingbug', this.generatorNewestVersion);
     process.exit(0);
     done();
@@ -54,4 +53,4 @@ function postInstallGenerator(done, data){
 
 module.exports = {
     checkGeneratorVersion: checkGeneratorVersion
-}
+};
