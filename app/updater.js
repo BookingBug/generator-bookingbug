@@ -13,7 +13,7 @@ function checkGeneratorVersion() {
 }
 
 function checkNewVersion(done, version) {
-    this.generatorNewestVersion = version;
+    this.generatorNewestVersion = version.trim();
 
     if (this.generatorNewestVersion === this.generatorLocalVersion) {
         done();
