@@ -15,38 +15,49 @@
 
     var BookingBugGenerator = generators.Base.extend();
 
+    var projectTypes = [
+        'admin',
+        'public-booking'
+    ];
+
     var publicBookingOptions = [
         {
             name: 'Appointment Booking',
+            abbr: 'abook',
             template: 'main_appointment.html',
             www: 'new_booking.html',
             checked: true
         },
         {
             name: 'Member Account (Authenticated)',
+            abbr: 'member',
             template: 'main_account.html',
             www: 'account.html',
             checked: true
         },
         {
             name: 'Event Booking',
+            abbr: 'ebook',
             template: 'main_event.html',
             www: 'new_booking_event.html',
             checked: true
         },
         {
             name: 'Purchase Certificate Journey',
+            abbr: 'cert',
             template: 'main_gift_certificate.html',
             www: 'gift_certificate.html',
             checked: true
         },
         {
             name: 'View Booking (Not Authenticated)',
+            abbr: 'vbook',
             template: 'main_view_booking.html',
             www: 'view_booking.html',
             checked: true
         }
     ];
+
 
     function errorLogFormat(msg){
         return gulpUtil.colors.white.bgRed.bold(msg);
@@ -57,6 +68,7 @@
      */
     function promptBookingBugOptions(done) {
         var _this = this;
+
         this.prompt({
             type: 'checkbox',
             name: 'type',
@@ -77,6 +89,8 @@
 
                 _this.publicBookingOptionsSelected = response.type;
 
+            _this.log("response.type", response.type);
+
                 done();
             }
         });
@@ -90,6 +104,12 @@
             this.option('name', {
                 desc: "Project name"
             });
+            this.option('type', {
+                desc: "Project type [admin|public-booking]"
+            });
+            this.option('options', {
+                desc: "Public Booking Options: Appointment Booking (abook), Event Booking (ebook), View Booking (vbook), Purchase Certificate Journey (cert), Member Account (member)"
+            })
             this.option('company-id', {
                 desc: "Company ID"
             });
@@ -109,6 +129,9 @@
                 desc: "Use the BookingBug SDK in development mode",
                 type: Boolean,
                 defaults: false
+            });
+            this.option('google-maps-key', {
+                desc: "Google Maps Key (leave blank if you don't have one)"
             });
         },
 
@@ -149,15 +172,43 @@
             return defer.promise;
         },
 
+        _validateCompanyId: function (companyId) {
+            if(companyId.match(/^\d+$/)) {
+                return true;
+            }else {
+                return "Numbers only";
+            }
+        },
+
         getProjectType: function () {
             var _this = this;
 
             var done = this.async();
+
+            if(typeof this.options['type'] !== 'undefined' && projectTypes.indexOf(this.options['type']) === -1){
+                _this.log(errorLogFormat('possible project types'), projectTypes);
+                process.exit(1);
+            }
+
+
+            if(projectTypes.indexOf(this.options['type']) !== -1){
+
+                this.type = this.options['type'];
+
+                if(this.type === 'public-booking' && _this._getPublicBookingOptions().length < 1) {
+                    promptBookingBugOptions.bind(_this)(done);
+                }else{
+                    done();
+                }
+
+                return;
+            }
+
             this.prompt({
                 type: 'list',
                 name: 'type',
                 message: 'Please choose the type of your project',
-                choices: ['admin', 'public-booking']
+                choices: projectTypes
             }, function (response) {
                 this.type = response.type;
 
@@ -172,8 +223,8 @@
         },
 
         getName: function () {
-            if (this.options.name) {
-                this.appName = this.options.name;
+            if (this.options['name'] && typeof this.options['name'] === 'string') {
+                this.appName = this.options['name'];
             } else {
                 var done = this.async();
                 this.prompt({
@@ -186,6 +237,41 @@
                     done();
                 }.bind(this));
             }
+        },
+
+        _getPublicBookingOptions: function () {
+            var _this = this;
+            var options = [];
+            
+            if (this.options['options'] && this.options['options'].length > 0) {
+               
+                options = this.options['options'].split(',');
+
+                publicBookingOptions.map(function(option){
+
+                    var index = options.findIndex(function(opt){
+                        return opt === option.abbr;
+                    });
+
+                    if(index !== -1) {
+                        options[index] = option.name;
+                    }
+
+                     _this.publicBookingOptionsSelected = options;
+                });
+            }
+
+            return options;
+        },
+
+        getGoogleMapsKey: function () {
+            var done = this.async();
+            var googleMapsKey = ""; // default to empty string
+            if(this.options['google-maps-key'] && typeof this.options['google-maps-key'] === 'string') { // empty flags such as --google-maps-key evaluate to true
+                googleMapsKey = this.options['google-maps-key'];
+            }
+            this.options['google-maps-key'] = googleMapsKey;
+            done();
         },
 
         _validateUrl: function (apiUrl) {
@@ -204,12 +290,13 @@
                     prompts.push({
                         type: 'input',
                         name: 'companyId',
-                        message: 'What is your BookingBug company id?'
+                        message: 'What is your BookingBug company id?',
+                        validate: this._validateCompanyId
                     });
                 }
             }
             if (this.options['bb-dev']) {
-                if (this.options['development-api-url']) {
+                if (this.options['development-api-url'] && typeof this.options['development-api-url'] === 'string') {
                     this.developmentApiUrl = this.options['development-api-url'];
                 } else {
                     prompts.push({
@@ -220,7 +307,7 @@
                         validate: this._validateUrl
                     });
                 }
-                if (this.options['staging-api-url']) {
+                if (this.options['staging-api-url'] && typeof this.options['staging-api-url'] === 'string') {
                     this.stagingApiUrl = this.options['staging-api-url'];
                 } else {
                     prompts.push({
@@ -231,7 +318,7 @@
                         validate: this._validateUrl
                     });
                 }
-                if (this.options['production-api-url']) {
+                if (this.options['production-api-url'] && typeof this.options['production-api-url'] === 'string') {
                     this.productionApiUrl = this.options['production-api-url'];
                 } else {
                     prompts.push({
@@ -243,7 +330,7 @@
                     });
                 }
             } else {
-                if (this.options['api-url']) {
+                if (this.options['api-url'] && typeof this.options['api-url'] === 'string') {
                     this.apiUrl = this.options['api-url'];
                 } else {
                     prompts.push({
@@ -255,6 +342,16 @@
                     });
                 }
             }
+            if (this.options['google-maps-key'] && typeof this.options['google-maps-key'] === 'string') {
+                this.googleMapsKey = this.options['google-maps-key'];
+            }else {
+                prompts.push({
+                    type: 'input',
+                    name: 'googleMapsKey',
+                    message: 'If you have a Google Maps Key please enter it here, otherwise leave blank',
+                    default: "optional"
+                });
+            }
             var done = this.async();
             this.prompt(prompts, function (response) {
                 if (response.companyId) this.companyId = response.companyId;
@@ -262,6 +359,8 @@
                 if (response.developmentApiUrl) this.developmentApiUrl = response.developmentApiUrl;
                 if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
                 if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
+                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey;
+                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? "" : response.googleMapsKey
                 done();
             }.bind(this));
         },
@@ -327,6 +426,9 @@
                         app_name: this.appName,
                         default_html: defaultHtml,
                         server_port: 8000
+                    },
+                    core: {
+                        google_maps_key: this.googleMapsKey
                     }
                 }
             };
@@ -343,6 +445,7 @@
                     build: {
                         uglify: false,
                         local_sdk: true
+
                     },
                     core: {
                         api_url: "http://localhost:3000"
@@ -385,6 +488,8 @@
                         return option.name === _this.publicBookingOptionsSelected[0];
                     })[0].www;
 
+                _this.log('here', JSON.stringify(config.general));
+
                 config.general.core.company_id = this.companyId;
             }
 
@@ -392,6 +497,9 @@
         },
 
         copySrc: function () {
+
+            this.log(typeof path.join, this.sourceRoot(),  this.type);
+
             var src = path.join(this.sourceRoot(), this.type, 'src', '**', '*');
             var dest = this.destinationPath('src');
 
