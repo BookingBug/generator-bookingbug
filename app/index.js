@@ -12,6 +12,7 @@
     var os = require('os');
     var path = require('path');
     var request = require('request');
+    var updater = require('./updater.js');
 
     var BookingBugGenerator = generators.Base.extend();
 
@@ -48,7 +49,7 @@
         }
     ];
 
-    function errorLogFormat(msg){
+    function errorLogFormat(msg) {
         return gulpUtil.colors.white.bgRed.bold(msg);
     }
 
@@ -112,6 +113,10 @@
             });
         },
 
+        checkGeneratorVersion: function () {
+            updater.checkGeneratorVersion.call(this);
+        },
+
         _validateNameForBespoke: function (appName, defer) {
             var _this = this;
             var s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
@@ -120,7 +125,7 @@
                 Prefix: appName + '/'
             }, function (err, data) {
 
-                if (err !== null){
+                if (err !== null) {
                     _this.log(errorLogFormat('\nmake sure you have working internet connection'));
                     _this.log(errorLogFormat(err));
                     process.exit(1);
@@ -277,7 +282,7 @@
                 var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
                 ghrepo.releases(function (err, releases, headers) {
 
-                    if (err !== null){
+                    if (err !== null) {
                         _this.log(errorLogFormat('make sure you have working internet connection'));
                         _this.log(errorLogFormat(err));
                         process.exit(1);
