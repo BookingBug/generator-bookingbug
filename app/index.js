@@ -60,7 +60,7 @@
     ];
 
     function errorLogFormat(msg) {
-        return gulpUtil.colors.white.bgRed.bold(msg);
+        return gulpUtil.colors.white.bgRed.bold("*** " + msg + " ***");
     }
 
     /**
@@ -133,6 +133,11 @@
             this.option('google-maps-key', {
                 desc: "Google Maps Key (leave blank if you don't have one)"
             });
+            this.option('skip-prompts', {
+                desc: 'Skip all prompts',
+                type: Boolean,
+                defaults: false
+            });
         },
 
         checkGeneratorVersion: function () {
@@ -177,7 +182,7 @@
         },
 
         _validateCompanyId: function (companyId) {
-            if(companyId.match(/^\d+$/)) {
+            if(companyId.toString().match(/^\d+$/)) {
                 return true;
             }else {
                 return "Numbers only";
@@ -246,9 +251,9 @@
         _getPublicBookingOptions: function () {
             var _this = this;
             var options = [];
-            
+
             if (this.options['options'] && this.options['options'].length > 0) {
-               
+
                 options = this.options['options'].split(',');
 
                 publicBookingOptions.map(function(option){
@@ -285,12 +290,31 @@
                 return "Invalid protocol. Should be http:// or https://";
         },
 
+        _validateFlag: function (flag, validateFn) {
+            var result = validateFn(this.options[flag]);
+            if (result !== true) {
+                this.log(errorLogFormat(flag + " [ERROR]"));
+                this.log(errorLogFormat(result));
+                process.exit();
+            }
+        },
+
+        _validateNonBooleanFlag: function (flag) {
+            if (typeof this.options[flag] === 'boolean') {
+                this.log(errorLogFormat("--" + flag + " cannot be blank"));
+                process.exit();
+            }
+        },
+
         getConfig: function () {
+            this.log(this.options);
             var prompts = [];
             if (this.type == 'public-booking') {
                 if (this.options['company-id']) {
+                    this._validateNonBooleanFlag('company-id');
                     this.companyId = this.options['company-id'];
-                } else {
+                    this._validateFlag('company-id', this._validateCompanyId);
+                } else if (!this.options['skip-prompts']){
                     prompts.push({
                         type: 'input',
                         name: 'companyId',
@@ -300,9 +324,11 @@
                 }
             }
             if (this.options['bb-dev']) {
-                if (this.options['development-api-url'] && typeof this.options['development-api-url'] === 'string') {
+                if (this.options['development-api-url']) {
+                    this._validateNonBooleanFlag('development-api-url');
                     this.developmentApiUrl = this.options['development-api-url'];
-                } else {
+                    this._validateFlag('development-api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']){
                     prompts.push({
                         type: 'input',
                         name: 'developmentApiUrl',
@@ -311,9 +337,11 @@
                         validate: this._validateUrl
                     });
                 }
-                if (this.options['staging-api-url'] && typeof this.options['staging-api-url'] === 'string') {
+                if (this.options['staging-api-url']) {
+                    this._validateNonBooleanFlag('staging-api-url');
                     this.stagingApiUrl = this.options['staging-api-url'];
-                } else {
+                    this._validateFlag('staging-api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']){
                     prompts.push({
                         type: 'input',
                         name: 'stagingApiUrl',
@@ -322,9 +350,11 @@
                         validate: this._validateUrl
                     });
                 }
-                if (this.options['production-api-url'] && typeof this.options['production-api-url'] === 'string') {
+                if (this.options['production-api-url']) {
+                    this._validateNonBooleanFlag('production-api-url');
                     this.productionApiUrl = this.options['production-api-url'];
-                } else {
+                    this._validateFlag('production-api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']){
                     prompts.push({
                         type: 'input',
                         name: 'productionApiUrl',
@@ -334,9 +364,11 @@
                     });
                 }
             } else {
-                if (this.options['api-url'] && typeof this.options['api-url'] === 'string') {
+                if (this.options['api-url']) {
+                    this._validateNonBooleanFlag('api-url');
                     this.apiUrl = this.options['api-url'];
-                } else {
+                    this._validateFlag('api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']){
                     prompts.push({
                         type: 'input',
                         name: 'apiUrl',
@@ -346,9 +378,10 @@
                     });
                 }
             }
-            if (this.options['google-maps-key'] && typeof this.options['google-maps-key'] === 'string') {
+            if (this.options['google-maps-key']) {
+                this._validateNonBooleanFlag('google-maps-key');
                 this.googleMapsKey = this.options['google-maps-key'];
-            }else {
+            } else if (!this.options['skip-prompts']){
                 prompts.push({
                     type: 'input',
                     name: 'googleMapsKey',
@@ -491,8 +524,6 @@
                 config.general.build.default_html = '/' + publicBookingOptions.filter(function (option) {
                         return option.name === _this.publicBookingOptionsSelected[0];
                     })[0].www;
-
-                _this.log('here', JSON.stringify(config.general));
 
                 config.general.core.company_id = this.companyId;
             }
