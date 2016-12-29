@@ -100,6 +100,7 @@
 
         constructor: function () {
             generators.Base.apply(this, arguments);
+            var _this = this;
 
             this.option('name', {
                 desc: "Project name"
@@ -144,6 +145,20 @@
             updater.checkGeneratorVersion.call(this);
         },
 
+        _getOptionDefaults: function () {
+            var _this = this;
+            if (!_this.optionDefaults) {
+                _this.optionDefaults = {
+                    'company-id': 37000,
+                    'development-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'production-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'google-maps-key': ""
+               }
+            }
+            return _this.optionDefaults;
+        },
+     
         _validateNameForBespoke: function (appName, defer) {
             var _this = this;
             var s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
@@ -319,6 +334,7 @@
                         type: 'input',
                         name: 'companyId',
                         message: 'What is your BookingBug company id?',
+                        default: this._getOptionDefaults()['company-id'],
                         validate: this._validateCompanyId
                     });
                 }
@@ -333,7 +349,8 @@
                         type: 'input',
                         name: 'developmentApiUrl',
                         message: 'What is the development API URL?',
-                        default: 'https://' + this.appName.toLowerCase() + '-dev.bookingbug.com',
+                        // default: 'https://' + this.appName.toLowerCase() + '-dev.bookingbug.com',
+                        default: this._getOptionDefaults()['development-api-url'],
                         validate: this._validateUrl
                     });
                 }
@@ -346,7 +363,8 @@
                         type: 'input',
                         name: 'stagingApiUrl',
                         message: 'What is the staging API URL?',
-                        default: 'https://' + this.appName.toLowerCase() + '-staging.bookingbug.com',
+                        // default: 'https://' + this.appName.toLowerCase() + '-staging.bookingbug.com',
+                        default: this._getOptionDefaults()['staging-api-url'],
                         validate: this._validateUrl
                     });
                 }
@@ -359,7 +377,8 @@
                         type: 'input',
                         name: 'productionApiUrl',
                         message: 'What is the production API URL?',
-                        default: 'https://' + this.appName.toLowerCase() + '.bookingbug.com',
+                        // default: 'https://' + this.appName.toLowerCase() + '.bookingbug.com',
+                        default: this._getOptionDefaults()['production-api-url'],
                         validate: this._validateUrl
                     });
                 }
@@ -397,7 +416,7 @@
                 if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
                 if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
                 if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey;
-                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? "" : response.googleMapsKey
+                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey
                 done();
             }.bind(this));
         },
