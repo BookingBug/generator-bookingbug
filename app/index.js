@@ -145,30 +145,6 @@
             updater.checkGeneratorVersion.call(this);
         },
 
-        _getOptionDefaults: function () {
-            var _this = this;
-            if (!_this.optionDefaults) {
-                _this.optionDefaults = {
-                    'company-id': 37000,
-                    'api-url': 'https://www.bookingbug.com',
-                    'development-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
-                    'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
-                    'production-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
-                    'google-maps-key': ""
-               }
-            }
-            return _this.optionDefaults;
-        },
-
-        initOptionDefaults: function () {
-            this.companyId = this._getOptionDefaults()['company-id'];
-            this.apiUrl = this._getOptionDefaults()['api-url'];
-            this.developmentApiUrl = this._getOptionDefaults()['development-api-url'];
-            this.stagingApiUrl = this._getOptionDefaults()['staging-api-url'];
-            this.produictionApiUrl = this._getOptionDefaults()['production-api-url'];
-            this.googleMapsKey = this._getOptionDefaults()['google-maps-key'];
-        },
-
         _validateNameForBespoke: function (appName, defer) {
             var _this = this;
             var s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
@@ -298,6 +274,30 @@
             return options;
         },
 
+         _getOptionDefaults: function () {
+            var _this = this;
+            if (!_this.optionDefaults) {
+                _this.optionDefaults = {
+                    'company-id': 37000,
+                    'api-url': 'https://www.bookingbug.com',
+                    'development-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'production-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'google-maps-key': ""
+               }
+            }
+            return _this.optionDefaults;
+        },
+
+        initOptionDefaults: function () {
+            this.companyId = this._getOptionDefaults()['company-id'];
+            this.apiUrl = this._getOptionDefaults()['api-url'];
+            this.developmentApiUrl = this._getOptionDefaults()['development-api-url'];
+            this.stagingApiUrl = this._getOptionDefaults()['staging-api-url'];
+            this.produictionApiUrl = this._getOptionDefaults()['production-api-url'];
+            this.googleMapsKey = this._getOptionDefaults()['google-maps-key'];
+        },
+
         _validateUrl: function (apiUrl) {
             if (apiUrl.match(/http[s]?:\/\//))
                 return true;
@@ -322,7 +322,10 @@
         },
 
         getConfig: function () {
+
             this.log(this.options);
+
+
             var prompts = [];
             if (this.type == 'public-booking') {
                 if (this.options['company-id']) {
@@ -411,7 +414,7 @@
                 if (response.apiUrl) this.apiUrl = response.apiUrl;
                 if (response.developmentApiUrl) this.developmentApiUrl = response.developmentApiUrl;
                 if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
-                if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;$routeParams
+                if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
                 if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey
                 done();
             }.bind(this));
