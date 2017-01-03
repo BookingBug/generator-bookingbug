@@ -279,8 +279,8 @@
                     'company-id': 37000,
                     'api-url': 'https://www.bookingbug.com',
                     'development-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
-                    'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
-                    'production-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-staging.bookingbug.com',
+                    'production-api-url': 'https://' + _this.appName.toLowerCase() + '.bookingbug.com',
                     'google-maps-key': ""
                }
             }
@@ -320,10 +320,6 @@
         },
 
         getConfig: function () {
-
-            this.log(this.options);
-
-
             var prompts = [];
             if (this.type == 'public-booking') {
                 if (this.options['company-id']) {
