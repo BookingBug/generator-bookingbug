@@ -89,8 +89,6 @@
 
                 _this.publicBookingOptionsSelected = response.type;
 
-            _this.log("response.type", response.type);
-
                 done();
             }
         });
