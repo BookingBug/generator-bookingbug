@@ -247,6 +247,16 @@
             }
         },
 
+        _listPublicBookingOptions: function () {
+            var str = "";
+            for (var i in publicBookingOptions) {
+                var option = publicBookingOptions[i];
+                str += option.abbr + " (" + option.name + "), ";
+                this.log(str);
+            }
+            return str.slice(0, -2);
+        },
+
         _getSelectedPublicBookingOptions: function () {
             var _this = this;
             var options = [];
@@ -261,8 +271,11 @@
                         return opt === option.abbr;
                     });
 
-                    if(index !== -1) {
+                    if (index !== -1) {
                         options[index] = option.name;
+                    }else {
+                        _this.log(errorLogFormat("Invalid value provided for --options. Possible values are: " + _this._listPublicBookingOptions()));
+                        process.exit(1);
                     }
 
                      _this.publicBookingOptionsSelected = options;
