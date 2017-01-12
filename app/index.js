@@ -78,9 +78,10 @@
 
             if (response.type.length === 0) {
 
-                publicBookingOptions.map(function (option) {
+                for (var i in publicBookingOptions) {
+                    var option = publicBookingOptions[i];
                     option.checked = false;
-                });
+                }
 
                 _this.log(gulpUtil.colors.red.bold('Please select at least one type of journey'));
 
