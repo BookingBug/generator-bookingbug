@@ -203,7 +203,7 @@
 
                 this.type = this.options['type'];
 
-                if(this.type === 'public-booking' && _this._getPublicBookingOptions().length < 1) {
+                if(this.type === 'public-booking' && _this._getSelectedPublicBookingOptions().length < 1) {
                     promptBookingBugOptions.bind(_this)(done);
                 }else{
                     done();
@@ -247,7 +247,7 @@
             }
         },
 
-        _getPublicBookingOptions: function () {
+        _getSelectedPublicBookingOptions: function () {
             var _this = this;
             var options = [];
 
@@ -409,7 +409,7 @@
                 if (response.developmentApiUrl) this.developmentApiUrl = response.developmentApiUrl;
                 if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
                 if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
-                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey
+                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey;
                 done();
             }.bind(this));
         },
@@ -544,8 +544,6 @@
         },
 
         copySrc: function () {
-
-            this.log(typeof path.join, this.sourceRoot(),  this.type);
 
             var src = path.join(this.sourceRoot(), this.type, 'src', '**', '*');
             var dest = this.destinationPath('src');
