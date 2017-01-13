@@ -15,7 +15,7 @@ function checkGeneratorVersion() {
 function checkNewVersion(done, version) {
     this.generatorNewestVersion = version.trim();
 
-    if (this.generatorNewestVersion === this.generatorLocalVersion) {
+    if ((this.generatorNewestVersion === this.generatorLocalVersion) || this.options['skip-prompts']) {
         done();
         return;
     }

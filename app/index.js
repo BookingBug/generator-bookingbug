@@ -16,33 +16,43 @@
 
     var BookingBugGenerator = generators.Base.extend();
 
+    var projectTypes = [
+        'admin',
+        'public-booking'
+    ];
+
     var publicBookingOptions = [
         {
             name: 'Appointment Booking',
+            abbr: 'abook',
             template: 'main_appointment.html',
             www: 'new_booking.html',
             checked: true
         },
         {
             name: 'Member Account (Authenticated)',
+            abbr: 'member',
             template: 'main_account.html',
             www: 'account.html',
             checked: true
         },
         {
             name: 'Event Booking',
+            abbr: 'ebook',
             template: 'main_event.html',
             www: 'new_booking_event.html',
             checked: true
         },
         {
             name: 'Purchase Certificate Journey',
+            abbr: 'cert',
             template: 'main_gift_certificate.html',
             www: 'gift_certificate.html',
             checked: true
         },
         {
             name: 'View Booking (Not Authenticated)',
+            abbr: 'vbook',
             template: 'main_view_booking.html',
             www: 'view_booking.html',
             checked: true
@@ -50,7 +60,7 @@
     ];
 
     function errorLogFormat(msg) {
-        return gulpUtil.colors.white.bgRed.bold(msg);
+        return gulpUtil.colors.white.bgRed.bold("*** " + msg + " ***");
     }
 
     /**
@@ -58,6 +68,12 @@
      */
     function promptBookingBugOptions(done) {
         var _this = this;
+
+        if (this.options['skip-prompts']) {
+            _this.log(errorLogFormat('please provide project "options" option'));
+            process.exit(1);
+        }
+
         this.prompt({
             type: 'checkbox',
             name: 'type',
@@ -87,9 +103,16 @@
 
         constructor: function () {
             generators.Base.apply(this, arguments);
+            var _this = this;
 
             this.option('name', {
                 desc: "Project name"
+            });
+            this.option('type', {
+                desc: "Project type [admin|public-booking]"
+            });
+            this.option('options', {
+                desc: "Public Booking Options: Appointment Booking (abook), Event Booking (ebook), View Booking (vbook), Purchase Certificate Journey (cert), Member Account (member)"
             });
             this.option('company-id', {
                 desc: "Company ID"
@@ -100,14 +123,19 @@
             this.option('skip-npm', {
                 desc: "Skip installing npm dependencies"
             });
-            this.option('skip-bower', {
-                desc: "Skip installing bower dependencies"
-            });
             this.option('sdk-version', {
                 desc: "BookingBug SDK version"
             });
             this.option('bb-dev', {
                 desc: "Use the BookingBug SDK in development mode",
+                type: Boolean,
+                defaults: false
+            });
+            this.option('google-maps-key', {
+                desc: "Google Maps Key (leave blank if you don't have one)"
+            });
+            this.option('skip-prompts', {
+                desc: 'Skip all prompts',
                 type: Boolean,
                 defaults: false
             });
@@ -154,15 +182,47 @@
             return defer.promise;
         },
 
+        _validateCompanyId: function (companyId) {
+            if (companyId.toString().match(/^\d+$/)) {
+                return true;
+            } else {
+                return "Numbers only";
+            }
+        },
+
         getProjectType: function () {
             var _this = this;
 
             var done = this.async();
+
+            if (typeof this.options['type'] !== 'undefined' && projectTypes.indexOf(this.options['type']) === -1) {
+                _this.log(errorLogFormat('possible project types'), projectTypes);
+                process.exit(1);
+            }
+
+            if (projectTypes.indexOf(this.options['type']) !== -1) {
+
+                this.type = this.options['type'];
+
+                if (this.type === 'public-booking' && _this._getSelectedPublicBookingOptions().length < 1) {
+                    promptBookingBugOptions.bind(_this)(done);
+                } else {
+                    done();
+                }
+
+                return;
+            }
+
+            if (this.options['skip-prompts']) {
+                _this.log(errorLogFormat('please provide project "type" option'));
+                process.exit(1);
+            }
+
             this.prompt({
                 type: 'list',
                 name: 'type',
                 message: 'Please choose the type of your project',
-                choices: ['admin', 'public-booking']
+                choices: projectTypes
             }, function (response) {
                 this.type = response.type;
 
@@ -177,10 +237,17 @@
         },
 
         getName: function () {
-            if (this.options.name) {
-                this.appName = this.options.name;
+            if (this.options['name'] && typeof this.options['name'] === 'string') {
+                this.appName = this.options['name'];
             } else {
+
+                if (this.options['skip-prompts']) {
+                    this.log(errorLogFormat('please provide project "name" option'));
+                    process.exit(1);
+                }
+
                 var done = this.async();
+
                 this.prompt({
                     type: 'input',
                     name: 'appName',
@@ -193,6 +260,67 @@
             }
         },
 
+        _listPublicBookingOptions: function () {
+            var str = "";
+            for (var i in publicBookingOptions) {
+                var option = publicBookingOptions[i];
+                str += option.abbr + " (" + option.name + "), ";
+                this.log(str);
+            }
+            return str.slice(0, -2);
+        },
+
+        _getSelectedPublicBookingOptions: function () {
+            var _this = this;
+
+            _this.publicBookingOptionsSelected = [];
+
+            if (this.options['options'] && this.options['options'].length > 0) {
+
+                var optionsAbbrs = this.options['options'].split(',');
+
+                _this.publicBookingOptionsSelected = optionsAbbrs.map(function (optionAbbr) {
+
+                    var option = publicBookingOptions.find(function (opt) {
+                        return opt.abbr === optionAbbr
+                    });
+
+                    if (typeof option === 'undefined') {
+                        _this.log(errorLogFormat("Invalid value provided for --options. Possible values are: " + _this._listPublicBookingOptions()));
+                        process.exit(1);
+                    }
+
+                    return option.name;
+                });
+            }
+
+            return _this.publicBookingOptionsSelected;
+        },
+
+        _getOptionDefaults: function () {
+            var _this = this;
+            if (!_this.optionDefaults) {
+                _this.optionDefaults = {
+                    'company-id': 37000,
+                    'api-url': 'https://www.bookingbug.com',
+                    'development-api-url': 'https://' + _this.appName.toLowerCase() + '-dev.bookingbug.com',
+                    'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-staging.bookingbug.com',
+                    'production-api-url': 'https://' + _this.appName.toLowerCase() + '.bookingbug.com',
+                    'google-maps-key': ""
+                }
+            }
+            return _this.optionDefaults;
+        },
+
+        initOptionDefaults: function () {
+            this.companyId = this._getOptionDefaults()['company-id'];
+            this.apiUrl = this._getOptionDefaults()['api-url'];
+            this.developmentApiUrl = this._getOptionDefaults()['development-api-url'];
+            this.stagingApiUrl = this._getOptionDefaults()['staging-api-url'];
+            this.productionApiUrl = this._getOptionDefaults()['production-api-url'];
+            this.googleMapsKey = this._getOptionDefaults()['google-maps-key'];
+        },
+
         _validateUrl: function (apiUrl) {
             if (apiUrl.match(/http[s]?:\/\//))
                 return true;
@@ -200,57 +328,85 @@
                 return "Invalid protocol. Should be http:// or https://";
         },
 
+        _validateFlag: function (flag, validateFn) {
+            var result = validateFn(this.options[flag]);
+            if (result !== true) {
+                this.log(errorLogFormat(flag + " [ERROR]"));
+                this.log(errorLogFormat(result));
+                process.exit();
+            }
+        },
+
+        _validateNonBooleanFlag: function (flag) {
+            if (typeof this.options[flag] === 'boolean') {
+                this.log(errorLogFormat("--" + flag + " cannot be blank"));
+                process.exit();
+            }
+        },
+
         getConfig: function () {
             var prompts = [];
             if (this.type == 'public-booking') {
                 if (this.options['company-id']) {
+                    this._validateNonBooleanFlag('company-id');
                     this.companyId = this.options['company-id'];
-                } else {
+                    this._validateFlag('company-id', this._validateCompanyId);
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'companyId',
-                        message: 'What is your BookingBug company id?'
+                        message: 'What is your BookingBug company id?',
+                        default: this._getOptionDefaults()['company-id'],
+                        validate: this._validateCompanyId
                     });
                 }
             }
             if (this.options['bb-dev']) {
                 if (this.options['development-api-url']) {
+                    this._validateNonBooleanFlag('development-api-url');
                     this.developmentApiUrl = this.options['development-api-url'];
-                } else {
+                    this._validateFlag('development-api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'developmentApiUrl',
                         message: 'What is the development API URL?',
-                        default: 'https://' + this.appName.toLowerCase() + '-dev.bookingbug.com',
+                        default: this._getOptionDefaults()['development-api-url'],
                         validate: this._validateUrl
                     });
                 }
                 if (this.options['staging-api-url']) {
+                    this._validateNonBooleanFlag('staging-api-url');
                     this.stagingApiUrl = this.options['staging-api-url'];
-                } else {
+                    this._validateFlag('staging-api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'stagingApiUrl',
                         message: 'What is the staging API URL?',
-                        default: 'https://' + this.appName.toLowerCase() + '-staging.bookingbug.com',
+                        default: this._getOptionDefaults()['staging-api-url'],
                         validate: this._validateUrl
                     });
                 }
                 if (this.options['production-api-url']) {
+                    this._validateNonBooleanFlag('production-api-url');
                     this.productionApiUrl = this.options['production-api-url'];
-                } else {
+                    this._validateFlag('production-api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'productionApiUrl',
                         message: 'What is the production API URL?',
-                        default: 'https://' + this.appName.toLowerCase() + '.bookingbug.com',
+                        default: this._getOptionDefaults()['production-api-url'],
                         validate: this._validateUrl
                     });
                 }
             } else {
                 if (this.options['api-url']) {
+                    this._validateNonBooleanFlag('api-url');
                     this.apiUrl = this.options['api-url'];
-                } else {
+                    this._validateFlag('api-url', this._validateUrl);
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'apiUrl',
@@ -260,6 +416,17 @@
                     });
                 }
             }
+            if (this.options['google-maps-key']) {
+                this._validateNonBooleanFlag('google-maps-key');
+                this.googleMapsKey = this.options['google-maps-key'];
+            } else if (!this.options['skip-prompts']) {
+                prompts.push({
+                    type: 'input',
+                    name: 'googleMapsKey',
+                    message: 'If you have a Google Maps Key please enter it here, otherwise leave blank',
+                    default: "optional"
+                });
+            }
             var done = this.async();
             this.prompt(prompts, function (response) {
                 if (response.companyId) this.companyId = response.companyId;
@@ -267,6 +434,7 @@
                 if (response.developmentApiUrl) this.developmentApiUrl = response.developmentApiUrl;
                 if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
                 if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
+                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional" ? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey;
                 done();
             }.bind(this));
         },
@@ -333,7 +501,9 @@
                         default_html: defaultHtml,
                         server_port: 8000
                     },
-                    core: {}
+                    core: {
+                        google_maps_key: this.googleMapsKey
+                    }
                 }
             };
 
@@ -349,6 +519,7 @@
                     build: {
                         uglify: false,
                         local_sdk: true
+
                     },
                     core: {
                         api_url: "http://localhost:3000"
@@ -398,6 +569,7 @@
         },
 
         copySrc: function () {
+
             var src = path.join(this.sourceRoot(), this.type, 'src', '**', '*');
             var dest = this.destinationPath('src');
 
