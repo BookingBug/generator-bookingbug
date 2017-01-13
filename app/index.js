@@ -135,7 +135,7 @@
                 desc: "Google Maps Key (leave blank if you don't have one)"
             });
             this.option('skip-prompts', {
-                desc: 'Skip all optional prompts',
+                desc: 'Skip all prompts',
                 type: Boolean,
                 defaults: false
             });
