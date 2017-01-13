@@ -69,6 +69,11 @@
     function promptBookingBugOptions(done) {
         var _this = this;
 
+        if (this.options['skip-prompts']) {
+            _this.log(errorLogFormat('please provide project "options" option'));
+            process.exit(1);
+        }
+
         this.prompt({
             type: 'checkbox',
             name: 'type',
@@ -208,6 +213,11 @@
                 return;
             }
 
+            if (this.options['skip-prompts']) {
+                _this.log(errorLogFormat('please provide project "type" option'));
+                process.exit(1);
+            }
+
             this.prompt({
                 type: 'list',
                 name: 'type',
@@ -230,7 +240,14 @@
             if (this.options['name'] && typeof this.options['name'] === 'string') {
                 this.appName = this.options['name'];
             } else {
+
+                if (this.options['skip-prompts']) {
+                    this.log(errorLogFormat('please provide project "name" option'));
+                    process.exit(1);
+                }
+
                 var done = this.async();
+
                 this.prompt({
                     type: 'input',
                     name: 'appName',
@@ -262,13 +279,13 @@
 
                 var optionsAbbrs = this.options['options'].split(',');
 
-                _this.publicBookingOptionsSelected = optionsAbbrs.map(function(optionAbbr){
+                _this.publicBookingOptionsSelected = optionsAbbrs.map(function (optionAbbr) {
 
-                    var option = publicBookingOptions.find(function(opt){
+                    var option = publicBookingOptions.find(function (opt) {
                         return opt.abbr === optionAbbr
                     });
 
-                    if(typeof option === 'undefined'){
+                    if (typeof option === 'undefined') {
                         _this.log(errorLogFormat("Invalid value provided for --options. Possible values are: " + _this._listPublicBookingOptions()));
                         process.exit(1);
                     }
@@ -277,7 +294,7 @@
                 });
             }
 
-            return _this.publicBookingOptionsSelected ;
+            return _this.publicBookingOptionsSelected;
         },
 
         _getOptionDefaults: function () {
@@ -300,7 +317,7 @@
             this.apiUrl = this._getOptionDefaults()['api-url'];
             this.developmentApiUrl = this._getOptionDefaults()['development-api-url'];
             this.stagingApiUrl = this._getOptionDefaults()['staging-api-url'];
-            this.produictionApiUrl = this._getOptionDefaults()['production-api-url'];
+            this.productionApiUrl = this._getOptionDefaults()['production-api-url'];
             this.googleMapsKey = this._getOptionDefaults()['google-maps-key'];
         },
 
