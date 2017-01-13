@@ -78,10 +78,9 @@
 
             if (response.type.length === 0) {
 
-                for (var i in publicBookingOptions) {
-                    var option = publicBookingOptions[i];
+                publicBookingOptions.map(function (option) {
                     option.checked = false;
-                }
+                });
 
                 _this.log(gulpUtil.colors.red.bold('Please select at least one type of journey'));
 
@@ -109,7 +108,7 @@
             });
             this.option('options', {
                 desc: "Public Booking Options: Appointment Booking (abook), Event Booking (ebook), View Booking (vbook), Purchase Certificate Journey (cert), Member Account (member)"
-            })
+            });
             this.option('company-id', {
                 desc: "Company ID"
             });
@@ -118,9 +117,6 @@
             });
             this.option('skip-npm', {
                 desc: "Skip installing npm dependencies"
-            });
-            this.option('skip-bower', {
-                desc: "Skip installing bower dependencies"
             });
             this.option('sdk-version', {
                 desc: "BookingBug SDK version"
@@ -134,7 +130,7 @@
                 desc: "Google Maps Key (leave blank if you don't have one)"
             });
             this.option('skip-prompts', {
-                desc: 'Skip all prompts',
+                desc: 'Skip all optional prompts',
                 type: Boolean,
                 defaults: false
             });
@@ -182,9 +178,9 @@
         },
 
         _validateCompanyId: function (companyId) {
-            if(companyId.toString().match(/^\d+$/)) {
+            if (companyId.toString().match(/^\d+$/)) {
                 return true;
-            }else {
+            } else {
                 return "Numbers only";
             }
         },
@@ -194,19 +190,18 @@
 
             var done = this.async();
 
-            if(typeof this.options['type'] !== 'undefined' && projectTypes.indexOf(this.options['type']) === -1){
+            if (typeof this.options['type'] !== 'undefined' && projectTypes.indexOf(this.options['type']) === -1) {
                 _this.log(errorLogFormat('possible project types'), projectTypes);
                 process.exit(1);
             }
 
-
-            if(projectTypes.indexOf(this.options['type']) !== -1){
+            if (projectTypes.indexOf(this.options['type']) !== -1) {
 
                 this.type = this.options['type'];
 
-                if(this.type === 'public-booking' && _this._getSelectedPublicBookingOptions().length < 1) {
+                if (this.type === 'public-booking' && _this._getSelectedPublicBookingOptions().length < 1) {
                     promptBookingBugOptions.bind(_this)(done);
-                }else{
+                } else {
                     done();
                 }
 
@@ -260,33 +255,32 @@
 
         _getSelectedPublicBookingOptions: function () {
             var _this = this;
-            var options = [];
+
+            _this.publicBookingOptionsSelected = [];
 
             if (this.options['options'] && this.options['options'].length > 0) {
 
-                options = this.options['options'].split(',');
+                var optionsAbbrs = this.options['options'].split(',');
 
-                publicBookingOptions.map(function(option){
+                _this.publicBookingOptionsSelected = optionsAbbrs.map(function(optionAbbr){
 
-                    var index = options.findIndex(function(opt){
-                        return opt === option.abbr;
+                    var option = publicBookingOptions.find(function(opt){
+                        return opt.abbr === optionAbbr
                     });
 
-                    if (index !== -1) {
-                        options[index] = option.name;
-                    }else {
+                    if(typeof option === 'undefined'){
                         _this.log(errorLogFormat("Invalid value provided for --options. Possible values are: " + _this._listPublicBookingOptions()));
                         process.exit(1);
                     }
 
-                     _this.publicBookingOptionsSelected = options;
+                    return option.name;
                 });
             }
 
-            return options;
+            return _this.publicBookingOptionsSelected ;
         },
 
-         _getOptionDefaults: function () {
+        _getOptionDefaults: function () {
             var _this = this;
             if (!_this.optionDefaults) {
                 _this.optionDefaults = {
@@ -296,7 +290,7 @@
                     'staging-api-url': 'https://' + _this.appName.toLowerCase() + '-staging.bookingbug.com',
                     'production-api-url': 'https://' + _this.appName.toLowerCase() + '.bookingbug.com',
                     'google-maps-key': ""
-               }
+                }
             }
             return _this.optionDefaults;
         },
@@ -340,7 +334,7 @@
                     this._validateNonBooleanFlag('company-id');
                     this.companyId = this.options['company-id'];
                     this._validateFlag('company-id', this._validateCompanyId);
-                } else if (!this.options['skip-prompts']){
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'companyId',
@@ -355,7 +349,7 @@
                     this._validateNonBooleanFlag('development-api-url');
                     this.developmentApiUrl = this.options['development-api-url'];
                     this._validateFlag('development-api-url', this._validateUrl);
-                } else if (!this.options['skip-prompts']){
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'developmentApiUrl',
@@ -368,7 +362,7 @@
                     this._validateNonBooleanFlag('staging-api-url');
                     this.stagingApiUrl = this.options['staging-api-url'];
                     this._validateFlag('staging-api-url', this._validateUrl);
-                } else if (!this.options['skip-prompts']){
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'stagingApiUrl',
@@ -381,7 +375,7 @@
                     this._validateNonBooleanFlag('production-api-url');
                     this.productionApiUrl = this.options['production-api-url'];
                     this._validateFlag('production-api-url', this._validateUrl);
-                } else if (!this.options['skip-prompts']){
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'productionApiUrl',
@@ -395,7 +389,7 @@
                     this._validateNonBooleanFlag('api-url');
                     this.apiUrl = this.options['api-url'];
                     this._validateFlag('api-url', this._validateUrl);
-                } else if (!this.options['skip-prompts']){
+                } else if (!this.options['skip-prompts']) {
                     prompts.push({
                         type: 'input',
                         name: 'apiUrl',
@@ -408,7 +402,7 @@
             if (this.options['google-maps-key']) {
                 this._validateNonBooleanFlag('google-maps-key');
                 this.googleMapsKey = this.options['google-maps-key'];
-            } else if (!this.options['skip-prompts']){
+            } else if (!this.options['skip-prompts']) {
                 prompts.push({
                     type: 'input',
                     name: 'googleMapsKey',
@@ -423,7 +417,7 @@
                 if (response.developmentApiUrl) this.developmentApiUrl = response.developmentApiUrl;
                 if (response.stagingApiUrl) this.stagingApiUrl = response.stagingApiUrl;
                 if (response.productionApiUrl) this.productionApiUrl = response.productionApiUrl;
-                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional"? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey;
+                if (response.googleMapsKey) this.googleMapsKey = response.googleMapsKey === "optional" ? this._getOptionDefaults()['google-maps-key'] : response.googleMapsKey;
                 done();
             }.bind(this));
         },
