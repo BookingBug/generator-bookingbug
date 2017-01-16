@@ -11,16 +11,41 @@
         function releaseTask(cb) {
 
             if (configuration.projectConfig.build.local_sdk === true) {
-              runSequence.call(null,'build-sdk','clean','bower-install','copy','config',
-              'scripts:vendors','templates','stylesheets:vendors','stylesheets:client',
-              'fonts','images',
-              'www','scripts:client',cb);
-              return;
+                runSequence.call(
+                    null,
+                    'build-sdk',
+                    'clean',
+                    'bower-install',
+                    'copy',
+                    'config',
+                    'templates',
+                    'stylesheets:vendors',
+                    'stylesheets:client',
+                    'fonts',
+                    'images',
+                    'scripts:vendors',
+                    'scripts:client',
+                    'www',
+                    cb
+                );
+                return;
             }
-              runSequence.call(null,'clean','bower-install','copy','config',
-              'scripts:vendors','templates','stylesheets:vendors','stylesheets:client',
-              'fonts','images',
-              'www','scripts:client',cb);
+            runSequence.call(
+                null,
+                'clean',
+                'bower-install',
+                'copy',
+                'config',
+                'templates',
+                'stylesheets:vendors',
+                'stylesheets:client',
+                'fonts',
+                'images',
+                'scripts:vendors',
+                'scripts:client',
+                'www',
+                cb
+            );
         }
 
         function releaseWatchTask(cb) {
