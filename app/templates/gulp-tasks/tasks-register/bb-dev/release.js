@@ -10,26 +10,17 @@
 
         function releaseTask(cb) {
 
-            var tasks = [
-                'clean',
-                'bower-prepare',
-                'bower-install',
-                'copy',
-                'config',
-                'scripts:vendors',
-                'scripts:client',
-                'templates',
-                'stylesheets:vendors',
-                'stylesheets:client',
-                'fonts',
-                'images',
-                'www',
-                cb
-            ];
             if (configuration.projectConfig.build.local_sdk === true) {
-                tasks = ['build-sdk'].concat(tasks);
+              runSequence.call(null,'build-sdk','clean','bower-install','copy','config',
+              'scripts:vendors','templates','stylesheets:vendors','stylesheets:client',
+              'fonts','images',
+              'www','scripts:client',cb);
+              return;
             }
-            runSequence.apply(null, tasks);
+              runSequence.call(null,'clean','bower-install','copy','config',
+              'scripts:vendors','templates','stylesheets:vendors','stylesheets:client',
+              'fonts','images',
+              'www','scripts:client',cb);
         }
 
         function releaseWatchTask(cb) {
