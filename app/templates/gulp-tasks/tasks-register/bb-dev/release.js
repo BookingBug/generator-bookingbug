@@ -15,6 +15,7 @@
                     null,
                     'build-sdk',
                     'clean',
+                    'bower-prepare',
                     'bower-install',
                     'copy',
                     'config',
@@ -33,6 +34,7 @@
             runSequence.call(
                 null,
                 'clean',
+                'bower-prepare',
                 'bower-install',
                 'copy',
                 'config',
