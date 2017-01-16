@@ -11,10 +11,22 @@
 
         function releaseTask(cb) {
 
-              runSequence.call(null,'clean','bower-install','copy','config',
-              'scripts:vendors','templates','stylesheets:vendors','stylesheets:client',
-              'fonts','images',
-              'www','scripts:client',cb);
+            runSequence.call(
+                null,
+                'clean',
+                'bower-install',
+                'copy',
+                'config',
+                'templates',
+                'stylesheets:vendors',
+                'stylesheets:client',
+                'fonts',
+                'images',
+                'scripts:vendors',
+                'scripts:client',
+                'www',
+                cb
+            );
         }
 
 
