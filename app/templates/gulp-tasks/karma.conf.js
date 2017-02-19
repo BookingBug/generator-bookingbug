@@ -37,8 +37,8 @@
             logLevel: config.LOG_INFO,
             port: 9876,
             preprocessors: {
-                'src/*/javascripts/**/*.js': ['babel'],
-                'src/*/javascripts/**/!(*.spec).js': ['coverage']
+                'src/javascripts/**/*.js': ['babel'],
+                'src/javascripts/**/!(*.spec).js': ['coverage']
             },
             reporters: ['dots', 'coverage'],
             singleRun: false
