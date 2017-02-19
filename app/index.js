@@ -713,6 +713,7 @@
                 'gulp-util@^3.0.7',
                 'gulp-watch@^4.3.11',
                 'karma@^1.3.0',
+                'karma-babel-preprocessor@^6.0.1',
                 'karma-bower@^1.0.1',
                 'karma-chrome-launcher@^2.0.0',
                 'karma-coffee-coverage@^1.1.2',
