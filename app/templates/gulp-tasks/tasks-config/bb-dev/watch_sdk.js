@@ -40,17 +40,16 @@
 
         function scripts() {
             configuration.bbDependencies.forEach(function (dirName) {
-                gulp.watch([configuration.sdkRootPath + '/src/' + dirName + '/javascripts/**/*'], ['build-sdk:' + dirName + ':javascripts'], watchOptions);
+                gulp.watch(
+                    [configuration.sdkRootPath + '/src/' + dirName + '/javascripts/**/*'],
+                    function () {
+                        setTimeout(function () {
+                            runSequence(['scripts:client']);
+                        }, 1000)
+                    },
+                    watchOptions
+                );
             });
-
-            gulp.watch(
-                [
-                    configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*.js',
-                    '!' + configuration.projectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
-                ],
-                ['scripts:client'],
-                watchOptions
-            );
         }
 
         function stylesheets() {

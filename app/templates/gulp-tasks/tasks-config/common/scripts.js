@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    var babel = require('gulp-babel');
     var gulpCoffee = require('gulp-coffee');
     var gulpConcat = require('gulp-concat');
     var gulpIf = require('gulp-if');
@@ -46,13 +47,8 @@
             var projectFiles = [
                 configuration.projectTmpPath + '/config.constants.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.module.js',
-                configuration.projectRootPath + '/src/javascripts/**/*.module.js.coffee',
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
-                configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js.coffee',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.js',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.map'
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js'
             ];
 
             return buildScriptsStream(sdkFiles.concat(projectFiles), 'booking-widget');
@@ -63,9 +59,11 @@
          * @param {String} filename
          */
         function buildScriptsStream(files, filename) {
-            var stream = gulp.src(files)
-                    .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
-                ;
+            var stream = gulp.src(files);
+
+            if (filename === 'booking-widget') {
+                stream.pipe(gulpIf(/^(?!bookingbug-angular-).*/, babel({presets: ['es2015']})).on('error', gulpUtil.log));
+            }
 
             if (configuration.projectConfig.build.uglify === true) {
                 stream

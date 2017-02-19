@@ -10,20 +10,20 @@
             exposeVersions();
         }
 
-        function exposeVersions() => {
+        const exposeVersions = () => {
 
-            this.sdk_version = bbConfig.BUILD.SDK_VERSION;
-            if (this.sdk_version === null) {
-                this.sdk_version = 'unreleased version';
+            this.sdkVersion = bbConfig.BUILD.SDK_VERSION;
+            if (this.sdkVersion === null) {
+                this.sdkVersion = 'unreleased version';
             }
 
-            this.project_deploy_version = bbConfig.BUILD.DEPLOY_VERSION;
-            if (this.project_deploy_version === false) {
-                this.project_deploy_version = 'unreleased version';
+            this.projectDeployVersion = bbConfig.BUILD.DEPLOY_VERSION;
+            if (this.projectDeployVersion === false) {
+                this.projectDeployVersion = 'unreleased version';
             }
 
-            this.show_version = bbConfig.BUILD.SHOW_VERSION;
-        }
+            this.showVersion = bbConfig.BUILD.SHOW_VERSION;
+        };
 
         init();
     }

@@ -3,7 +3,7 @@
 
     angular.module('<%= module_name %>.version').component('bbProjectVersion', {
         controller: 'BbProjectVersionController',
-        controllerAs: 'vm_project_version',
+        controllerAs: '$projectVersionCtrl',
         templateUrl: 'bespoke/version/project_version.html'
     });
 

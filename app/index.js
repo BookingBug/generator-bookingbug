@@ -685,6 +685,7 @@
             }
 
             var dependencies = [
+                "babel-preset-es2015@^6.22.0",
                 'bower@^1.8.0',
                 'del@^2.2.2',
                 'deep-rename-keys@^0.2.0',
@@ -692,6 +693,7 @@
                 'fs-finder@^1.8.1',
                 'gulp@^3.9.1',
                 'gulp-angular-templatecache@^2.0.0',
+                "gulp-babel@^6.1.2",
                 'gulp-css-selector-limit@^0.1.2',
                 'gulp-coffee@^2.3.3',
                 'gulp-concat@^2.6.1',
