@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    var del = require('del');
-    var fs = require('fs');
-    var jsonFile = require('jsonfile');
-    var localSdk = require('../helpers/local_sdk');
-    var mkdirp = require('mkdirp');
-    var path = require('path');
+    const del = require('del');
+    const fs = require('fs');
+    const jsonFile = require('jsonfile');
+    const localSdk = require('../helpers/local_sdk');
+    const mkdirp = require('mkdirp');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -30,7 +30,7 @@
 
         function cleanUpBowerComponents() {
             mkdirp.sync(path.join(configuration.projectRootPath, 'bower_components'));
-            var bbDependenciesToDelete = path.join(configuration.projectRootPath, 'bower_components/bookingbug-angular-*');
+            let bbDependenciesToDelete = path.join(configuration.projectRootPath, 'bower_components/bookingbug-angular-*');
             del.sync([bbDependenciesToDelete]);
         }
 
@@ -39,10 +39,10 @@
         }
 
         function prepareBowerFileReferringToLocalSdk() {
-            var bowerOriginalJsonPath = path.join(configuration.projectRootPath, 'bower.json');
-            var bowerJsonPath = path.join(configuration.projectTmpPath, 'bower.json');
+            let bowerOriginalJsonPath = path.join(configuration.projectRootPath, 'bower.json');
+            let bowerJsonPath = path.join(configuration.projectTmpPath, 'bower.json');
 
-            var bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
+            let bowerJson = JSON.parse(fs.readFileSync(bowerOriginalJsonPath, 'utf8'));
 
             useLocalPaths(bowerJson);
 
@@ -53,7 +53,7 @@
          * @param {Object} bowerJson
          */
         function useLocalPaths(bowerJson) {
-            for (var depName in bowerJson.dependencies) {
+            for (let depName in bowerJson.dependencies) {
                 if (localSdk.isBBDependency(depName)) {
                     bowerJson.dependencies[depName] = localSdk.generatePathToSdkBuild(depName);
                 }
@@ -62,21 +62,21 @@
 
         function createSymlinks() {
 
-            for (var depKey in configuration.bbDependencies) {
-                var depName = configuration.bbDependencies[depKey];
+            for (let depKey in configuration.bbDependencies) {
+                let depName = configuration.bbDependencies[depKey];
                 localSdk.createSymlink(depName);
             }
         }
 
         function overrideBBDependenciesInSDKBuilds() {
 
-            for (var depIndex in configuration.bbDependencies) {
-                var depName = configuration.bbDependencies[depIndex];
+            for (let depIndex in configuration.bbDependencies) {
+                let depName = configuration.bbDependencies[depIndex];
 
-                var sdkBowerPath = path.join(configuration.sdkRootPath, 'build', depName, 'bower.json');
-                var sdkBowerJson = JSON.parse(fs.readFileSync(sdkBowerPath, 'utf8'));
+                let sdkBowerPath = path.join(configuration.sdkRootPath, 'build', depName, 'bower.json');
+                let sdkBowerJson = JSON.parse(fs.readFileSync(sdkBowerPath, 'utf8'));
 
-                for (var dep in sdkBowerJson.dependencies) {
+                for (let dep in sdkBowerJson.dependencies) {
                     if (localSdk.isBBDependency(dep)) {
                         sdkBowerJson.dependencies[dep] = localSdk.generatePathToSdkBuild(dep);
                     }
@@ -88,4 +88,4 @@
 
     };
 
-}).call(this);
+})();

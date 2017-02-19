@@ -1,8 +1,8 @@
-var nodeCmd = require('node-cmd');
-var packageJson = require('../package.json');
+const nodeCmd = require('node-cmd');
+const packageJson = require('../package.json');
 
 function checkGeneratorVersion() {
-    var done = this.async();
+    let done = this.async();
 
     this.generatorLocalVersion = packageJson.version.trim();
 

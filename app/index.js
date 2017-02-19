@@ -1,27 +1,27 @@
 (function () {
     'use strict';
 
-    var _ = require('lodash');
-    var camelCase = require('camelcase');
-    var fs = require('fs');
-    var generators = require('yeoman-generator');
-    var glob = require('glob');
-    var github = require('octonode');
-    var gulpUtil = require('gulp-util');
-    var mkdirp = require('mkdirp');
-    var os = require('os');
-    var path = require('path');
-    var request = require('request');
-    var updater = require('./updater.js');
+    const _ = require('lodash');
+    const camelCase = require('camelcase');
+    const fs = require('fs');
+    const generators = require('yeoman-generator');
+    const glob = require('glob');
+    const github = require('octonode');
+    const gulpUtil = require('gulp-util');
+    const mkdirp = require('mkdirp');
+    const os = require('os');
+    const path = require('path');
+    const request = require('request');
+    const updater = require('./updater.js');
 
-    var BookingBugGenerator = generators.Base.extend();
+    let BookingBugGenerator = generators.Base.extend();
 
-    var projectTypes = [
+    let projectTypes = [
         'admin',
         'public-booking'
     ];
 
-    var publicBookingOptions = [
+    let publicBookingOptions = [
         {
             name: 'Appointment Booking',
             abbr: 'abook',
@@ -67,7 +67,7 @@
      * @param {Function} done
      */
     function promptBookingBugOptions(done) {
-        var _this = this;
+        let _this = this;
 
         if (this.options['skip-prompts']) {
             _this.log(errorLogFormat('please provide project "options" option'));
@@ -103,7 +103,7 @@
 
         constructor: function () {
             generators.Base.apply(this, arguments);
-            var _this = this;
+            let _this = this;
 
             this.option('name', {
                 desc: "Project name"
@@ -146,8 +146,8 @@
         },
 
         _validateNameForBespoke: function (appName, defer) {
-            var _this = this;
-            var s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
+            let _this = this;
+            let s3Client = require('s3').createClient({s3Options: {region: 'eu-west-1'}});
             s3Client.s3.listObjects({
                 Bucket: 'bespoke.bookingbug.com',
                 Prefix: appName + '/'
@@ -169,7 +169,7 @@
         },
 
         _validateName: function (appName) {
-            var defer = require('q').defer();
+            let defer = require('q').defer();
             if (appName.match(/^[a-zA-Z0-9-]+$/)) {
                 if (this.options['bb-dev'] && !this.options['force-name']) {
                     this._validateNameForBespoke(appName, defer);
@@ -191,9 +191,9 @@
         },
 
         getProjectType: function () {
-            var _this = this;
+            let _this = this;
 
-            var done = this.async();
+            let done = this.async();
 
             if (typeof this.options['type'] !== 'undefined' && projectTypes.indexOf(this.options['type']) === -1) {
                 _this.log(errorLogFormat('possible project types'), projectTypes);
@@ -246,7 +246,7 @@
                     process.exit(1);
                 }
 
-                var done = this.async();
+                let done = this.async();
 
                 this.prompt({
                     type: 'input',
@@ -261,9 +261,9 @@
         },
 
         _listPublicBookingOptions: function () {
-            var str = "";
-            for (var i in publicBookingOptions) {
-                var option = publicBookingOptions[i];
+            let str = "";
+            for (let i in publicBookingOptions) {
+                let option = publicBookingOptions[i];
                 str += option.abbr + " (" + option.name + "), ";
                 this.log(str);
             }
@@ -271,17 +271,17 @@
         },
 
         _getSelectedPublicBookingOptions: function () {
-            var _this = this;
+            let _this = this;
 
             _this.publicBookingOptionsSelected = [];
 
             if (this.options['options'] && this.options['options'].length > 0) {
 
-                var optionsAbbrs = this.options['options'].split(',');
+                let optionsAbbrs = this.options['options'].split(',');
 
                 _this.publicBookingOptionsSelected = optionsAbbrs.map(function (optionAbbr) {
 
-                    var option = publicBookingOptions.find(function (opt) {
+                    let option = publicBookingOptions.find(function (opt) {
                         return opt.abbr === optionAbbr
                     });
 
@@ -298,7 +298,7 @@
         },
 
         _getOptionDefaults: function () {
-            var _this = this;
+            let _this = this;
             if (!_this.optionDefaults) {
                 _this.optionDefaults = {
                     'company-id': 37000,
@@ -329,7 +329,7 @@
         },
 
         _validateFlag: function (flag, validateFn) {
-            var result = validateFn(this.options[flag]);
+            let result = validateFn(this.options[flag]);
             if (result !== true) {
                 this.log(errorLogFormat(flag + " [ERROR]"));
                 this.log(errorLogFormat(result));
@@ -345,7 +345,7 @@
         },
 
         getConfig: function () {
-            var prompts = [];
+            let prompts = [];
             if (this.type == 'public-booking') {
                 if (this.options['company-id']) {
                     this._validateNonBooleanFlag('company-id');
@@ -427,7 +427,7 @@
                     default: "optional"
                 });
             }
-            var done = this.async();
+            let done = this.async();
             this.prompt(prompts, function (response) {
                 if (response.companyId) this.companyId = response.companyId;
                 if (response.apiUrl) this.apiUrl = response.apiUrl;
@@ -444,10 +444,10 @@
                 this.version = this.options['sdk-version'];
                 this.log('Latest version is ' + this.version);
             } else {
-                var _this = this;
-                var done = this.async();
-                var ghclient = github.client();
-                var ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
+                let _this = this;
+                let done = this.async();
+                let ghclient = github.client();
+                let ghrepo = ghclient.repo('BookingBug/bookingbug-angular');
                 ghrepo.releases(function (err, releases, headers) {
 
                     if (err !== null) {
@@ -491,10 +491,10 @@
 
         createBuildConfig: function () {
 
-            var _this = this;
-            var defaultHtml = '/index.html';
+            let _this = this;
+            let defaultHtml = '/index.html';
 
-            var config = {
+            let config = {
                 general: {
                     build: {
                         app_name: this.appName,
@@ -570,8 +570,8 @@
 
         copySrc: function () {
 
-            var src = path.join(this.sourceRoot(), this.type, 'src', '**', '*');
-            var dest = this.destinationPath('src');
+            let src = path.join(this.sourceRoot(), this.type, 'src', '**', '*');
+            let dest = this.destinationPath('src');
 
             this.fs.copy(src, dest);
 
@@ -627,7 +627,7 @@
                 );
             }
 
-            var templateOptions = {module_name: camelCase(this.appName)};
+            let templateOptions = {module_name: camelCase(this.appName)};
 
             this.template(
                 path.join(this.type, 'src', 'javascripts'),
@@ -656,21 +656,21 @@
                 );
             } else if (this.type == 'public-booking') {
 
-                for (var optionKey in this.publicBookingOptionsSelected) {
+                for (let optionKey in this.publicBookingOptionsSelected) {
 
-                    var optionName = this.publicBookingOptionsSelected[optionKey];
-                    var option = publicBookingOptions.filter(function (option) {
+                    let optionName = this.publicBookingOptionsSelected[optionKey];
+                    let option = publicBookingOptions.filter(function (option) {
                         return option.name === optionName;
                     })[0];
 
-                    var templateFrom = path.join('public-booking/templates', option.template);
-                    var templateTo = path.join('src/templates', option.template);
+                    let templateFrom = path.join('public-booking/templates', option.template);
+                    let templateTo = path.join('src/templates', option.template);
 
                     this.log('templateFrom', templateFrom, 'templateTo', templateTo);
                     this.template(templateFrom, templateTo, templateOptions);
 
-                    var wwwFrom = path.join('public-booking/www', option.www);
-                    var wwwTo = path.join('src/www', option.www);
+                    let wwwFrom = path.join('public-booking/www', option.www);
+                    let wwwTo = path.join('src/www', option.www);
 
                     this.log('wwwFrom', wwwFrom, 'wwwTo', wwwTo);
                     this.template(wwwFrom, wwwTo, templateOptions);
@@ -684,7 +684,7 @@
                 return;
             }
 
-            var dependencies = [
+            let dependencies = [
                 "babel-preset-es2015@^6.22.0",
                 'bower@^1.8.0',
                 'del@^2.2.2',
@@ -725,6 +725,7 @@
                 'karma-ng-html2js-preprocessor@^1.0.0',
                 'karma-phantomjs-launcher@^1.0.2',
                 'include-all@^2.0.0',
+                'isparta@^4.0.0',
                 'jasmine-core@^2.5.2',
                 'jsonfile@^2.4.0',
                 'main-bower-files@^2.13.1',
@@ -760,10 +761,10 @@
      * @returns {Number} [-1, 0, 1]
      */
     function sortBookingBugReleases(a, b) {
-        var aTagName = a.tag_name.replace('v', '').split('.');
-        var bTagName = b.tag_name.replace('v', '').split('.');
+        let aTagName = a.tag_name.replace('v', '').split('.');
+        let bTagName = b.tag_name.replace('v', '').split('.');
 
-        var aMajor = parseInt(aTagName[0]),
+        let aMajor = parseInt(aTagName[0]),
             aMinor = parseInt(aTagName[1]),
             aPatch = isNaN(aTagName[2]) ? aTagName[2] : parseInt(aTagName[2]),
             bMajor = parseInt(bTagName[0]),
@@ -800,4 +801,4 @@
             }
         }
     }
-})(this);
+})();

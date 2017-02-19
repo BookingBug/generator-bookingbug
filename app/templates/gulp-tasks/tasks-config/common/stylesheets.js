@@ -1,14 +1,13 @@
 (function () {
     'use strict';
 
-    var gulpConcat = require('gulp-concat');
-    var gulpCssSelectorLimit = require('gulp-css-selector-limit');
-    var gulpPlumber = require('gulp-plumber');
-    var gulpSass = require('gulp-sass');
-    var gulpSourcemaps = require('gulp-sourcemaps');
-    var gulpTemplate = require('gulp-template');
-    var mainBowerFiles = require('main-bower-files');
-    var path = require('path');
+    const gulpConcat = require('gulp-concat');
+    const gulpCssSelectorLimit = require('gulp-css-selector-limit');
+    const gulpPlumber = require('gulp-plumber');
+    const gulpSass = require('gulp-sass');
+    const gulpSourcemaps = require('gulp-sourcemaps');
+    const mainBowerFiles = require('main-bower-files');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -22,7 +21,7 @@
         }
 
         function stylesheetsVendorsTask() {
-            var dependenciesCssFiles = mainBowerFiles({
+            let dependenciesCssFiles = mainBowerFiles({
                 includeDev: true,
                 paths: {
                     bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
@@ -34,15 +33,14 @@
 
             gulp.src(dependenciesCssFiles)
                 .pipe(gulpConcat('booking-widget-dependencies.css'))
-                .pipe(gulp.dest(configuration.projectReleasePath))
-            ;
+                .pipe(gulp.dest(configuration.projectReleasePath));
         }
 
         function stylesheetsClientTask() {
 
-            var clientSCSS = path.join(configuration.projectRootPath, 'src/stylesheets/main.scss');
+            let clientSCSS = path.join(configuration.projectRootPath, 'src/stylesheets/main.scss');
 
-            var gulpSassOptions = {
+            let gulpSassOptions = {
                 errLogToConsole: true,
                 includePaths: [path.join(configuration.projectRootPath, 'bower_components/bootstrap-sass/assets/stylesheets')]
             };
@@ -58,9 +56,8 @@
                 .pipe(gulpConcat('booking-widget.css'))
                 .pipe(gulpCssSelectorLimit.reporter('fail'))
                 .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
-                .pipe(gulp.dest(configuration.projectReleasePath))
-                ;
+                .pipe(gulp.dest(configuration.projectReleasePath));
         }
     };
 
-}).call(this);
+})();

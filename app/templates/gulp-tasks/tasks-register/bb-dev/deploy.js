@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var runSequence = require('run-sequence');
+    const runSequence = require('run-sequence');
 
     module.exports = function (gulp, configuration) {
 
@@ -13,4 +13,4 @@
         }
     };
 
-}).call(this);
+})();

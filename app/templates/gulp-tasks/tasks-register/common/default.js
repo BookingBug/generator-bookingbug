@@ -6,4 +6,4 @@
         gulp.task('default', ['run:watch']);
     };
 
-}).call(this);
+})();

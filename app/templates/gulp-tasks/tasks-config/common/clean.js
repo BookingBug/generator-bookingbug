@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var del = require('del');
-    var mkdirp = require('mkdirp');
+    const del = require('del');
+    const mkdirp = require('mkdirp');
 
     module.exports = function (gulp, configuration) {
 
@@ -18,4 +18,4 @@
 
     };
 
-}).call(this);
+})();

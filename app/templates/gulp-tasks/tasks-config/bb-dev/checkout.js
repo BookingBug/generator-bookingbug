@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var git = require('gulp-git');
+    const git = require('gulp-git');
 
     module.exports = function (gulp, configuration) {
 
@@ -32,4 +32,4 @@
 
     };
 
-})(this);
+})();

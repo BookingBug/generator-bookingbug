@@ -1,14 +1,13 @@
 (function () {
     'use strict';
 
-    var babel = require('gulp-babel');
-    var gulpCoffee = require('gulp-coffee');
-    var gulpConcat = require('gulp-concat');
-    var gulpIf = require('gulp-if');
-    var gulpUglify = require('gulp-uglify');
-    var gulpUtil = require('gulp-util');
-    var mainBowerFiles = require('main-bower-files');
-    var path = require('path');
+    const babel = require('gulp-babel');
+    const gulpConcat = require('gulp-concat');
+    const gulpIf = require('gulp-if');
+    const gulpUglify = require('gulp-uglify');
+    const gulpUtil = require('gulp-util');
+    const mainBowerFiles = require('main-bower-files');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -17,7 +16,7 @@
 
 
         function scriptsVendorsTask() {
-            var dependenciesFiles = mainBowerFiles({
+            let dependenciesFiles = mainBowerFiles({
                 paths: {
                     bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
                     bowerrc: path.join(configuration.projectRootPath, '.bowerrc'),
@@ -32,7 +31,7 @@
 
         function scriptsClient() {
 
-            var sdkFiles = mainBowerFiles({
+            let sdkFiles = mainBowerFiles({
                 paths: {
                     bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
                     bowerrc: path.join(configuration.projectRootPath, '.bowerrc'),
@@ -44,7 +43,7 @@
                 }
             });
 
-            var projectFiles = [
+            let projectFiles = [
                 configuration.projectTmpPath + '/config.constants.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.module.js',
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
@@ -59,7 +58,7 @@
          * @param {String} filename
          */
         function buildScriptsStream(files, filename) {
-            var stream = gulp.src(files);
+            let stream = gulp.src(files);
 
             if (filename === 'booking-widget') {
                 stream.pipe(gulpIf(/^(?!bookingbug-angular-).*/, babel({presets: ['es2015']})).on('error', gulpUtil.log));
@@ -81,4 +80,4 @@
 
     };
 
-}).call(this);
+})();

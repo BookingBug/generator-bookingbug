@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    var gulpLiveReload = require('gulp-livereload');
-    var gulpTemplate = require('gulp-template');
-    var path = require('path');
+    const gulpLiveReload = require('gulp-livereload');
+    const gulpTemplate = require('gulp-template');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -11,7 +11,7 @@
 
         function wwwTask() {
 
-            var src = path.join(configuration.projectRootPath, 'src/www/*.*');
+            let src = path.join(configuration.projectRootPath, 'src/www/*.*');
 
             return gulp.src(src)
                 .pipe(gulpTemplate(configuration.projectConfig))
@@ -21,4 +21,4 @@
         }
     };
 
-}).call(this);
+})();

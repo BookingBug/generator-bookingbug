@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    var bower = require('bower');
-    var bowerCli = require('../../node_modules/bower/lib/util/cli');
-    var fs = require('fs');
-    var jsonFile = require('jsonfile');
-    var path = require('path');
+    const bower = require('bower');
+    const bowerCli = require('../../node_modules/bower/lib/util/cli');
+    const fs = require('fs');
+    const jsonFile = require('jsonfile');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -13,8 +13,8 @@
 
         function bowerInstallTask(cb) {
 
-            var renderer = bowerCli.getRenderer('install', null, bower.config);
-            var overrideOriginalResolutions = false;
+            let renderer = bowerCli.getRenderer('install', null, bower.config);
+            let overrideOriginalResolutions = false;
 
             bower.commands
                 .install([], {save: true}, {interactive: true})
@@ -44,16 +44,16 @@
         }
 
         function updateOriginalBowerResolutions() {
-            var bowerOriginalPath = path.join(configuration.projectRootPath, 'bower.json');
-            var bowerTmpPath = path.join(configuration.projectTmpPath, 'bower.json');
+            let bowerOriginalPath = path.join(configuration.projectRootPath, 'bower.json');
+            let bowerTmpPath = path.join(configuration.projectTmpPath, 'bower.json');
 
-            var bowerTmpJson = JSON.parse(fs.readFileSync(bowerTmpPath, 'utf8'));
+            let bowerTmpJson = JSON.parse(fs.readFileSync(bowerTmpPath, 'utf8'));
 
             if (typeof bowerTmpJson.resolutions === 'undefined') {
                 return
             }
 
-            var bowerOriginalJson = JSON.parse(fs.readFileSync(bowerOriginalPath, 'utf8'));
+            let bowerOriginalJson = JSON.parse(fs.readFileSync(bowerOriginalPath, 'utf8'));
 
             bowerOriginalJson.resolutions = bowerTmpJson.resolutions;
 
@@ -61,4 +61,4 @@
         }
     };
 
-}).call(this);
+})();

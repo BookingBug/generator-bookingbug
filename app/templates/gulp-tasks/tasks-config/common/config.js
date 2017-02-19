@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    var deepRenameKeys = require('deep-rename-keys');
-    var gulpNgConstant = require('gulp-ng-constant');
-    var gulpRename = require('gulp-rename');
-    var path = require('path');
-    var projectConfig = require('../helpers/project_config');
+    const deepRenameKeys = require('deep-rename-keys');
+    const gulpNgConstant = require('gulp-ng-constant');
+    const gulpRename = require('gulp-rename');
+    const path = require('path');
+    const projectConfig = require('../helpers/project_config');
 
     module.exports = function (gulp, configuration) {
 
@@ -17,10 +17,10 @@
                 reloadProjectConfig();
             }
 
-            var projectConfig = JSON.parse(JSON.stringify(configuration.projectConfig));
+            let projectConfig = JSON.parse(JSON.stringify(configuration.projectConfig));
             projectConfig = deepRenameKeys(projectConfig, upperCaseKey);
 
-            var options = {
+            let options = {
                 constants: {
                     bbConfig: projectConfig
                 },
@@ -50,4 +50,4 @@
         }
     };
 
-}).call(this);
+})();

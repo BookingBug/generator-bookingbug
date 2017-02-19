@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var bower = require('bower');
-    var bowerCli = require('../../node_modules/bower/lib/util/cli');
+    const bower = require('bower');
+    const bowerCli = require('../../node_modules/bower/lib/util/cli');
 
     module.exports = function (gulp, configuration) {
 
@@ -10,7 +10,7 @@
 
         function bowerInstallTask(cb) {
 
-            var renderer = bowerCli.getRenderer('install', null, bower.config);
+            let renderer = bowerCli.getRenderer('install', null, bower.config);
 
             bower.commands
                 .install([], {save: true}, {interactive: true})
@@ -34,4 +34,4 @@
         }
     };
 
-}).call(this);
+})();

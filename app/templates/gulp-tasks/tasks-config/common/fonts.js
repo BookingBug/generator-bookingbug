@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    var gulpFlatten = require('gulp-flatten');
-    var gulpLiveReload = require('gulp-livereload');
-    var mainBowerFiles = require('main-bower-files');
-    var path = require('path');
+    const gulpFlatten = require('gulp-flatten');
+    const gulpLiveReload = require('gulp-livereload');
+    const mainBowerFiles = require('main-bower-files');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -12,7 +12,7 @@
 
         function fontsTask() {
 
-            var dependenciesFonts = mainBowerFiles({
+            let dependenciesFonts = mainBowerFiles({
                 includeDev: true,
                 paths: {
                     bowerDirectory: path.join(configuration.projectRootPath, 'bower_components'),
@@ -22,8 +22,8 @@
                 filter: '**/*.{eot,svg,ttf,woff,woff2,otf}'
             });
 
-            var clientFonts = path.join(configuration.projectRootPath, 'src/fonts/*.*');
-            var dest = path.join(configuration.projectReleasePath, 'fonts');
+            let clientFonts = path.join(configuration.projectRootPath, 'src/fonts/*.*');
+            let dest = path.join(configuration.projectReleasePath, 'fonts');
 
             return gulp.src(dependenciesFonts.concat(clientFonts))
                 .pipe(gulpFlatten())
@@ -33,4 +33,4 @@
         }
     };
 
-}).call(this);
+})();

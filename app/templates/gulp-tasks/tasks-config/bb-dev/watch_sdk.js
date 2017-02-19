@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    var path = require('path');
-    var runSequence = require('run-sequence');
+    const path = require('path');
+    const runSequence = require('run-sequence');
 
-    var watchOptions = {
+    const watchOptions = {
         read: false,
         readDelay: 500
     };
@@ -77,4 +77,4 @@
         }
     };
 
-}).call(this);
+})();

@@ -1,28 +1,25 @@
 (function () {
     'use strict';
 
-    var fs = require('fs');
-    var karma = require('karma');
-    var path = require('path');
+    const fs = require('fs');
+    const karma = require('karma');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
-
-        var prepareKarmaFiles = function () {
-            var bowerFiles, projectFiles;
-            bowerFiles = require('main-bower-files')({
+        const prepareKarmaFiles = function () {
+            let bowerFiles = require('main-bower-files')({
                 filter: ['**/*.js'],
                 paths: {
                     bowerDirectory: 'bower_components',
                     bowerJson: 'bower.json'
                 }
             });
-            projectFiles = [
+            let projectFiles = [
                 'tmp/config.constants.js',
                 'release/booking-widget-templates.js',
-                'src/javascripts/**/*.module.js.coffee',
+                'src/javascripts/**/*.module.js',
                 'src/templates/**/*.html',
-                'src/javascripts/**/*.coffee',
                 'src/javascripts/**/*.js'
             ];
             return bowerFiles.concat(projectFiles);
@@ -31,9 +28,8 @@
         /*
          * @param {Boolean} isDev
          */
-        var getKarmaServerSettings = function (isDev) {
-            var serverSettings;
-            serverSettings = {
+        const getKarmaServerSettings = function (isDev) {
+            const serverSettings = {
                 configFile: path.join(__dirname, '/../karma.conf.js'),
                 basePath: '../',
                 files: prepareKarmaFiles(),
@@ -56,4 +52,4 @@
         });
     };
 
-}).call(this);
+})();
