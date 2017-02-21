@@ -9,7 +9,11 @@ can customise the booking widget to suit your requirements.
 
 ### Create your project
 
+Node version required: >=5.0.0
+
 Install the required tools: `yo`, `gulp`, `bower`
+
+
 ```
 npm install -g yo gulp bower
 ```
