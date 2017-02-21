@@ -1,14 +1,14 @@
 (function () {
     'use strict';
 
-    var args = require('./helpers/args.js');
-    var includeAll = require("include-all");
-    var path = require("path");
-    var projectConfig = require('./helpers/project_config.js');
+    const args = require('./helpers/args.js');
+    const includeAll = require("include-all");
+    const path = require("path");
+    const projectConfig = require('./helpers/project_config.js');
 
     module.exports = function (gulp, projectRootPath) {
 
-        var configuration = null;
+        let configuration = null;
 
         init();
 
@@ -29,12 +29,12 @@
         }
 
         function loadTasks(directory) {
-            var tasks = includeAll({
+            let tasks = includeAll({
                     dirname: path.resolve(__dirname, directory),
-                    filter: /(.+)\.(js|coffee)$/
+                    filter: /(.+)\.(js)$/
                 }) || {};
 
-            for (var taskName in tasks) {
+            for (let taskName in tasks) {
                 if (tasks.hasOwnProperty(taskName)) {
                     tasks[taskName](gulp, configuration);
                 }
@@ -44,4 +44,4 @@
         return module.exports = gulp;
     };
 
-}).call(this);
+})();

@@ -5,21 +5,24 @@
         return config.set({
             autoWatch: true,
             browsers: ['PhantomJS'],
-            coffeeCoverage: {
-                preprocessor: {
-                    instrumentor: 'istanbul'
-                }
-            },
-            coffeePreprocessor: {
+
+            babelPreprocessor: {
                 options: {
-                    bare: false,
-                    sourceMap: true
+                    presets: ['es2015'],
+                    sourceMap: 'inline'
                 },
-                transformPath: function (path) {
-                    return path.replace(/\.coffee$/, '.js');
+                filename: function (file) {
+                    return file.originalPath.replace(/\.js$/, '.es5.js');
+                },
+                sourceFileName: function (file) {
+                    return file.originalPath;
                 }
             },
             coverageReporter: {
+                instrumenters: {isparta: require('isparta')},
+                instrumenter: {
+                    'src/*.js': 'isparta'
+                },
                 reporters: [
                     {
                         type: 'lcov',
@@ -34,16 +37,12 @@
             logLevel: config.LOG_INFO,
             port: 9876,
             preprocessors: {
-                'src/javascripts/*.html': 'html2js',
-                'src/javascripts/**/*.html': 'html2js',
-                'src/javascripts/*.spec.js.coffee': ['coffee'],
-                'src/javascripts/**/*.spec.js.coffee': ['coffee'],
-                'src/javascripts/!(*.spec).js.coffee': ['coffee-coverage'],
-                'src/javascripts/**/!(*.spec).js.coffee': ['coffee-coverage']
+                'src/javascripts/**/*.js': ['babel'],
+                'src/javascripts/**/!(*.spec).js': ['coverage']
             },
             reporters: ['dots', 'coverage'],
             singleRun: false
         });
     };
 
-}).call(this);
+})();

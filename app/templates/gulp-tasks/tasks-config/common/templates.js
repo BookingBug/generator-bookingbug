@@ -1,12 +1,11 @@
 (function () {
     'use strict';
 
-    var gulpAngularTemplateCache = require('gulp-angular-templatecache');
-    var gulpConcat = require('gulp-concat');
-    var gulpLiveReload = require('gulp-livereload');
-    var gulpTemplate = require('gulp-template');
-    var gulpUglify = require('gulp-uglify');
-    var path = require('path');
+    const gulpAngularTemplateCache = require('gulp-angular-templatecache');
+    const gulpLiveReload = require('gulp-livereload');
+    const gulpTemplate = require('gulp-template');
+    const gulpUglify = require('gulp-uglify');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -14,9 +13,9 @@
 
         function templatesTask() {
 
-            var clientTemplates = path.join(configuration.projectRootPath, 'src/templates/**/*.html');
+            let clientTemplates = path.join(configuration.projectRootPath, 'src/templates/**/*.html');
 
-            var stream = gulp.src(clientTemplates)
+            let stream = gulp.src(clientTemplates)
                     .pipe(gulpAngularTemplateCache('booking-widget-templates.js', {
                         module: 'TemplateOverrides',
                         standalone: true
@@ -40,4 +39,4 @@
         }
     };
 
-}).call(this);
+})();

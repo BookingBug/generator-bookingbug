@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    var fs = require('fs');
-    var path = require('path');
-    var projectConfig = require('./project_config');
-    var sdkSrcDir = process.env.BB_SDK_SRC_DIR;
+    const fs = require('fs');
+    const path = require('path');
+    const projectConfig = require('./project_config');
+    const sdkSrcDir = process.env.BB_SDK_SRC_DIR;
 
     module.exports = {
         createSymlink: createSymlink,
@@ -43,9 +43,9 @@
 
     function createSymlink(sdkDependency) {
 
-        var isWin = process.platform === 'win32';
-        var src = path.join(sdkSrcDir, 'build', sdkDependency);
-        var dest = path.join(__dirname, '../../bower_components/bookingbug-angular-' + sdkDependency);
+        let isWin = process.platform === 'win32';
+        let src = path.join(sdkSrcDir, 'build', sdkDependency);
+        let dest = path.join(__dirname, '../../bower_components/bookingbug-angular-' + sdkDependency);
 
         try {
             fs.symlinkSync(src, dest, 'dir');
@@ -66,4 +66,4 @@
     }
 
 
-}).call(this);
+})();

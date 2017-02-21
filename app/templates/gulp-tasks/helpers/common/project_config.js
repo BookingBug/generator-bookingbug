@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    var args = require('./args.js');
-    var deepMerge = require('deepmerge');
-    var fs = require('fs');
-    var fsFinder = require('fs-finder');
-    var jsonFile = require('jsonfile');
-    var path = require('path');
+    const args = require('./args.js');
+    const deepMerge = require('deepmerge');
+    const fs = require('fs');
+    const fsFinder = require('fs-finder');
+    const jsonFile = require('jsonfile');
+    const path = require('path');
 
     module.exports = {
         getConfig: getConfig
@@ -17,13 +17,13 @@
      */
     function getConfig() {
 
-        var config = {};
+        let config = {};
 
-        var environment = getEnvironmentName();
+        let environment = getEnvironmentName();
 
         getConfigFileNames().forEach(function (configFileName) {
 
-            var loadedData = getConfigData(configFileName);
+            let loadedData = getConfigData(configFileName);
 
             if(typeof loadedData.general === 'undeinfed'){
                 throw new Error('general section of conifg file is required, filename = ' + configFileName);
@@ -67,8 +67,8 @@
      * @returns {String}
      */
     function getEnvironmentName() {
-        var env = args.getEnvironment();
-        var environmentName = 'development';
+        let env = args.getEnvironment();
+        let environmentName = 'development';
 
         if (env.match(/local/)) {
             environmentName = 'local';
@@ -109,10 +109,10 @@
             return
         }
 
-        var bowerJson = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
+        let bowerJson = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
 
-        for (var depName in bowerJson.dependencies) {
-            var depVersion = bowerJson.dependencies[depName];
+        for (let depName in bowerJson.dependencies) {
+            let depVersion = bowerJson.dependencies[depName];
             if (new RegExp(/^bookingbug-angular.*/).test(depName)) {
                 config.build.sdk_version = depVersion;
                 return;
@@ -123,4 +123,4 @@
     }
 
 
-}).call(this);
+})();

@@ -61,6 +61,10 @@
      */
     function forceDeployVersion() {
 
+        if(argv['deployVersion'] === 'false'){
+            return false;
+        }
+
         if (typeof argv['deployVersion'] !== 'undefined' && argv['deployVersion'].length > 0) {
             return argv['deployVersion'];
         }
@@ -97,4 +101,4 @@
         }
     }
 
-}).call(this);
+})();

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var runSequence = require('run-sequence');
+    const runSequence = require('run-sequence');
 
     module.exports = function (gulp, configuration) {
 
@@ -11,8 +11,7 @@
 
         function releaseTask(cb) {
 
-            runSequence.call(
-                null,
+            runSequence(
                 'clean',
                 'bower-install',
                 'copy',
@@ -40,4 +39,4 @@
         }
     };
 
-}).call(this);
+})();

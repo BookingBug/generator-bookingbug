@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var fs = require('fs');
-    var path = require('path');
+    const fs = require('fs');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -10,12 +10,12 @@
 
         function copyTask(cb) {
 
-            var copyList = getCopyList();
+            let copyList = getCopyList();
 
-            for(var i = 0; i < copyList.length; i++){
-                var copyEntry = copyList[i];
-                var from = copyEntry.from.map(function(glob){ return path.join(configuration.projectRootPath, glob); });
-                var to = path.join(configuration.projectRootPath, copyEntry.to);
+            for(let i = 0; i < copyList.length; i++){
+                let copyEntry = copyList[i];
+                let from = copyEntry.from.map(function(glob){ return path.join(configuration.projectRootPath, glob); });
+                let to = path.join(configuration.projectRootPath, copyEntry.to);
                 gulp.src(from).pipe(gulp.dest(to));
             }
 
@@ -26,8 +26,8 @@
          * @returns {Array.<Object>}
          **/
         function getCopyList() {
-            var bowerJsonPath = path.join(configuration.projectRootPath, 'bower.json');
-            var bowerJson = JSON.parse(fs.readFileSync(bowerJsonPath, 'utf8'));
+            let bowerJsonPath = path.join(configuration.projectRootPath, 'bower.json');
+            let bowerJson = JSON.parse(fs.readFileSync(bowerJsonPath, 'utf8'));
 
             if (typeof bowerJson.release !== 'undefined' && typeof bowerJson.release.copy !== 'undefined') {
                 return bowerJson.release.copy;
@@ -37,4 +37,4 @@
         }
     };
 
-}).call(this);
+})();

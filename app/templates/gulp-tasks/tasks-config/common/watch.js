@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    var gulpLiveReload = require('gulp-livereload');
-    var gulpUtil = require('gulp-util');
-    var path = require('path');
-    var runSequence = require('run-sequence');
+    const gulpLiveReload = require('gulp-livereload');
+    const gulpUtil = require('gulp-util');
+    const path = require('path');
+    const runSequence = require('run-sequence');
 
-    var watchOptions = {
+    const watchOptions = {
         read: false,
         readDelay: 500
     };
@@ -55,13 +55,9 @@
         }
 
         function scripts() {
-            var projectFiles = [
+            let projectFiles = [
                 configuration.projectRootPath + '/src/javascripts/**/*.js',
-                configuration.projectRootPath + '/src/javascripts/**/*.js.coffee',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js.coffee',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.js',
-                '!' + configuration.projectRootPath + '/src/javascripts/**/*.js.map'
+                '!' + configuration.projectRootPath + '/src/javascripts/**/*.spec.js'
             ];
 
             gulp.watch(projectFiles, ['scripts:client'], watchOptions);
@@ -93,4 +89,4 @@
         }
     };
 
-}).call(this);
+})();

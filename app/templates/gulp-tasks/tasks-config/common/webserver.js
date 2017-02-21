@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var gulpConnect = require('gulp-connect');
-    var gulpOpen = require('gulp-open');
+    const gulpConnect = require('gulp-connect');
+    const gulpOpen = require('gulp-open');
 
     module.exports = function (gulp, configuration) {
 
@@ -19,7 +19,7 @@
 
         function openBrowserTask() {
 
-            var gulpOpenOptions = {
+            let gulpOpenOptions = {
                 uri: 'http://localhost:' + configuration.projectConfig.build.server_port + configuration.projectConfig.build.default_html
             };
 
@@ -28,4 +28,4 @@
         }
     };
 
-}).call(this);
+})();

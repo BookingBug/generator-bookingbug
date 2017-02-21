@@ -1,16 +1,16 @@
 (function () {
     'use strict';
 
-    var argv = require('yargs').argv;
-    var fs = require('fs');
-    var gitUserEmail = require('git-user-email');
-    var gitUserName = require('git-user-name');
-    var gulpAwsPublish = require('gulp-awspublish');
-    var gulpRename = require('gulp-rename');
-    var gulpSlack = require('gulp-slack');
-    var gulpUtil = require('gulp-util');
-    var localSdk = require('../helpers/local_sdk');
-    var path = require('path');
+    const argv = require('yargs').argv;
+    const fs = require('fs');
+    const gitUserEmail = require('git-user-email');
+    const gitUserName = require('git-user-name');
+    const gulpAwsPublish = require('gulp-awspublish');
+    const gulpRename = require('gulp-rename');
+    const gulpSlack = require('gulp-slack');
+    const gulpUtil = require('gulp-util');
+    const localSdk = require('../helpers/local_sdk');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -50,9 +50,9 @@
         }
 
         function consoleNotificationAboutDeployment() {
-            var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            var projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
-            var msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " +  projectVersion;
+            let sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            let projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
+            let msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " +  projectVersion;
             gulpUtil.log(gulpUtil.colors.green(msg));
         }
 
@@ -60,7 +60,7 @@
          * @returns {String|Array.<String>}
          */
         function getReleaseFiles() {
-            var releaseFiles = './release/**';
+            let releaseFiles = './release/**';
             if (argv.media) {
                 releaseFiles = ['./release/images/**', './release/fonts/**'];
             }
@@ -82,12 +82,12 @@
          */
         function publishRelease() {
 
-            var publisher = createAwsPublisher();
+            let publisher = createAwsPublisher();
 
-            var publishHeaders = {
+            let publishHeaders = {
                 'Cache-Control': 'max-age=' + configuration.projectConfig.build.cache_control_max_age
             };
-            var publishOptions = {
+            let publishOptions = {
                 force: true
             };
 
@@ -98,7 +98,7 @@
          * @returns {Object}
          */
         function createAwsPublisher() {
-            var awsPublishOptions = {
+            let awsPublishOptions = {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
                 params: {
@@ -114,9 +114,9 @@
          * @returns {Object}
          */
         function slackNotificationAboutDeployment() {
-            var sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            var projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
-            var message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , PROJECT ' + projectVersion;
+            let sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            let projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
+            let message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , PROJECT ' + projectVersion;
             return getSlackPostman()(message);
         }
 
@@ -124,8 +124,8 @@
          * @returns {String}
          */
         function getUserDetails() {
-            var user = gitUserName();
-            var mail = gitUserEmail();
+            let user = gitUserName();
+            let mail = gitUserEmail();
             if (typeof user !== "undefined" && user.trim().length > 0) {
                 return mail += " | " + user;
             } else {
@@ -137,7 +137,7 @@
          * @returns {Object}
          */
         function getSlackPostman() {
-            var slackConfig = {
+            let slackConfig = {
                 url: process.env.BB_SDK_SLACK_URL,
                 user: "ROBO",
                 icon_emoji: ":cow:"

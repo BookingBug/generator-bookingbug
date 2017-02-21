@@ -1,9 +1,8 @@
 (function () {
     'use strict';
 
-    var gulpFlatten = require('gulp-flatten');
-    var gulpLiveReload = require('gulp-livereload');
-    var path = require('path');
+    const gulpLiveReload = require('gulp-livereload');
+    const path = require('path');
 
     module.exports = function (gulp, configuration) {
 
@@ -11,8 +10,8 @@
 
         function imagesTask() {
 
-            var clientImages = path.join(configuration.projectRootPath, 'src/images/**/*.*');
-            var dest = path.join(configuration.projectReleasePath, 'images');
+            let clientImages = path.join(configuration.projectRootPath, 'src/images/**/*.*');
+            let dest = path.join(configuration.projectReleasePath, 'images');
 
             return gulp.src(clientImages)
                 .pipe(gulp.dest(dest))
@@ -21,4 +20,4 @@
         }
     };
 
-}).call(this);
+})();

@@ -1,13 +1,13 @@
 (function () {
     'use strict';
 
-    var bump = require('gulp-bump');
-    var git = require('gulp-git');
-    var filter = require('gulp-filter');
-    var fs = require('fs');
-    var jsonFile = require('jsonfile');
-    var path = require('path');
-    var tagVersion = require('gulp-tag-version');
+    const bump = require('gulp-bump');
+    const git = require('gulp-git');
+    const filter = require('gulp-filter');
+    const fs = require('fs');
+    const jsonFile = require('jsonfile');
+    const path = require('path');
+    const tagVersion = require('gulp-tag-version');
 
 
     module.exports = function (gulp, configuration) {
@@ -39,10 +39,10 @@
         }
 
         function updateConfigDeployVersion(){
-            var bowerConfigPath = path.join(configuration.projectRootPath, 'bower.json');
-            var projectConfigPath = path.join(configuration.projectRootPath, 'config.json');
-            var bowerConfig = JSON.parse(fs.readFileSync(bowerConfigPath, 'utf8'));
-            var projectConfig = JSON.parse(fs.readFileSync(projectConfigPath, 'utf8'));
+            let bowerConfigPath = path.join(configuration.projectRootPath, 'bower.json');
+            let projectConfigPath = path.join(configuration.projectRootPath, 'config.json');
+            let bowerConfig = JSON.parse(fs.readFileSync(bowerConfigPath, 'utf8'));
+            let projectConfig = JSON.parse(fs.readFileSync(projectConfigPath, 'utf8'));
 
             projectConfig.general.build.deploy_version = 'v' + bowerConfig.version;
             jsonFile.writeFileSync(projectConfigPath, projectConfig, {spaces: 2});
@@ -52,4 +52,4 @@
 
     };
 
-}).call(this);
+})();

@@ -86,17 +86,5 @@
       "ignore": true
     }
     <% } -%>
-  },
-  "resolutions": {
-<% if (type == 'public-booking') { -%>
-    "angular": "1.5.11",
-    "jquery": "~1.11.3"
-<% } else if (type == 'admin') { -%>
-    "fullcalendar": "~2.9.1",
-    "jquery": "~1.11.2",
-    "moment": "~2.14.0",
-    "components-font-awesome": "~4.1.0",
-    "angular": "1.5.8"
-<% } -%>
   }
 }

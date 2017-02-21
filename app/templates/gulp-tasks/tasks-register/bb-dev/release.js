@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var runSequence = require('run-sequence');
+    const runSequence = require('run-sequence');
 
     module.exports = function (gulp, configuration) {
 
@@ -11,8 +11,7 @@
         function releaseTask(cb) {
 
             if (configuration.projectConfig.build.local_sdk === true) {
-                runSequence.call(
-                    null,
+                runSequence(
                     'build-sdk',
                     'clean',
                     'bower-prepare',
@@ -31,8 +30,7 @@
                 );
                 return;
             }
-            runSequence.call(
-                null,
+            runSequence(
                 'clean',
                 'bower-prepare',
                 'bower-install',
@@ -52,7 +50,7 @@
 
         function releaseWatchTask(cb) {
 
-            var tasks = [
+            let tasks = [
                 'release',
                 'watch'
             ];
@@ -67,4 +65,4 @@
         }
     };
 
-}).call(this);
+})();
