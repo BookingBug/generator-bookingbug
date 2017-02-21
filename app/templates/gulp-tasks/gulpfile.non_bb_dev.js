@@ -31,7 +31,7 @@
         function loadTasks(directory) {
             let tasks = includeAll({
                     dirname: path.resolve(__dirname, directory),
-                    filter: /(.+)\.(js|coffee)$/
+                    filter: /(.+)\.(js)$/
                 }) || {};
 
             for (let taskName in tasks) {
