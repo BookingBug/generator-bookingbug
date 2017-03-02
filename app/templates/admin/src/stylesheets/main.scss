@@ -35,10 +35,47 @@ $fa-font-path: "fonts";
 @import "../../bower_components/bookingbug-angular-admin-dashboard/src/stylesheets/main";
 
 .bb-project-version {
-  bottom: 20px;
-  left: 20px;
-  position: absolute;
-  z-index: 10000;
-  color: red;
-  pointer-events: none;
+  position: fixed;
+  left: calc(100% - 29.09px);
+  top: calc(100% - 17px);
+  width: 210px;
+  background: #147d9a;
+  color: transparent;
+  z-index: 999;
+  font: normal 16px calibri, sans-serif;
+  padding: 20px 10px 10px 10px;
+  border-left-width: 10px;
+  opacity: 1;
+  transition: top 200ms, left 0ms, opacity 600ms;
+  cursor: default;
+  .desc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #fff;
+    padding: 0 5px;
+    background: #222;
+    font-size: 14px;
+  }
+  span {
+    font-weight: bold;
+    color: transparent;
+  }
+  &:hover {
+    left: calc(100% - 210px);
+    top: calc(100% - 84px);
+    opacity: 1;
+    > {
+      .desc {
+        color: transparent;
+        background: transparent;
+      }
+      p {
+        color: #fff;
+        span {
+          color: #98d67f;
+        }
+      }
+    }
+  }
 }
