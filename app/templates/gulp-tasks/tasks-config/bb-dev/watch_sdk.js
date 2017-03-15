@@ -41,11 +41,9 @@
         function scripts() {
             configuration.bbDependencies.forEach(function (dirName) {
                 gulp.watch(
-                    [configuration.sdkRootPath + '/src/' + dirName + '/javascripts/**/*'],
+                    [configuration.sdkRootPath + '/build/' + dirName + '/*.js'],
                     function () {
-                        setTimeout(function () {
-                            runSequence(['scripts:client']);
-                        }, 1000)
+                        runSequence(['scripts:client']);
                     },
                     watchOptions
                 );
