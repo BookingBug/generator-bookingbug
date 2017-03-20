@@ -24,6 +24,10 @@
     "bookingbug-angular-admin-dashboard": "<%= version %>",
     "bookingbug-angular-events": "<%= version %>",
 <% } -%>
+<% if (type != 'admin') { -%>
+    "angulartics": "^1.3.0",
+    "angulartics-piwik": "^1.0.4",
+<% } -%>
     "bookingbug-angular-public-booking": "<%= version %>",
     "bookingbug-angular-member": "<%= version %>"
   },

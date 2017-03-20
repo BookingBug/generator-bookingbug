@@ -1,10 +1,12 @@
-(function (angular) {
+(function(angular) {
     'use strict';
 
     angular.module('<%= module_name %>', [
         'BB',
         'TemplateOverrides',
-        '<%= module_name %>.version'
+        '<%= module_name %>.version',
+        'angulartics',
+        'angulartics.piwik'
     ]);
 
 })(angular);
