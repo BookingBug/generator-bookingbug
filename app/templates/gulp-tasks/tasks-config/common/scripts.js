@@ -61,7 +61,10 @@
             let stream = gulp.src(files);
 
             if (filename === 'booking-widget') {
-                stream.pipe(gulpIf(/^(?!bookingbug-angular-).*/, babel({presets: ['es2015']})).on('error', gulpUtil.log));
+                stream.pipe(gulpIf(/^(?!bookingbug-angular-).*/, babel({
+                    presets: ['es2015'],
+                    plugins: [["transform-es2015-classes", {"loose": true}]]
+                })).on('error', gulpUtil.log));
             }
 
             if (configuration.projectConfig.build.uglify === true) {
