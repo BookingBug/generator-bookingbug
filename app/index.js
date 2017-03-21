@@ -708,7 +708,7 @@
                 'gulp-sass@^2.3.2',
                 'gulp-sourcemaps@^1.9.1',
                 'gulp-template@^4.0.0',
-                'gulp-uglify@^2.0.0',
+                'gulp-uglify@~2.0.1',
                 'gulp-util@^3.0.7',
                 'gulp-watch@^4.3.11',
                 'karma@^1.3.0',
