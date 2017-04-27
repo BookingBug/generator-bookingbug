@@ -12,8 +12,12 @@
                           AdminMembersIframeOptionsProvider,
                           AdminPublishIframeOptionsProvider,
                           AdminSettingsIframeOptionsProvider,
+                          bbAnalyticsPiwikProvider,
                           bbConfig) {
         'ngInject';
+
+        // enable Piwik Analytics
+        if (bbConfig.CORE.ANALYTICS.ENABLE_PIWIK) bbAnalyticsPiwikProvider.enable();
 
         // AdminCheckInOptionsProvider.setOption('use_default_states', false);
         // AdminCheckInOptionsProvider.setOption('show_in_navigation', false);

@@ -502,7 +502,10 @@
                         server_port: 8000
                     },
                     core: {
-                        google_maps_key: this.googleMapsKey
+                        google_maps_key: this.googleMapsKey,
+                        analytics: {
+                            enable_piwik: false
+                        }
                     }
                 }
             };
@@ -549,7 +552,10 @@
                         deploy_path: "/" + this.appName + "/"
                     },
                     core: {
-                        api_url: this.productionApiUrl
+                        api_url: this.productionApiUrl,
+                        analytics: {
+                            enable_piwik: true
+                        }
                     }
                 };
             } else {
