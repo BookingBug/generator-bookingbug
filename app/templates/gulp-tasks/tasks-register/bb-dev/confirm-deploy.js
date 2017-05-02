@@ -21,7 +21,6 @@
             ];
             inquirer.prompt(questions).then(function (answers){
                 if (answers[confirmDeploy]){
-                    console.log('here mofo');
                     cd();
                 } else {
                     process.exit();
