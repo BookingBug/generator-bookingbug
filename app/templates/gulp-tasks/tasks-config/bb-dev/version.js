@@ -34,7 +34,7 @@
                 .pipe(tagVersion())
                 .on('end', function () {
                     updateConfigDeployVersion();
-                    gulp.src(['./package.json'])
+                    gulp.src(['./config.json'])
                       .pipe(git.commit('Update deploy version'))
                       .on('end', function() {
                         git.push('origin', 'master', {args: ' --follow-tags'});
