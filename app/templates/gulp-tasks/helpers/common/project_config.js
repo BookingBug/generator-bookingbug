@@ -25,7 +25,7 @@
 
             let loadedData = getConfigData(configFileName);
 
-            if(typeof loadedData.general === 'undeinfed'){
+            if(typeof loadedData.general === 'undefined'){
                 throw new Error('general section of conifg file is required, filename = ' + configFileName);
             }
 
