@@ -20,8 +20,8 @@
                 }
             ];
             inquirer.prompt(questions).then(function (answers){
-                if (answers[confirmDeploy]){
-                    cd();
+                if (answers['confirmDeploy']){
+                    cb();
                 } else {
                     process.exit();
                 }

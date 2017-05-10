@@ -723,6 +723,7 @@
                 'karma-ng-html2js-preprocessor@^1.0.0',
                 'karma-phantomjs-launcher@^1.0.2',
                 'include-all@^2.0.0',
+                'inquirer@^3.0.6',
                 'isparta@^4.0.0',
                 'jasmine-core@^2.5.2',
                 'jsonfile@^2.4.0',
