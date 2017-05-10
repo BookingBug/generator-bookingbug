@@ -21,6 +21,7 @@
     "gulp": "^3.9.1",
     "gulp-flatten": "^0.2.0",
     "gulp-util": "^3.0.7",
+    "gulp-bless": "^3.2.1",
     "lodash": "^3.10.0",
     "mkdirp": "^0.5.1",
     "node-cmd": "^1.1.1",
