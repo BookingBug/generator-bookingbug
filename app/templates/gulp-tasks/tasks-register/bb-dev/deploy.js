@@ -9,7 +9,7 @@
 
         function deployTask(cb) {
             configuration.deploy = true;
-            runSequence('checkout', 'release', 'deploy-aws', 'checkout-master', cb);
+            runSequence('confirm-deploy', 'checkout', 'release', 'deploy-aws', 'checkout-master', cb);
         }
     };
 
