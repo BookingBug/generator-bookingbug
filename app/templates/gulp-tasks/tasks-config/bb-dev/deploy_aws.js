@@ -75,16 +75,15 @@
          */
         function renameReleaseFiles() {
             return gulpRename(function (path) {
-                if (args.getEnvironment() === 'prod') {
+                if (argv.noQa || args.getEnvironment() === 'prod') {
                     path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
                 } else {
                     let currentBranch = gitRevSync.branch();
                     let currentTag = gitRevSync.tag();
                     let currentBanchOrTag = '';
-                    if (currentBranch.match(/Detached/i)) {
-                        currentBanchOrTag = currentTag;
-                    } else currentBanchOrTag = currentBranch;
-                    path.dirname = configuration.projectConfig.build.deploy_path + currentBanchOrTag + '/' + path.dirname;
+                    if (currentBranch.match(/Detached/i)) currentBanchOrTag = currentTag;
+                    else currentBanchOrTag = currentBranch;
+                    path.dirname = configuration.projectConfig.build.deploy_path + 'qa/' + currentBanchOrTag + '/' + path.dirname;
                 }
             });
         }

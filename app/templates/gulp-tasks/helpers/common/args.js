@@ -3,7 +3,7 @@
 
     var argv = require('yargs').argv;
 
-    var allowedOptions = ['env', 'localSdk', 'uglify', 'deployVersion'];
+    var allowedOptions = ['env', 'localSdk', 'uglify', 'deployVersion', 'noQa'];
 
     validateAllowedOptions();
 
