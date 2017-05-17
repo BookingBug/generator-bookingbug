@@ -53,8 +53,9 @@
 
         function consoleNotificationAboutDeployment() {
             let sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
+            if (!(argv.noQa || args.getEnvironment() === 'prod')) configuration.projectConfig.build.deploy_version = getCurrentBranchOrTag();
             let projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
-            let msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " +  projectVersion;
+            let msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " + projectVersion;
             gulpUtil.log(gulpUtil.colors.green(msg));
         }
 
@@ -78,11 +79,7 @@
                 if (argv.noQa || args.getEnvironment() === 'prod') {
                     path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
                 } else {
-                    let currentBranch = gitRevSync.branch();
-                    let currentTag = gitRevSync.tag();
-                    let currentBanchOrTag = '';
-                    if (currentBranch.match(/Detached/i)) currentBanchOrTag = currentTag;
-                    else currentBanchOrTag = currentBranch;
+                    let currentBanchOrTag = getCurrentBranchOrTag();
                     path.dirname = configuration.projectConfig.build.deploy_path + 'qa/' + currentBanchOrTag + '/' + path.dirname;
                 }
             });
@@ -142,6 +139,19 @@
             } else {
                 return mail;
             }
+        }
+
+        /**
+         * @returns {String}
+         */
+        function getCurrentBranchOrTag() {
+            let currentBranch = gitRevSync.branch();
+            let currentTag = gitRevSync.tag();
+            let currentBanchOrTag = '';
+            if (currentBranch.match(/detached/i)) {
+                currentBanchOrTag = currentTag;
+            } else currentBanchOrTag = currentBranch;
+            return currentBanchOrTag;
         }
 
         /**
