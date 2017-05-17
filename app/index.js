@@ -746,6 +746,7 @@
                 dependencies = dependencies.concat([
                     'gulp-awspublish@^3.3.0',
                     'gulp-awspublish-router@^0.1.2',
+                    'git-rev-sync@1.9.1',
                     'git-user-email@0.2.1',
                     'git-user-name@^1.2.0',
                     'gulp-slack@^0.1.2',

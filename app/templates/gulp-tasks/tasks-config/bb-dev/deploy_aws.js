@@ -2,7 +2,9 @@
     'use strict';
 
     const argv = require('yargs').argv;
+    const args = require('../helpers/args');
     const fs = require('fs');
+    const gitRevSync = require('git-rev-sync');
     const gitUserEmail = require('git-user-email');
     const gitUserName = require('git-user-name');
     const gulpAwsPublish = require('gulp-awspublish');
@@ -73,7 +75,17 @@
          */
         function renameReleaseFiles() {
             return gulpRename(function (path) {
-                path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
+                if (args.getEnvironment() === 'prod') {
+                    path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
+                } else {
+                    let currentBranch = gitRevSync.branch();
+                    let currentTag = gitRevSync.tag();
+                    let currentBanchOrTag = '';
+                    if (currentBranch.match(/detached/i)) {
+                        currentBanchOrTag = currentTag;
+                    } else currentBanchOrTag = currentBranch;
+                    path.dirname = configuration.projectConfig.build.deploy_path + currentBanchOrTag + '/' + path.dirname;
+                }
             });
         }
 
