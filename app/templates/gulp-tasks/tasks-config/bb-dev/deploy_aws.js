@@ -81,7 +81,7 @@
                     let currentBranch = gitRevSync.branch();
                     let currentTag = gitRevSync.tag();
                     let currentBanchOrTag = '';
-                    if (currentBranch.match(/detached/i)) {
+                    if (currentBranch.match(/Detached/i)) {
                         currentBanchOrTag = currentTag;
                     } else currentBanchOrTag = currentBranch;
                     path.dirname = configuration.projectConfig.build.deploy_path + currentBanchOrTag + '/' + path.dirname;
