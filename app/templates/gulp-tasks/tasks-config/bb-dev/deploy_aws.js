@@ -11,7 +11,6 @@
     const gulpRename = require('gulp-rename');
     const gulpSlack = require('gulp-slack');
     const gulpUtil = require('gulp-util');
-    const localSdk = require('../helpers/local_sdk');
     const path = require('path');
 
     module.exports = function (gulp, configuration) {
@@ -40,23 +39,30 @@
         }
 
         function guardEnvironmentalVariables() {
-            if (!process.env.AWS_ACCESS_KEY_ID) {
-                throw new Error('Missing environment variable AWS_ACCESS_KEY_ID');
-            }
-            if (!process.env.AWS_SECRET_ACCESS_KEY) {
-                throw new Error('Missing environment variable AWS_SECRET_ACCESS_KEY');
-            }
-            if (!process.env.BB_SDK_SLACK_URL) {
-                throw new Error('Missing environment variable BB_SDK_SLACK_URL');
-            }
+            if (!process.env.AWS_ACCESS_KEY_ID) throw new Error('Missing environment variable AWS_ACCESS_KEY_ID');
+            if (!process.env.AWS_SECRET_ACCESS_KEY) throw new Error('Missing environment variable AWS_SECRET_ACCESS_KEY');
+            if (!process.env.BB_SDK_SLACK_URL) throw new Error('Missing environment variable BB_SDK_SLACK_URL');
         }
 
         function consoleNotificationAboutDeployment() {
-            let sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            if (!(argv.noQa || args.getEnvironment() === 'prod')) configuration.projectConfig.build.deploy_version = getCurrentBranchOrTag();
-            let projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
-            let msg = "Deploying to " + configuration.environment + " with SDK " + sdkVersion + ", PROJECT " + projectVersion;
+            let msg = `Deploying to ${configuration.environment} with SDK ${getSDKVersion()}, PROJECT ${getProjectVersion()}`;
             gulpUtil.log(gulpUtil.colors.green(msg));
+        }
+
+        /**
+         * @returns {string}
+         */
+        function getSDKVersion() {
+            return configuration.projectConfig.build.sdk_version === null
+                ? 'unreleased version' : `version ${configuration.projectConfig.build.sdk_version}`;
+        }
+
+        /**
+         * @returns {string}
+         */
+        function getProjectVersion() {
+            return configuration.projectConfig.build.deploy_version === false
+                ? getCurrentBranchOrTag() : `version ${configuration.projectConfig.build.deploy_version}`;
         }
 
         /**
@@ -75,12 +81,11 @@
          * @returns {Object}
          */
         function renameReleaseFiles() {
-            return gulpRename(function (path) {
-                if (argv.noQa || args.getEnvironment() === 'prod') {
-                    path.dirname = configuration.projectConfig.build.deploy_path + path.dirname;
+            return gulpRename(function (pathObj) {
+                if (isQADeployment()) {
+                    pathObj.dirname = path.join(configuration.projectConfig.build.deploy_path, getQAPath(), pathObj.dirname);
                 } else {
-                    let currentBanchOrTag = getCurrentBranchOrTag();
-                    path.dirname = configuration.projectConfig.build.deploy_path + 'qa/' + currentBanchOrTag + '/' + path.dirname;
+                    pathObj.dirname = path.join(configuration.projectConfig.build.deploy_path, pathObj.dirname);
                 }
             });
         }
@@ -89,7 +94,6 @@
          * @returns {Object}
          */
         function publishRelease() {
-
             let publisher = createAwsPublisher();
 
             let publishHeaders = {
@@ -122,10 +126,10 @@
          * @returns {Object}
          */
         function slackNotificationAboutDeployment() {
-            let sdkVersion = configuration.projectConfig.build.sdk_version === null ? 'unreleased version' : 'version ' + configuration.projectConfig.build.sdk_version;
-            let projectVersion = configuration.projectConfig.build.deploy_version === false ? 'unreleased version' : 'version ' + configuration.projectConfig.build.deploy_version;
-            let message = getUserDetails() + " deployed `" + configuration.projectConfig.build.app_name + "` to " + configuration.environment + " with SDK " + sdkVersion + ' , PROJECT ' + projectVersion;
-            return getSlackPostman()(message);
+            let msg = `${getUserDetails()} deployed ${configuration.projectConfig.build.app_name} to ${configuration.environment}`
+                + ` SDK ${getSDKVersion()} | PROJECT ${getProjectVersion()} `;
+
+            return getSlackPostman()(msg);
         }
 
         /**
@@ -142,16 +146,30 @@
         }
 
         /**
+         * @returns {boolean}
+         */
+        function isQADeployment(){
+            return argv.noQa !== 'true' && args.getEnvironment() !== 'prod';
+        }
+
+        /**
+         * @returns {string}
+         */
+        function getQAPath() {
+            let branchOrTagName = configuration.projectConfig.build.deploy_version || getCurrentBranchOrTag();
+            return path.join('qa', branchOrTagName);
+        }
+
+        /**
          * @returns {String}
          */
         function getCurrentBranchOrTag() {
             let currentBranch = gitRevSync.branch();
             let currentTag = gitRevSync.tag();
-            let currentBanchOrTag = '';
-            if (currentBranch.match(/detached/i)) {
-                currentBanchOrTag = currentTag;
-            } else currentBanchOrTag = currentBranch;
-            return currentBanchOrTag;
+
+            if (currentBranch.match(/detached/i)) return currentTag;
+
+            return currentBranch;
         }
 
         /**
