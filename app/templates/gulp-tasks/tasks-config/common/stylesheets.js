@@ -10,7 +10,7 @@
     const mainBowerFiles = require('main-bower-files');
     const path = require('path');
     const gulpIf = require('gulp-if');
-    const guipBless = require('gulp-bless');
+    const gulpBless = require('gulp-bless');
     const gulpUtil = require('gulp-util');
 
     module.exports = function (gulp, configuration) {
