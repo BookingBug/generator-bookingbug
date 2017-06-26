@@ -80,7 +80,6 @@
             message: 'Please choose types of user journeys you want to create',
             choices: publicBookingOptions
         }, function (response) {
-
             if (response.type.length === 0) {
 
                 publicBookingOptions.map(function (option) {
@@ -633,7 +632,30 @@
                 );
             }
 
-            let templateOptions = {module_name: camelCase(this.appName)};
+
+            /**
+             * We need to catch if the user adds a member journey type to the generation process,
+             * so we check if in the selected options there is a member option.
+             *
+             * The regex/string comparison may sound a bit weak, but it's the only solution I found
+             */
+            let isMemberJourney = this.publicBookingOptionsSelected.filter(function(opt) {
+                return opt.match(/member/gi)
+            }).length > 0;
+
+            // Additional modules to inject inside main.module file (config function)
+            let modules = [];
+
+            // inject BBmember if the user selects a member journey
+            if (isMemberJourney) {
+                modules.push('BBMember');
+            }
+
+            // pass module_name itself to templates and the additional modules to inject
+            let templateOptions = {
+                module_name: camelCase(this.appName),
+                modules: modules
+            };
 
             this.template(
                 path.join(this.type, 'src', 'javascripts'),
