@@ -632,29 +632,9 @@
                 );
             }
 
-
-            /**
-             * We need to catch if the user adds a member journey type to the generation process,
-             * so we check if in the selected options there is a member option.
-             *
-             * The regex/string comparison may sound a bit weak, but it's the only solution I found
-             */
-            let isMemberJourney = this.publicBookingOptionsSelected.filter(function(opt) {
-                return opt.match(/member/gi)
-            }).length > 0;
-
-            // Additional modules to inject inside main.module file (config function)
-            let modules = [];
-
-            // inject BBmember if the user selects a member journey
-            if (isMemberJourney) {
-                modules.push('BBMember');
-            }
-
-            // pass module_name itself to templates and the additional modules to inject
             let templateOptions = {
                 module_name: camelCase(this.appName),
-                modules: modules
+                modules: this.publicBookingOptionsSelected ? 'BBMember' : ''
             };
 
             this.template(
