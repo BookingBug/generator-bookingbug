@@ -131,7 +131,7 @@
             if (isQADeployment()) link = path.join(configuration.projectConfig.build.deploy_path, getQAPath(), configuration.projectConfig.build.default_html);
             else link = path.join(configuration.projectConfig.build.deploy_path, configuration.projectConfig.build.default_html);
 
-            link = `http://bespoke.bookingbug.com${link}`;
+            link = `https://bespoke.bookingbug.com${link}`;
 
             let msg = `---\n ${getUserDetails()} deployed \`${configuration.projectConfig.build.app_name}\` to \`${configuration.environment}\``
                 + `\n sdk: \`${getSDKVersion()}\`  |  project: \`${getProjectVersion()}\`  |  link: ${link} \n ---`;
