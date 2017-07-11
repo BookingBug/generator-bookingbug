@@ -126,8 +126,15 @@
          * @returns {Object}
          */
         function slackNotificationAboutDeployment() {
-            let msg = `${getUserDetails()} deployed ${configuration.projectConfig.build.app_name} to ${configuration.environment}`
-                + ` SDK ${getSDKVersion()} | PROJECT ${getProjectVersion()} `;
+            let link = '';
+
+            if (isQADeployment()) link = path.join(configuration.projectConfig.build.deploy_path, getQAPath(), configuration.projectConfig.build.default_html);
+            else link = path.join(configuration.projectConfig.build.deploy_path, configuration.projectConfig.build.default_html);
+
+            link = `http://bespoke.bookingbug.com${link}`;
+
+            let msg = `---\n ${getUserDetails()} deployed \`${configuration.projectConfig.build.app_name}\` to \`${configuration.environment}\``
+                + `\n sdk: \`${getSDKVersion()}\`  |  project: \`${getProjectVersion()}\`  |  link: ${link} \n ---`;
 
             return getSlackPostman()(msg);
         }
@@ -148,7 +155,7 @@
         /**
          * @returns {boolean}
          */
-        function isQADeployment(){
+        function isQADeployment() {
             return argv.noQa !== 'true' && args.getEnvironment() !== 'prod';
         }
 
