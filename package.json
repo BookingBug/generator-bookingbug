@@ -18,6 +18,7 @@
     "child_process": "~1.0.2",
     "jsonfile": "~4.0.0",
     "s3": "~4.4.0",
+    "simple-git": "~1.92.0",
     "yeoman-generator": "~2.0.3"
   }
 }

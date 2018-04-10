@@ -4,6 +4,7 @@ const demoTagName = 'v0.0.12';
 const childProcess = require('child_process');
 const jsonFile = require('jsonfile');
 const s3 = require('s3');
+const git = require('simple-git');
 
 module.exports = class extends require('yeoman-generator') {
 
@@ -72,7 +73,7 @@ module.exports = class extends require('yeoman-generator') {
             this._declareApiUrlOptions(this.options['name']);
         }
 
-        this._downloadDemoTaggedVersion();
+        await this._downloadDemoTaggedVersion();
     }
 
     configuring() {// - Saving configurations and configure the project (creating .editorconfig files and other metadata files)
@@ -292,20 +293,30 @@ module.exports = class extends require('yeoman-generator') {
     }
 
     _downloadDemoTaggedVersion() {
-        try {
-            childProcess.execSync(`
-                git clone https://github.com/BookingBug/demo.git ${this.options['name']} && 
-                cd ${this.options['name']} && 
-                git checkout ${demoTagName} && 
-                rm -rf .git`,
-                {stdio: 'inherit'}
-            );
-            // consider latest stable tag: git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+        return new Promise((resolve, reject) => {
 
-        } catch (error) {
-            this.log(`Please either remove "${this.options['name']}" directory or choose different project name`);
-            process.exit(0);
-        }
+            git().silent(false)
+                .raw(['clone', 'https://github.com/BookingBug/demo.git', this.options['name']], (err, result) => {
+                    if (err) {
+                        this.log(err);
+                        this.log(`Please either remove "${this.options['name']}" directory or choose different project name`);
+                        process.exit(0);
+                    }
+                    git(this.destinationPath(`${this.options['name']}`)).silent(false)
+                        .raw(['checkout', demoTagName], (err, result) => {
+
+                            if (err) {
+                                this.log(err);
+                                this.log(`Could not checkout tag ${demoTagName}`);
+                                process.exit(0);
+                            }
+
+                            childProcess.execSync(`cd ${this.options['name']} && rm -rf .git`, {stdio: 'inherit'});
+
+                            resolve()
+                        });
+                })
+        });
     }
 
     _checkGeneratorVersion() {
