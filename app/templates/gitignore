@@ -1,7 +1,0 @@
-/.idea/
-node_modules
-bower_components
-/release/
-/tmp/
-.DS_Store
-/test/unit/reports/\
