@@ -360,8 +360,16 @@ module.exports = class extends require('yeoman-generator') {
                         {stdio: 'inherit'}
                     );
 
-                    this.log(`bookingbug generator has been successfully upgraded from ${localVersion} to ${newestVersion}`);
-                    this.log(`Please rerun generator.`);
+                    this.log(`generator-bookingbug has been upgraded from ${localVersion} to ${newestVersion}`);
+
+                    this.log(`If after rerunning the generator you keep seeing message about new version of generator it's highly
+                    probable that you've installed generator-bookingbug on system nodejs. 
+                    In that situation please trigger following commands in your terminal:`);
+
+                    this.log(`1) "nvm use system"`);
+                    this.log(`2) "npm uninstall -g generator-bookingbug"`);
+                    this.log(`3) "nvm use 8.9.1" #any other version of your choice`);
+                    this.log(`4) "npm install -g generator-bookingbug"`);
 
                     process.exit(0);
                     reject();
