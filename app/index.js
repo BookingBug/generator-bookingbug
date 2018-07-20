@@ -1,6 +1,6 @@
 'use strict';
 
-const demoTagName = 'v0.0.16';
+const demoTagName = 'v0.0.17';
 const childProcess = require('child_process');
 const jsonFile = require('jsonfile');
 const s3 = require('s3');
@@ -126,6 +126,11 @@ module.exports = class extends require('yeoman-generator') {
         this.studioConfig.development.core.api_url = this.options['api-url-development'];
         this.studioConfig.staging.core.api_url = this.options['api-url-staging'];
         this.studioConfig.production.core.api_url = this.options['api-url-production'];
+
+        if (this.publicConfig.apidemo) delete this.publicConfig.apidemo;
+        if (this.memberConfig.apidemo) delete this.memberConfig.apidemo;
+        if (this.studioConfig.apidemo) delete this.studioConfig.apidemo;
+
         this.packageJson.name = this.options['name'];
         this.packageJson.version = '0.0.0';
     }
