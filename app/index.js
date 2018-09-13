@@ -1,6 +1,6 @@
 'use strict';
 
-const demoTagName = 'v0.0.17';
+const demoTagName = 'v0.0.18';
 const childProcess = require('child_process');
 const jsonFile = require('jsonfile');
 const s3 = require('s3');
